@@ -1,0 +1,14 @@
+FUNCTION gnome_sort( 1DARRAYOFUINT a = [0, 0, 0], dir = 0 ) {
+    UINT pos = 0
+    IF(pos EQ 0 OR a(pos) GT a(pos-1) OR a(pos) EQ a(pos-1)){
+        INC pos
+    } ELSE {
+        [a(pos), a(pos-1)] = swap(a(pos), a(pos-1))
+        DEC pos
+    }
+    RETURN [a]
+}
+
+[c = 0, d = 0] FUNCTION swap(UINT a = 0, UINT b = 0){
+    RETURN [b, a]
+}

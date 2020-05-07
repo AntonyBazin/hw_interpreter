@@ -28,7 +28,6 @@ class Lexer:
     def token(self):
         return self.lexer.token()
 
-
     def t_COMMA(self, t):
         r"""\,"""
         return t

@@ -1,7 +1,7 @@
 from ply import lex
 
 
-class Lexer:
+class Lexer:  # added RETURN and EQ statements to task
     states = ()
     tokens = (
         'COMMA', 'TRUE', 'FALSE', 'UINT', 'BOOL', 'CUINT', 'CBOOL',

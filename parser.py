@@ -11,9 +11,9 @@ class STNode(object):
 
     @staticmethod
     def paste(start, depth):
-        print("  " * depth + str(start.type) + ":" + str(start.value))
+        print("    " * (depth - 1) + "   |" + str(start.type) + ":" + str(start.value))
         if start.parts:
-            print("  " * depth + "+->")
+            print("    " * depth + "+->")
             if start.parts:
                 for part in start.parts:
                     STNode.paste(part, depth + 1)
@@ -28,6 +28,7 @@ class Parser:
     tokens = Lexer.tokens
 
     def __init__(self):
+        self.accept = True
         self.lexer = Lexer()
         self.parser = yacc.yacc(module=self, debug=True)
 
@@ -46,23 +47,29 @@ class Parser:
 
     def p_program(self, p):
         """program : stmt_list"""
-        print("p_program rule")
+        # print("p_program rule")
         p[0] = STNode('program', None, p[1])
 
     def p_stmt_list(self, p):
         """stmt_list : stmt_list statement
                      | statement"""
-        print("p_stmt_list rule")
+        # print("p_stmt_list rule")
         if len(p) == 3:
             p[0] = STNode('conjunction', None, p[1], p[2])
         else:
             p[0] = p[1]
 
+    def p_statement_error(self, p):
+        """statement : error"""
+        self.accept = False
+        print("Syntax error : {}\n".format(str(p[1])))
+
     def p_statement(self, p):
         """statement : expr
-                     | OPENST statement CLOSEST"""
-        print("p_statement rule")
-        # add init rule
+                     | OPENST statement CLOSEST
+                     | create_id
+                     | assign"""
+        # print("p_statement rule")
         if len(p) == 2:
             p[0] = p[1]
         else:
@@ -72,7 +79,7 @@ class Parser:
         """expr : expr PLUS term
                 | expr MINUS term
                 | term"""
-        print("p_expr rule")
+        # print("p_expr rule")
         if len(p) == 2:
             p[0] = p[1]
         else:
@@ -82,7 +89,7 @@ class Parser:
         """term : term MUL factor
                 | term DIV factor
                 | factor"""
-        print("term rule")
+        # print("term rule")
         if len(p) == 2:
             p[0] = p[1]
         else:
@@ -90,35 +97,41 @@ class Parser:
 
     def p_factor(self, p):
         """factor : OPENBR expr CLOSEBR"""
-        print("factor brackets rule")
+        # print("factor brackets rule")
         p[0] = p[2]
 
     def p_factor_un(self, p):
         """factor : MINUS factor"""
-        print("p_factor_unary rule")
+        # print("p_factor_unary rule")
         p[0] = STNode('invert', None, p[2])  # value of STNode
 
     def p_factor_const(self, p):
         """factor : NUM"""
-        print("p_factor_const rule")
+        # print("p_factor_const rule")
         p[0] = STNode('number', p[1])
 
     def p_factor_id(self, p):
         """factor : ID"""
-        print("p_factor_id rule")
+        # print("p_factor_id rule")
         p[0] = STNode('id', p[1])
 
-    # def p_expr_e(self, p):
-    #     """expr : term"""
-    #     print("p_expr_e rule")
-    #     p[0] = p[1]
+    def p_create_id(self, p):
+        """create_id : UINT ID ASGN expr
+                     | CUINT ID ASGN expr
+                     | BOOL ID ASGN expr
+                     | CBOOL ID ASGN expr"""
+        p[0] = STNode('create', str(p[1]), p[4])
+
+    def p_assign(self, p):
+        """assign : ID ASGN expr"""
+        p[0] = STNode('assign', None, p[3])
 
     def p_error(self, p):
         print("Error!")
 
 
 if __name__ == '__main__':
+    parser = Parser()
     while True:
-        parser = Parser()
         t = parser.parse(input())
-        t.paste(t, 0)
+        STNode.paste(t, 0)

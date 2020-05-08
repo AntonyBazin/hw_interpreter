@@ -6,26 +6,28 @@ class Interpreter:
         self.parser = Parser()
 
     def interpret(self, code: str):
-        pass
+        t = self.parser.parse(code)
+        STNode.paste(t, 0)
+        print(self._interpret_node(t))
 
     def _interpret_node(self, node: STNode):
         if node is None:
             return
         elif node.type == 'program':
-            self._interpret_node(node.parts[0])
+            return self._interpret_node(node.parts[0])
         elif node.type == 'number':
             return node.value
         elif node.type == 'oper':
-            if node.value == 'PLUS':
+            if node.value == '+':
                 return self._interpret_node(node.parts[0])\
                        + self._interpret_node(node.parts[1])
-            elif node.type == 'MINUS':
+            elif node.value == '-':
                 return self._interpret_node(node.parts[0]) \
                        - self._interpret_node(node.parts[1])
-            elif node.type == 'MUL':
+            elif node.value == '*':
                 return self._interpret_node(node.parts[0]) \
                        * self._interpret_node(node.parts[1])
-            elif node.type == 'DIV':
+            elif node.value == '/':
                 return self._interpret_node(node.parts[0]) \
                        // self._interpret_node(node.parts[1])
         elif node.type == 'id':
@@ -34,4 +36,11 @@ class Interpreter:
             return -self._interpret_node(node.parts[0])
         elif node.type == 'conjunction':
             return None
+        elif node.type == 'create':
+            return self._interpret_node(node.parts[0])
 
+
+if __name__ == '__main__':
+    interpreter = Interpreter()
+    while True:
+        interpreter.interpret(input())

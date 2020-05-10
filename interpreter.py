@@ -24,6 +24,7 @@ class Interpreter:
     def __init__(self):
         self.parser = Parser()
         self.nmsp_stack = []
+        self.LDT = {}
 
     def interpret(self, code: str):
         t = self.parser.parse(code)
@@ -32,6 +33,7 @@ class Interpreter:
             print(self._interpret_node(t))
         except RedeclarationError as er:
             print(er.__doc__)
+            raise
         except NotFoundError as nf:
             print(nf.__doc__)
         print(self.nmsp_stack)
@@ -41,7 +43,7 @@ class Interpreter:
         if node is None:
             return
         elif node.type == 'program':
-            self.nmsp_stack.append({})
+            self.nmsp_stack.append(self.LDT)
             return self._interpret_node(node.parts[0])
         elif node.type == 'number':
             return node.value
@@ -58,31 +60,42 @@ class Interpreter:
             elif node.value == '/':
                 return self._interpret_node(node.parts[0]) \
                        // self._interpret_node(node.parts[1])
+            elif node.value == 'OR':
+                return self._interpret_node(node.parts[0]) \
+                       and self._interpret_node(node.parts[1])
+            elif node.value == 'GT':
+                return self._interpret_node(node.parts[0]) \
+                       > self._interpret_node(node.parts[1])
+            elif node.value == 'LT':
+                return self._interpret_node(node.parts[0]) \
+                       < self._interpret_node(node.parts[1])
+            elif node.value == 'EQ':
+                return self._interpret_node(node.parts[0]) \
+                       == self._interpret_node(node.parts[1])
         elif node.type == 'id':
-            return node.parts[0].value
+            if node.value not in self.LDT.keys():
+                self.nmsp_stack.append(self.LDT)
+                raise NotFoundError
+            return self.LDT[node.value].value
         elif node.type == 'invert':
             return -self._interpret_node(node.parts[0])
         elif node.type == 'conjunction':
             self._interpret_node(node.parts[0])
             return self._interpret_node(node.parts[1])
         elif node.type == 'create':
-            ldt = self.nmsp_stack.pop()
-            if node.parts[0].value in ldt.keys():
+            if node.parts[0].value in self.LDT.keys():
+                self.nmsp_stack.append(self.LDT)
                 raise RedeclarationError
-            ldt[node.parts[0].value] = Descriptor(node.parts[0].type, node.parts[1].value)
-            node.parts[0].add_part(node.parts[1])
-            self.nmsp_stack.append(ldt)
+            self.LDT[node.parts[0].value] = Descriptor(node.parts[0].type, self._interpret_node(node.parts[1]))
             return self._interpret_node(node.parts[0])
         elif node.type == 'assign':
             self._interpret_node(node.parts[0]).parts[0] = node.parts[1].value
             return node.parts[0].parts[0].value
         elif node.type == 'call':
-            ldt = self.nmsp_stack.pop()
-            if node.value not in ldt.keys():
-                self.nmsp_stack.append(ldt)
+            if node.value not in self.LDT.keys():
+                self.nmsp_stack.append(self.LDT)
                 raise NotFoundError
-            self.nmsp_stack.append(ldt)
-            return ldt[node.value].value
+            return self.LDT[node.value].value
 
 
 if __name__ == '__main__':

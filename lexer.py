@@ -46,6 +46,7 @@ class Lexer:  # added RETURN and EQ statements to task
 
     def t_BOOL(self, t):
         r"""BOOLEAN"""
+        t.value = 'BOOL'
         return t
 
     def t_CUINT(self, t):
@@ -54,6 +55,7 @@ class Lexer:  # added RETURN and EQ statements to task
 
     def t_CBOOL(self, t):
         r"""CBOOLEAN"""
+        t.value = 'CBOOL'
         return t
 
     def t_PLUS(self, t):

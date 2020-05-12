@@ -9,9 +9,6 @@ Unused terminals:
     BACK
     CLOSEIND
     COMMA
-    DEC
-    DO
-    ELSE
     EXTEND1
     EXTEND2
     FALSE
@@ -21,8 +18,6 @@ Unused terminals:
     GETF
     GETL
     GETR
-    IF
-    INC
     LEFT
     NL
     OPENIND
@@ -36,7 +31,6 @@ Unused terminals:
     SZ2
     TRUE
     UNDO
-    WHILE
 
 Grammar
 
@@ -46,28 +40,33 @@ Rule 2     stmt_list -> statement
 Rule 3     stmt_list -> stmt_list statement
 Rule 4     statement -> error
 Rule 5     statement -> expr
-Rule 6     statement -> OPENST statement CLOSEST
+Rule 6     statement -> OPENST stmt_list CLOSEST
 Rule 7     statement -> create_id
 Rule 8     statement -> assign
-Rule 9     expr -> MINUS expr
-Rule 10    expr -> NOT expr
-Rule 11    expr -> expr PLUS expr
-Rule 12    expr -> expr MINUS expr
-Rule 13    expr -> expr MUL expr
-Rule 14    expr -> expr DIV expr
-Rule 15    expr -> expr OR expr
-Rule 16    expr -> expr GT expr
-Rule 17    expr -> expr LT expr
-Rule 18    expr -> expr EQ expr
-Rule 19    expr -> OPENBR expr CLOSEBR
-Rule 20    expr -> NUM
-Rule 21    expr -> id
-Rule 22    create_id -> UINT id ASGN expr
-Rule 23    create_id -> CUINT id ASGN expr
-Rule 24    create_id -> BOOL id ASGN expr
-Rule 25    create_id -> CBOOL id ASGN expr
-Rule 26    assign -> id ASGN expr
-Rule 27    id -> ID
+Rule 9     statement -> WHILE OPENBR expr CLOSEBR DO statement
+Rule 10    statement -> IF OPENBR expr CLOSEBR statement
+Rule 11    statement -> IF OPENBR expr CLOSEBR statement ELSE statement
+Rule 12    expr -> MINUS expr
+Rule 13    expr -> NOT expr
+Rule 14    expr -> INC id
+Rule 15    expr -> DEC id
+Rule 16    expr -> expr PLUS expr
+Rule 17    expr -> expr MINUS expr
+Rule 18    expr -> expr MUL expr
+Rule 19    expr -> expr DIV expr
+Rule 20    expr -> expr OR expr
+Rule 21    expr -> expr GT expr
+Rule 22    expr -> expr LT expr
+Rule 23    expr -> expr EQ expr
+Rule 24    expr -> OPENBR expr CLOSEBR
+Rule 25    expr -> NUM
+Rule 26    expr -> id
+Rule 27    create_id -> UINT id ASGN expr
+Rule 28    create_id -> CUINT id ASGN expr
+Rule 29    create_id -> BOOL id ASGN expr
+Rule 30    create_id -> CBOOL id ASGN expr
+Rule 31    assign -> id ASGN expr
+Rule 32    id -> ID
 
 Terminals, with rules where they appear
 
@@ -75,20 +74,20 @@ Terminals, with rules where they appear
 1DARRINT             : 
 2DARRBOOL            : 
 2DARRINT             : 
-ASGN                 : 22 23 24 25 26
+ASGN                 : 27 28 29 30 31
 BACK                 : 
-BOOL                 : 24
-CBOOL                : 25
-CLOSEBR              : 19
+BOOL                 : 29
+CBOOL                : 30
+CLOSEBR              : 9 10 11 24
 CLOSEIND             : 
 CLOSEST              : 6
 COMMA                : 
-CUINT                : 23
-DEC                  : 
-DIV                  : 14
-DO                   : 
-ELSE                 : 
-EQ                   : 18
+CUINT                : 28
+DEC                  : 15
+DIV                  : 19
+DO                   : 9
+ELSE                 : 11
+EQ                   : 23
 EXTEND1              : 
 EXTEND2              : 
 FALSE                : 
@@ -98,22 +97,22 @@ GETB                 :
 GETF                 : 
 GETL                 : 
 GETR                 : 
-GT                   : 16
-ID                   : 27
-IF                   : 
-INC                  : 
+GT                   : 21
+ID                   : 32
+IF                   : 10 11
+INC                  : 14
 LEFT                 : 
-LT                   : 17
-MINUS                : 9 12
-MUL                  : 13
+LT                   : 22
+MINUS                : 12 17
+MUL                  : 18
 NL                   : 
-NOT                  : 10
-NUM                  : 20
-OPENBR               : 19
+NOT                  : 13
+NUM                  : 25
+OPENBR               : 9 10 11 24
 OPENIND              : 
 OPENST               : 6
-OR                   : 15
-PLUS                 : 11
+OR                   : 20
+PLUS                 : 16
 PUSHB                : 
 PUSHF                : 
 PUSHL                : 
@@ -123,20 +122,20 @@ RIGHT                :
 SZ1                  : 
 SZ2                  : 
 TRUE                 : 
-UINT                 : 22
+UINT                 : 27
 UNDO                 : 
-WHILE                : 
+WHILE                : 9
 error                : 4
 
 Nonterminals, with rules where they appear
 
 assign               : 8
 create_id            : 7
-expr                 : 5 9 10 11 11 12 12 13 13 14 14 15 15 16 16 17 17 18 18 19 22 23 24 25 26
-id                   : 21 22 23 24 25 26
+expr                 : 5 9 10 11 12 13 16 16 17 17 18 18 19 19 20 20 21 21 22 22 23 23 24 27 28 29 30 31
+id                   : 14 15 26 27 28 29 30 31
 program              : 0
-statement            : 2 3 6
-stmt_list            : 1 3
+statement            : 2 3 9 10 11 11
+stmt_list            : 1 3 6
 
 Parsing method: LALR
 
@@ -148,40 +147,49 @@ state 0
     (3) stmt_list -> . stmt_list statement
     (4) statement -> . error
     (5) statement -> . expr
-    (6) statement -> . OPENST statement CLOSEST
+    (6) statement -> . OPENST stmt_list CLOSEST
     (7) statement -> . create_id
     (8) statement -> . assign
-    (9) expr -> . MINUS expr
-    (10) expr -> . NOT expr
-    (11) expr -> . expr PLUS expr
-    (12) expr -> . expr MINUS expr
-    (13) expr -> . expr MUL expr
-    (14) expr -> . expr DIV expr
-    (15) expr -> . expr OR expr
-    (16) expr -> . expr GT expr
-    (17) expr -> . expr LT expr
-    (18) expr -> . expr EQ expr
-    (19) expr -> . OPENBR expr CLOSEBR
-    (20) expr -> . NUM
-    (21) expr -> . id
-    (22) create_id -> . UINT id ASGN expr
-    (23) create_id -> . CUINT id ASGN expr
-    (24) create_id -> . BOOL id ASGN expr
-    (25) create_id -> . CBOOL id ASGN expr
-    (26) assign -> . id ASGN expr
-    (27) id -> . ID
+    (9) statement -> . WHILE OPENBR expr CLOSEBR DO statement
+    (10) statement -> . IF OPENBR expr CLOSEBR statement
+    (11) statement -> . IF OPENBR expr CLOSEBR statement ELSE statement
+    (12) expr -> . MINUS expr
+    (13) expr -> . NOT expr
+    (14) expr -> . INC id
+    (15) expr -> . DEC id
+    (16) expr -> . expr PLUS expr
+    (17) expr -> . expr MINUS expr
+    (18) expr -> . expr MUL expr
+    (19) expr -> . expr DIV expr
+    (20) expr -> . expr OR expr
+    (21) expr -> . expr GT expr
+    (22) expr -> . expr LT expr
+    (23) expr -> . expr EQ expr
+    (24) expr -> . OPENBR expr CLOSEBR
+    (25) expr -> . NUM
+    (26) expr -> . id
+    (27) create_id -> . UINT id ASGN expr
+    (28) create_id -> . CUINT id ASGN expr
+    (29) create_id -> . BOOL id ASGN expr
+    (30) create_id -> . CBOOL id ASGN expr
+    (31) assign -> . id ASGN expr
+    (32) id -> . ID
 
     error           shift and go to state 4
     OPENST          shift and go to state 6
-    MINUS           shift and go to state 9
-    NOT             shift and go to state 10
-    OPENBR          shift and go to state 11
-    NUM             shift and go to state 12
-    UINT            shift and go to state 14
-    CUINT           shift and go to state 15
-    BOOL            shift and go to state 16
-    CBOOL           shift and go to state 17
-    ID              shift and go to state 18
+    WHILE           shift and go to state 9
+    IF              shift and go to state 11
+    MINUS           shift and go to state 12
+    NOT             shift and go to state 13
+    INC             shift and go to state 14
+    DEC             shift and go to state 16
+    OPENBR          shift and go to state 10
+    NUM             shift and go to state 17
+    UINT            shift and go to state 18
+    CUINT           shift and go to state 19
+    BOOL            shift and go to state 20
+    CBOOL           shift and go to state 21
+    ID              shift and go to state 22
 
     program                        shift and go to state 1
     stmt_list                      shift and go to state 2
@@ -189,7 +197,7 @@ state 0
     expr                           shift and go to state 5
     create_id                      shift and go to state 7
     assign                         shift and go to state 8
-    id                             shift and go to state 13
+    id                             shift and go to state 15
 
 state 1
 
@@ -203,47 +211,56 @@ state 2
     (3) stmt_list -> stmt_list . statement
     (4) statement -> . error
     (5) statement -> . expr
-    (6) statement -> . OPENST statement CLOSEST
+    (6) statement -> . OPENST stmt_list CLOSEST
     (7) statement -> . create_id
     (8) statement -> . assign
-    (9) expr -> . MINUS expr
-    (10) expr -> . NOT expr
-    (11) expr -> . expr PLUS expr
-    (12) expr -> . expr MINUS expr
-    (13) expr -> . expr MUL expr
-    (14) expr -> . expr DIV expr
-    (15) expr -> . expr OR expr
-    (16) expr -> . expr GT expr
-    (17) expr -> . expr LT expr
-    (18) expr -> . expr EQ expr
-    (19) expr -> . OPENBR expr CLOSEBR
-    (20) expr -> . NUM
-    (21) expr -> . id
-    (22) create_id -> . UINT id ASGN expr
-    (23) create_id -> . CUINT id ASGN expr
-    (24) create_id -> . BOOL id ASGN expr
-    (25) create_id -> . CBOOL id ASGN expr
-    (26) assign -> . id ASGN expr
-    (27) id -> . ID
+    (9) statement -> . WHILE OPENBR expr CLOSEBR DO statement
+    (10) statement -> . IF OPENBR expr CLOSEBR statement
+    (11) statement -> . IF OPENBR expr CLOSEBR statement ELSE statement
+    (12) expr -> . MINUS expr
+    (13) expr -> . NOT expr
+    (14) expr -> . INC id
+    (15) expr -> . DEC id
+    (16) expr -> . expr PLUS expr
+    (17) expr -> . expr MINUS expr
+    (18) expr -> . expr MUL expr
+    (19) expr -> . expr DIV expr
+    (20) expr -> . expr OR expr
+    (21) expr -> . expr GT expr
+    (22) expr -> . expr LT expr
+    (23) expr -> . expr EQ expr
+    (24) expr -> . OPENBR expr CLOSEBR
+    (25) expr -> . NUM
+    (26) expr -> . id
+    (27) create_id -> . UINT id ASGN expr
+    (28) create_id -> . CUINT id ASGN expr
+    (29) create_id -> . BOOL id ASGN expr
+    (30) create_id -> . CBOOL id ASGN expr
+    (31) assign -> . id ASGN expr
+    (32) id -> . ID
 
     $end            reduce using rule 1 (program -> stmt_list .)
     error           shift and go to state 4
     OPENST          shift and go to state 6
-    MINUS           shift and go to state 9
-    NOT             shift and go to state 10
-    OPENBR          shift and go to state 11
-    NUM             shift and go to state 12
-    UINT            shift and go to state 14
-    CUINT           shift and go to state 15
-    BOOL            shift and go to state 16
-    CBOOL           shift and go to state 17
-    ID              shift and go to state 18
+    WHILE           shift and go to state 9
+    IF              shift and go to state 11
+    MINUS           shift and go to state 12
+    NOT             shift and go to state 13
+    INC             shift and go to state 14
+    DEC             shift and go to state 16
+    OPENBR          shift and go to state 10
+    NUM             shift and go to state 17
+    UINT            shift and go to state 18
+    CUINT           shift and go to state 19
+    BOOL            shift and go to state 20
+    CBOOL           shift and go to state 21
+    ID              shift and go to state 22
 
-    statement                      shift and go to state 19
+    statement                      shift and go to state 23
     expr                           shift and go to state 5
     create_id                      shift and go to state 7
     assign                         shift and go to state 8
-    id                             shift and go to state 13
+    id                             shift and go to state 15
 
 state 3
 
@@ -251,8 +268,12 @@ state 3
 
     error           reduce using rule 2 (stmt_list -> statement .)
     OPENST          reduce using rule 2 (stmt_list -> statement .)
+    WHILE           reduce using rule 2 (stmt_list -> statement .)
+    IF              reduce using rule 2 (stmt_list -> statement .)
     MINUS           reduce using rule 2 (stmt_list -> statement .)
     NOT             reduce using rule 2 (stmt_list -> statement .)
+    INC             reduce using rule 2 (stmt_list -> statement .)
+    DEC             reduce using rule 2 (stmt_list -> statement .)
     OPENBR          reduce using rule 2 (stmt_list -> statement .)
     NUM             reduce using rule 2 (stmt_list -> statement .)
     UINT            reduce using rule 2 (stmt_list -> statement .)
@@ -261,6 +282,7 @@ state 3
     CBOOL           reduce using rule 2 (stmt_list -> statement .)
     ID              reduce using rule 2 (stmt_list -> statement .)
     $end            reduce using rule 2 (stmt_list -> statement .)
+    CLOSEST         reduce using rule 2 (stmt_list -> statement .)
 
 
 state 4
@@ -269,8 +291,12 @@ state 4
 
     error           reduce using rule 4 (statement -> error .)
     OPENST          reduce using rule 4 (statement -> error .)
+    WHILE           reduce using rule 4 (statement -> error .)
+    IF              reduce using rule 4 (statement -> error .)
     MINUS           reduce using rule 4 (statement -> error .)
     NOT             reduce using rule 4 (statement -> error .)
+    INC             reduce using rule 4 (statement -> error .)
+    DEC             reduce using rule 4 (statement -> error .)
     OPENBR          reduce using rule 4 (statement -> error .)
     NUM             reduce using rule 4 (statement -> error .)
     UINT            reduce using rule 4 (statement -> error .)
@@ -280,24 +306,29 @@ state 4
     ID              reduce using rule 4 (statement -> error .)
     $end            reduce using rule 4 (statement -> error .)
     CLOSEST         reduce using rule 4 (statement -> error .)
+    ELSE            reduce using rule 4 (statement -> error .)
 
 
 state 5
 
     (5) statement -> expr .
-    (11) expr -> expr . PLUS expr
-    (12) expr -> expr . MINUS expr
-    (13) expr -> expr . MUL expr
-    (14) expr -> expr . DIV expr
-    (15) expr -> expr . OR expr
-    (16) expr -> expr . GT expr
-    (17) expr -> expr . LT expr
-    (18) expr -> expr . EQ expr
+    (16) expr -> expr . PLUS expr
+    (17) expr -> expr . MINUS expr
+    (18) expr -> expr . MUL expr
+    (19) expr -> expr . DIV expr
+    (20) expr -> expr . OR expr
+    (21) expr -> expr . GT expr
+    (22) expr -> expr . LT expr
+    (23) expr -> expr . EQ expr
 
   ! shift/reduce conflict for MINUS resolved as shift
     error           reduce using rule 5 (statement -> expr .)
     OPENST          reduce using rule 5 (statement -> expr .)
+    WHILE           reduce using rule 5 (statement -> expr .)
+    IF              reduce using rule 5 (statement -> expr .)
     NOT             reduce using rule 5 (statement -> expr .)
+    INC             reduce using rule 5 (statement -> expr .)
+    DEC             reduce using rule 5 (statement -> expr .)
     OPENBR          reduce using rule 5 (statement -> expr .)
     NUM             reduce using rule 5 (statement -> expr .)
     UINT            reduce using rule 5 (statement -> expr .)
@@ -307,63 +338,76 @@ state 5
     ID              reduce using rule 5 (statement -> expr .)
     $end            reduce using rule 5 (statement -> expr .)
     CLOSEST         reduce using rule 5 (statement -> expr .)
-    PLUS            shift and go to state 20
-    MINUS           shift and go to state 21
-    MUL             shift and go to state 22
-    DIV             shift and go to state 23
-    OR              shift and go to state 24
-    GT              shift and go to state 25
-    LT              shift and go to state 26
-    EQ              shift and go to state 27
+    ELSE            reduce using rule 5 (statement -> expr .)
+    PLUS            shift and go to state 24
+    MINUS           shift and go to state 25
+    MUL             shift and go to state 26
+    DIV             shift and go to state 27
+    OR              shift and go to state 28
+    GT              shift and go to state 29
+    LT              shift and go to state 30
+    EQ              shift and go to state 31
 
   ! MINUS           [ reduce using rule 5 (statement -> expr .) ]
 
 
 state 6
 
-    (6) statement -> OPENST . statement CLOSEST
+    (6) statement -> OPENST . stmt_list CLOSEST
+    (2) stmt_list -> . statement
+    (3) stmt_list -> . stmt_list statement
     (4) statement -> . error
     (5) statement -> . expr
-    (6) statement -> . OPENST statement CLOSEST
+    (6) statement -> . OPENST stmt_list CLOSEST
     (7) statement -> . create_id
     (8) statement -> . assign
-    (9) expr -> . MINUS expr
-    (10) expr -> . NOT expr
-    (11) expr -> . expr PLUS expr
-    (12) expr -> . expr MINUS expr
-    (13) expr -> . expr MUL expr
-    (14) expr -> . expr DIV expr
-    (15) expr -> . expr OR expr
-    (16) expr -> . expr GT expr
-    (17) expr -> . expr LT expr
-    (18) expr -> . expr EQ expr
-    (19) expr -> . OPENBR expr CLOSEBR
-    (20) expr -> . NUM
-    (21) expr -> . id
-    (22) create_id -> . UINT id ASGN expr
-    (23) create_id -> . CUINT id ASGN expr
-    (24) create_id -> . BOOL id ASGN expr
-    (25) create_id -> . CBOOL id ASGN expr
-    (26) assign -> . id ASGN expr
-    (27) id -> . ID
+    (9) statement -> . WHILE OPENBR expr CLOSEBR DO statement
+    (10) statement -> . IF OPENBR expr CLOSEBR statement
+    (11) statement -> . IF OPENBR expr CLOSEBR statement ELSE statement
+    (12) expr -> . MINUS expr
+    (13) expr -> . NOT expr
+    (14) expr -> . INC id
+    (15) expr -> . DEC id
+    (16) expr -> . expr PLUS expr
+    (17) expr -> . expr MINUS expr
+    (18) expr -> . expr MUL expr
+    (19) expr -> . expr DIV expr
+    (20) expr -> . expr OR expr
+    (21) expr -> . expr GT expr
+    (22) expr -> . expr LT expr
+    (23) expr -> . expr EQ expr
+    (24) expr -> . OPENBR expr CLOSEBR
+    (25) expr -> . NUM
+    (26) expr -> . id
+    (27) create_id -> . UINT id ASGN expr
+    (28) create_id -> . CUINT id ASGN expr
+    (29) create_id -> . BOOL id ASGN expr
+    (30) create_id -> . CBOOL id ASGN expr
+    (31) assign -> . id ASGN expr
+    (32) id -> . ID
 
     error           shift and go to state 4
     OPENST          shift and go to state 6
-    MINUS           shift and go to state 9
-    NOT             shift and go to state 10
-    OPENBR          shift and go to state 11
-    NUM             shift and go to state 12
-    UINT            shift and go to state 14
-    CUINT           shift and go to state 15
-    BOOL            shift and go to state 16
-    CBOOL           shift and go to state 17
-    ID              shift and go to state 18
+    WHILE           shift and go to state 9
+    IF              shift and go to state 11
+    MINUS           shift and go to state 12
+    NOT             shift and go to state 13
+    INC             shift and go to state 14
+    DEC             shift and go to state 16
+    OPENBR          shift and go to state 10
+    NUM             shift and go to state 17
+    UINT            shift and go to state 18
+    CUINT           shift and go to state 19
+    BOOL            shift and go to state 20
+    CBOOL           shift and go to state 21
+    ID              shift and go to state 22
 
-    statement                      shift and go to state 28
+    stmt_list                      shift and go to state 32
+    statement                      shift and go to state 3
     expr                           shift and go to state 5
     create_id                      shift and go to state 7
     assign                         shift and go to state 8
-    id                             shift and go to state 13
+    id                             shift and go to state 15
 
 state 7
 
@@ -371,8 +415,12 @@ state 7
 
     error           reduce using rule 7 (statement -> create_id .)
     OPENST          reduce using rule 7 (statement -> create_id .)
+    WHILE           reduce using rule 7 (statement -> create_id .)
+    IF              reduce using rule 7 (statement -> create_id .)
     MINUS           reduce using rule 7 (statement -> create_id .)
     NOT             reduce using rule 7 (statement -> create_id .)
+    INC             reduce using rule 7 (statement -> create_id .)
+    DEC             reduce using rule 7 (statement -> create_id .)
     OPENBR          reduce using rule 7 (statement -> create_id .)
     NUM             reduce using rule 7 (statement -> create_id .)
     UINT            reduce using rule 7 (statement -> create_id .)
@@ -382,6 +430,7 @@ state 7
     ID              reduce using rule 7 (statement -> create_id .)
     $end            reduce using rule 7 (statement -> create_id .)
     CLOSEST         reduce using rule 7 (statement -> create_id .)
+    ELSE            reduce using rule 7 (statement -> create_id .)
 
 
 state 8
@@ -390,8 +439,12 @@ state 8
 
     error           reduce using rule 8 (statement -> assign .)
     OPENST          reduce using rule 8 (statement -> assign .)
+    WHILE           reduce using rule 8 (statement -> assign .)
+    IF              reduce using rule 8 (statement -> assign .)
     MINUS           reduce using rule 8 (statement -> assign .)
     NOT             reduce using rule 8 (statement -> assign .)
+    INC             reduce using rule 8 (statement -> assign .)
+    DEC             reduce using rule 8 (statement -> assign .)
     OPENBR          reduce using rule 8 (statement -> assign .)
     NUM             reduce using rule 8 (statement -> assign .)
     UINT            reduce using rule 8 (statement -> assign .)
@@ -401,216 +454,281 @@ state 8
     ID              reduce using rule 8 (statement -> assign .)
     $end            reduce using rule 8 (statement -> assign .)
     CLOSEST         reduce using rule 8 (statement -> assign .)
+    ELSE            reduce using rule 8 (statement -> assign .)
 
 
 state 9
 
-    (9) expr -> MINUS . expr
-    (9) expr -> . MINUS expr
-    (10) expr -> . NOT expr
-    (11) expr -> . expr PLUS expr
-    (12) expr -> . expr MINUS expr
-    (13) expr -> . expr MUL expr
-    (14) expr -> . expr DIV expr
-    (15) expr -> . expr OR expr
-    (16) expr -> . expr GT expr
-    (17) expr -> . expr LT expr
-    (18) expr -> . expr EQ expr
-    (19) expr -> . OPENBR expr CLOSEBR
-    (20) expr -> . NUM
-    (21) expr -> . id
-    (27) id -> . ID
+    (9) statement -> WHILE . OPENBR expr CLOSEBR DO statement
 
-    MINUS           shift and go to state 9
-    NOT             shift and go to state 10
-    OPENBR          shift and go to state 11
-    NUM             shift and go to state 12
-    ID              shift and go to state 18
+    OPENBR          shift and go to state 33
 
-    expr                           shift and go to state 29
-    id                             shift and go to state 30
 
 state 10
 
-    (10) expr -> NOT . expr
-    (9) expr -> . MINUS expr
-    (10) expr -> . NOT expr
-    (11) expr -> . expr PLUS expr
-    (12) expr -> . expr MINUS expr
-    (13) expr -> . expr MUL expr
-    (14) expr -> . expr DIV expr
-    (15) expr -> . expr OR expr
-    (16) expr -> . expr GT expr
-    (17) expr -> . expr LT expr
-    (18) expr -> . expr EQ expr
-    (19) expr -> . OPENBR expr CLOSEBR
-    (20) expr -> . NUM
-    (21) expr -> . id
-    (27) id -> . ID
+    (24) expr -> OPENBR . expr CLOSEBR
+    (12) expr -> . MINUS expr
+    (13) expr -> . NOT expr
+    (14) expr -> . INC id
+    (15) expr -> . DEC id
+    (16) expr -> . expr PLUS expr
+    (17) expr -> . expr MINUS expr
+    (18) expr -> . expr MUL expr
+    (19) expr -> . expr DIV expr
+    (20) expr -> . expr OR expr
+    (21) expr -> . expr GT expr
+    (22) expr -> . expr LT expr
+    (23) expr -> . expr EQ expr
+    (24) expr -> . OPENBR expr CLOSEBR
+    (25) expr -> . NUM
+    (26) expr -> . id
+    (32) id -> . ID
 
-    MINUS           shift and go to state 9
-    NOT             shift and go to state 10
-    OPENBR          shift and go to state 11
-    NUM             shift and go to state 12
-    ID              shift and go to state 18
+    MINUS           shift and go to state 12
+    NOT             shift and go to state 13
+    INC             shift and go to state 14
+    DEC             shift and go to state 16
+    OPENBR          shift and go to state 10
+    NUM             shift and go to state 17
+    ID              shift and go to state 22
 
-    expr                           shift and go to state 31
-    id                             shift and go to state 30
+    expr                           shift and go to state 34
+    id                             shift and go to state 35
 
 state 11
 
-    (19) expr -> OPENBR . expr CLOSEBR
-    (9) expr -> . MINUS expr
-    (10) expr -> . NOT expr
-    (11) expr -> . expr PLUS expr
-    (12) expr -> . expr MINUS expr
-    (13) expr -> . expr MUL expr
-    (14) expr -> . expr DIV expr
-    (15) expr -> . expr OR expr
-    (16) expr -> . expr GT expr
-    (17) expr -> . expr LT expr
-    (18) expr -> . expr EQ expr
-    (19) expr -> . OPENBR expr CLOSEBR
-    (20) expr -> . NUM
-    (21) expr -> . id
-    (27) id -> . ID
+    (10) statement -> IF . OPENBR expr CLOSEBR statement
+    (11) statement -> IF . OPENBR expr CLOSEBR statement ELSE statement
 
-    MINUS           shift and go to state 9
-    NOT             shift and go to state 10
-    OPENBR          shift and go to state 11
-    NUM             shift and go to state 12
-    ID              shift and go to state 18
+    OPENBR          shift and go to state 36
 
-    expr                           shift and go to state 32
-    id                             shift and go to state 30
 
 state 12
 
-    (20) expr -> NUM .
+    (12) expr -> MINUS . expr
+    (12) expr -> . MINUS expr
+    (13) expr -> . NOT expr
+    (14) expr -> . INC id
+    (15) expr -> . DEC id
+    (16) expr -> . expr PLUS expr
+    (17) expr -> . expr MINUS expr
+    (18) expr -> . expr MUL expr
+    (19) expr -> . expr DIV expr
+    (20) expr -> . expr OR expr
+    (21) expr -> . expr GT expr
+    (22) expr -> . expr LT expr
+    (23) expr -> . expr EQ expr
+    (24) expr -> . OPENBR expr CLOSEBR
+    (25) expr -> . NUM
+    (26) expr -> . id
+    (32) id -> . ID
 
-    PLUS            reduce using rule 20 (expr -> NUM .)
-    MINUS           reduce using rule 20 (expr -> NUM .)
-    MUL             reduce using rule 20 (expr -> NUM .)
-    DIV             reduce using rule 20 (expr -> NUM .)
-    OR              reduce using rule 20 (expr -> NUM .)
-    GT              reduce using rule 20 (expr -> NUM .)
-    LT              reduce using rule 20 (expr -> NUM .)
-    EQ              reduce using rule 20 (expr -> NUM .)
-    error           reduce using rule 20 (expr -> NUM .)
-    OPENST          reduce using rule 20 (expr -> NUM .)
-    NOT             reduce using rule 20 (expr -> NUM .)
-    OPENBR          reduce using rule 20 (expr -> NUM .)
-    NUM             reduce using rule 20 (expr -> NUM .)
-    UINT            reduce using rule 20 (expr -> NUM .)
-    CUINT           reduce using rule 20 (expr -> NUM .)
-    BOOL            reduce using rule 20 (expr -> NUM .)
-    CBOOL           reduce using rule 20 (expr -> NUM .)
-    ID              reduce using rule 20 (expr -> NUM .)
-    $end            reduce using rule 20 (expr -> NUM .)
-    CLOSEST         reduce using rule 20 (expr -> NUM .)
-    CLOSEBR         reduce using rule 20 (expr -> NUM .)
+    MINUS           shift and go to state 12
+    NOT             shift and go to state 13
+    INC             shift and go to state 14
+    DEC             shift and go to state 16
+    OPENBR          shift and go to state 10
+    NUM             shift and go to state 17
+    ID              shift and go to state 22
 
+    expr                           shift and go to state 37
+    id                             shift and go to state 35
 
 state 13
 
-    (21) expr -> id .
-    (26) assign -> id . ASGN expr
+    (13) expr -> NOT . expr
+    (12) expr -> . MINUS expr
+    (13) expr -> . NOT expr
+    (14) expr -> . INC id
+    (15) expr -> . DEC id
+    (16) expr -> . expr PLUS expr
+    (17) expr -> . expr MINUS expr
+    (18) expr -> . expr MUL expr
+    (19) expr -> . expr DIV expr
+    (20) expr -> . expr OR expr
+    (21) expr -> . expr GT expr
+    (22) expr -> . expr LT expr
+    (23) expr -> . expr EQ expr
+    (24) expr -> . OPENBR expr CLOSEBR
+    (25) expr -> . NUM
+    (26) expr -> . id
+    (32) id -> . ID
 
-    PLUS            reduce using rule 21 (expr -> id .)
-    MINUS           reduce using rule 21 (expr -> id .)
-    MUL             reduce using rule 21 (expr -> id .)
-    DIV             reduce using rule 21 (expr -> id .)
-    OR              reduce using rule 21 (expr -> id .)
-    GT              reduce using rule 21 (expr -> id .)
-    LT              reduce using rule 21 (expr -> id .)
-    EQ              reduce using rule 21 (expr -> id .)
-    error           reduce using rule 21 (expr -> id .)
-    OPENST          reduce using rule 21 (expr -> id .)
-    NOT             reduce using rule 21 (expr -> id .)
-    OPENBR          reduce using rule 21 (expr -> id .)
-    NUM             reduce using rule 21 (expr -> id .)
-    UINT            reduce using rule 21 (expr -> id .)
-    CUINT           reduce using rule 21 (expr -> id .)
-    BOOL            reduce using rule 21 (expr -> id .)
-    CBOOL           reduce using rule 21 (expr -> id .)
-    ID              reduce using rule 21 (expr -> id .)
-    $end            reduce using rule 21 (expr -> id .)
-    CLOSEST         reduce using rule 21 (expr -> id .)
-    ASGN            shift and go to state 33
+    MINUS           shift and go to state 12
+    NOT             shift and go to state 13
+    INC             shift and go to state 14
+    DEC             shift and go to state 16
+    OPENBR          shift and go to state 10
+    NUM             shift and go to state 17
+    ID              shift and go to state 22
 
+    expr                           shift and go to state 38
+    id                             shift and go to state 35
 
 state 14
 
-    (22) create_id -> UINT . id ASGN expr
-    (27) id -> . ID
+    (14) expr -> INC . id
+    (32) id -> . ID
 
-    ID              shift and go to state 18
+    ID              shift and go to state 22
 
-    id                             shift and go to state 34
+    id                             shift and go to state 39
 
 state 15
 
-    (23) create_id -> CUINT . id ASGN expr
-    (27) id -> . ID
+    (26) expr -> id .
+    (31) assign -> id . ASGN expr
 
-    ID              shift and go to state 18
+    PLUS            reduce using rule 26 (expr -> id .)
+    MINUS           reduce using rule 26 (expr -> id .)
+    MUL             reduce using rule 26 (expr -> id .)
+    DIV             reduce using rule 26 (expr -> id .)
+    OR              reduce using rule 26 (expr -> id .)
+    GT              reduce using rule 26 (expr -> id .)
+    LT              reduce using rule 26 (expr -> id .)
+    EQ              reduce using rule 26 (expr -> id .)
+    error           reduce using rule 26 (expr -> id .)
+    OPENST          reduce using rule 26 (expr -> id .)
+    WHILE           reduce using rule 26 (expr -> id .)
+    IF              reduce using rule 26 (expr -> id .)
+    NOT             reduce using rule 26 (expr -> id .)
+    INC             reduce using rule 26 (expr -> id .)
+    DEC             reduce using rule 26 (expr -> id .)
+    OPENBR          reduce using rule 26 (expr -> id .)
+    NUM             reduce using rule 26 (expr -> id .)
+    UINT            reduce using rule 26 (expr -> id .)
+    CUINT           reduce using rule 26 (expr -> id .)
+    BOOL            reduce using rule 26 (expr -> id .)
+    CBOOL           reduce using rule 26 (expr -> id .)
+    ID              reduce using rule 26 (expr -> id .)
+    $end            reduce using rule 26 (expr -> id .)
+    CLOSEST         reduce using rule 26 (expr -> id .)
+    ELSE            reduce using rule 26 (expr -> id .)
+    ASGN            shift and go to state 40
 
-    id                             shift and go to state 35
 
 state 16
 
-    (24) create_id -> BOOL . id ASGN expr
-    (27) id -> . ID
+    (15) expr -> DEC . id
+    (32) id -> . ID
 
-    ID              shift and go to state 18
+    ID              shift and go to state 22
 
-    id                             shift and go to state 36
+    id                             shift and go to state 41
 
 state 17
 
-    (25) create_id -> CBOOL . id ASGN expr
-    (27) id -> . ID
+    (25) expr -> NUM .
 
-    ID              shift and go to state 18
+    PLUS            reduce using rule 25 (expr -> NUM .)
+    MINUS           reduce using rule 25 (expr -> NUM .)
+    MUL             reduce using rule 25 (expr -> NUM .)
+    DIV             reduce using rule 25 (expr -> NUM .)
+    OR              reduce using rule 25 (expr -> NUM .)
+    GT              reduce using rule 25 (expr -> NUM .)
+    LT              reduce using rule 25 (expr -> NUM .)
+    EQ              reduce using rule 25 (expr -> NUM .)
+    error           reduce using rule 25 (expr -> NUM .)
+    OPENST          reduce using rule 25 (expr -> NUM .)
+    WHILE           reduce using rule 25 (expr -> NUM .)
+    IF              reduce using rule 25 (expr -> NUM .)
+    NOT             reduce using rule 25 (expr -> NUM .)
+    INC             reduce using rule 25 (expr -> NUM .)
+    DEC             reduce using rule 25 (expr -> NUM .)
+    OPENBR          reduce using rule 25 (expr -> NUM .)
+    NUM             reduce using rule 25 (expr -> NUM .)
+    UINT            reduce using rule 25 (expr -> NUM .)
+    CUINT           reduce using rule 25 (expr -> NUM .)
+    BOOL            reduce using rule 25 (expr -> NUM .)
+    CBOOL           reduce using rule 25 (expr -> NUM .)
+    ID              reduce using rule 25 (expr -> NUM .)
+    $end            reduce using rule 25 (expr -> NUM .)
+    CLOSEST         reduce using rule 25 (expr -> NUM .)
+    CLOSEBR         reduce using rule 25 (expr -> NUM .)
+    ELSE            reduce using rule 25 (expr -> NUM .)
 
-    id                             shift and go to state 37
 
 state 18
 
-    (27) id -> ID .
+    (27) create_id -> UINT . id ASGN expr
+    (32) id -> . ID
 
-    ASGN            reduce using rule 27 (id -> ID .)
-    PLUS            reduce using rule 27 (id -> ID .)
-    MINUS           reduce using rule 27 (id -> ID .)
-    MUL             reduce using rule 27 (id -> ID .)
-    DIV             reduce using rule 27 (id -> ID .)
-    OR              reduce using rule 27 (id -> ID .)
-    GT              reduce using rule 27 (id -> ID .)
-    LT              reduce using rule 27 (id -> ID .)
-    EQ              reduce using rule 27 (id -> ID .)
-    error           reduce using rule 27 (id -> ID .)
-    OPENST          reduce using rule 27 (id -> ID .)
-    NOT             reduce using rule 27 (id -> ID .)
-    OPENBR          reduce using rule 27 (id -> ID .)
-    NUM             reduce using rule 27 (id -> ID .)
-    UINT            reduce using rule 27 (id -> ID .)
-    CUINT           reduce using rule 27 (id -> ID .)
-    BOOL            reduce using rule 27 (id -> ID .)
-    CBOOL           reduce using rule 27 (id -> ID .)
-    ID              reduce using rule 27 (id -> ID .)
-    $end            reduce using rule 27 (id -> ID .)
-    CLOSEST         reduce using rule 27 (id -> ID .)
-    CLOSEBR         reduce using rule 27 (id -> ID .)
+    ID              shift and go to state 22
 
+    id                             shift and go to state 42
 
 state 19
+
+    (28) create_id -> CUINT . id ASGN expr
+    (32) id -> . ID
+
+    ID              shift and go to state 22
+
+    id                             shift and go to state 43
+
+state 20
+
+    (29) create_id -> BOOL . id ASGN expr
+    (32) id -> . ID
+
+    ID              shift and go to state 22
+
+    id                             shift and go to state 44
+
+state 21
+
+    (30) create_id -> CBOOL . id ASGN expr
+    (32) id -> . ID
+
+    ID              shift and go to state 22
+
+    id                             shift and go to state 45
+
+state 22
+
+    (32) id -> ID .
+
+    ASGN            reduce using rule 32 (id -> ID .)
+    PLUS            reduce using rule 32 (id -> ID .)
+    MINUS           reduce using rule 32 (id -> ID .)
+    MUL             reduce using rule 32 (id -> ID .)
+    DIV             reduce using rule 32 (id -> ID .)
+    OR              reduce using rule 32 (id -> ID .)
+    GT              reduce using rule 32 (id -> ID .)
+    LT              reduce using rule 32 (id -> ID .)
+    EQ              reduce using rule 32 (id -> ID .)
+    error           reduce using rule 32 (id -> ID .)
+    OPENST          reduce using rule 32 (id -> ID .)
+    WHILE           reduce using rule 32 (id -> ID .)
+    IF              reduce using rule 32 (id -> ID .)
+    NOT             reduce using rule 32 (id -> ID .)
+    INC             reduce using rule 32 (id -> ID .)
+    DEC             reduce using rule 32 (id -> ID .)
+    OPENBR          reduce using rule 32 (id -> ID .)
+    NUM             reduce using rule 32 (id -> ID .)
+    UINT            reduce using rule 32 (id -> ID .)
+    CUINT           reduce using rule 32 (id -> ID .)
+    BOOL            reduce using rule 32 (id -> ID .)
+    CBOOL           reduce using rule 32 (id -> ID .)
+    ID              reduce using rule 32 (id -> ID .)
+    $end            reduce using rule 32 (id -> ID .)
+    CLOSEST         reduce using rule 32 (id -> ID .)
+    CLOSEBR         reduce using rule 32 (id -> ID .)
+    ELSE            reduce using rule 32 (id -> ID .)
+
+
+state 23
 
     (3) stmt_list -> stmt_list statement .
 
     error           reduce using rule 3 (stmt_list -> stmt_list statement .)
     OPENST          reduce using rule 3 (stmt_list -> stmt_list statement .)
+    WHILE           reduce using rule 3 (stmt_list -> stmt_list statement .)
+    IF              reduce using rule 3 (stmt_list -> stmt_list statement .)
     MINUS           reduce using rule 3 (stmt_list -> stmt_list statement .)
     NOT             reduce using rule 3 (stmt_list -> stmt_list statement .)
+    INC             reduce using rule 3 (stmt_list -> stmt_list statement .)
+    DEC             reduce using rule 3 (stmt_list -> stmt_list statement .)
     OPENBR          reduce using rule 3 (stmt_list -> stmt_list statement .)
     NUM             reduce using rule 3 (stmt_list -> stmt_list statement .)
     UINT            reduce using rule 3 (stmt_list -> stmt_list statement .)
@@ -619,611 +737,860 @@ state 19
     CBOOL           reduce using rule 3 (stmt_list -> stmt_list statement .)
     ID              reduce using rule 3 (stmt_list -> stmt_list statement .)
     $end            reduce using rule 3 (stmt_list -> stmt_list statement .)
+    CLOSEST         reduce using rule 3 (stmt_list -> stmt_list statement .)
 
-
-state 20
-
-    (11) expr -> expr PLUS . expr
-    (9) expr -> . MINUS expr
-    (10) expr -> . NOT expr
-    (11) expr -> . expr PLUS expr
-    (12) expr -> . expr MINUS expr
-    (13) expr -> . expr MUL expr
-    (14) expr -> . expr DIV expr
-    (15) expr -> . expr OR expr
-    (16) expr -> . expr GT expr
-    (17) expr -> . expr LT expr
-    (18) expr -> . expr EQ expr
-    (19) expr -> . OPENBR expr CLOSEBR
-    (20) expr -> . NUM
-    (21) expr -> . id
-    (27) id -> . ID
-
-    MINUS           shift and go to state 9
-    NOT             shift and go to state 10
-    OPENBR          shift and go to state 11
-    NUM             shift and go to state 12
-    ID              shift and go to state 18
-
-    expr                           shift and go to state 38
-    id                             shift and go to state 30
-
-state 21
-
-    (12) expr -> expr MINUS . expr
-    (9) expr -> . MINUS expr
-    (10) expr -> . NOT expr
-    (11) expr -> . expr PLUS expr
-    (12) expr -> . expr MINUS expr
-    (13) expr -> . expr MUL expr
-    (14) expr -> . expr DIV expr
-    (15) expr -> . expr OR expr
-    (16) expr -> . expr GT expr
-    (17) expr -> . expr LT expr
-    (18) expr -> . expr EQ expr
-    (19) expr -> . OPENBR expr CLOSEBR
-    (20) expr -> . NUM
-    (21) expr -> . id
-    (27) id -> . ID
-
-    MINUS           shift and go to state 9
-    NOT             shift and go to state 10
-    OPENBR          shift and go to state 11
-    NUM             shift and go to state 12
-    ID              shift and go to state 18
-
-    expr                           shift and go to state 39
-    id                             shift and go to state 30
-
-state 22
-
-    (13) expr -> expr MUL . expr
-    (9) expr -> . MINUS expr
-    (10) expr -> . NOT expr
-    (11) expr -> . expr PLUS expr
-    (12) expr -> . expr MINUS expr
-    (13) expr -> . expr MUL expr
-    (14) expr -> . expr DIV expr
-    (15) expr -> . expr OR expr
-    (16) expr -> . expr GT expr
-    (17) expr -> . expr LT expr
-    (18) expr -> . expr EQ expr
-    (19) expr -> . OPENBR expr CLOSEBR
-    (20) expr -> . NUM
-    (21) expr -> . id
-    (27) id -> . ID
-
-    MINUS           shift and go to state 9
-    NOT             shift and go to state 10
-    OPENBR          shift and go to state 11
-    NUM             shift and go to state 12
-    ID              shift and go to state 18
-
-    expr                           shift and go to state 40
-    id                             shift and go to state 30
-
-state 23
-
-    (14) expr -> expr DIV . expr
-    (9) expr -> . MINUS expr
-    (10) expr -> . NOT expr
-    (11) expr -> . expr PLUS expr
-    (12) expr -> . expr MINUS expr
-    (13) expr -> . expr MUL expr
-    (14) expr -> . expr DIV expr
-    (15) expr -> . expr OR expr
-    (16) expr -> . expr GT expr
-    (17) expr -> . expr LT expr
-    (18) expr -> . expr EQ expr
-    (19) expr -> . OPENBR expr CLOSEBR
-    (20) expr -> . NUM
-    (21) expr -> . id
-    (27) id -> . ID
-
-    MINUS           shift and go to state 9
-    NOT             shift and go to state 10
-    OPENBR          shift and go to state 11
-    NUM             shift and go to state 12
-    ID              shift and go to state 18
-
-    expr                           shift and go to state 41
-    id                             shift and go to state 30
 
 state 24
 
-    (15) expr -> expr OR . expr
-    (9) expr -> . MINUS expr
-    (10) expr -> . NOT expr
-    (11) expr -> . expr PLUS expr
-    (12) expr -> . expr MINUS expr
-    (13) expr -> . expr MUL expr
-    (14) expr -> . expr DIV expr
-    (15) expr -> . expr OR expr
-    (16) expr -> . expr GT expr
-    (17) expr -> . expr LT expr
-    (18) expr -> . expr EQ expr
-    (19) expr -> . OPENBR expr CLOSEBR
-    (20) expr -> . NUM
-    (21) expr -> . id
-    (27) id -> . ID
+    (16) expr -> expr PLUS . expr
+    (12) expr -> . MINUS expr
+    (13) expr -> . NOT expr
+    (14) expr -> . INC id
+    (15) expr -> . DEC id
+    (16) expr -> . expr PLUS expr
+    (17) expr -> . expr MINUS expr
+    (18) expr -> . expr MUL expr
+    (19) expr -> . expr DIV expr
+    (20) expr -> . expr OR expr
+    (21) expr -> . expr GT expr
+    (22) expr -> . expr LT expr
+    (23) expr -> . expr EQ expr
+    (24) expr -> . OPENBR expr CLOSEBR
+    (25) expr -> . NUM
+    (26) expr -> . id
+    (32) id -> . ID
 
-    MINUS           shift and go to state 9
-    NOT             shift and go to state 10
-    OPENBR          shift and go to state 11
-    NUM             shift and go to state 12
-    ID              shift and go to state 18
+    MINUS           shift and go to state 12
+    NOT             shift and go to state 13
+    INC             shift and go to state 14
+    DEC             shift and go to state 16
+    OPENBR          shift and go to state 10
+    NUM             shift and go to state 17
+    ID              shift and go to state 22
 
-    expr                           shift and go to state 42
-    id                             shift and go to state 30
+    expr                           shift and go to state 46
+    id                             shift and go to state 35
 
 state 25
 
-    (16) expr -> expr GT . expr
-    (9) expr -> . MINUS expr
-    (10) expr -> . NOT expr
-    (11) expr -> . expr PLUS expr
-    (12) expr -> . expr MINUS expr
-    (13) expr -> . expr MUL expr
-    (14) expr -> . expr DIV expr
-    (15) expr -> . expr OR expr
-    (16) expr -> . expr GT expr
-    (17) expr -> . expr LT expr
-    (18) expr -> . expr EQ expr
-    (19) expr -> . OPENBR expr CLOSEBR
-    (20) expr -> . NUM
-    (21) expr -> . id
-    (27) id -> . ID
+    (17) expr -> expr MINUS . expr
+    (12) expr -> . MINUS expr
+    (13) expr -> . NOT expr
+    (14) expr -> . INC id
+    (15) expr -> . DEC id
+    (16) expr -> . expr PLUS expr
+    (17) expr -> . expr MINUS expr
+    (18) expr -> . expr MUL expr
+    (19) expr -> . expr DIV expr
+    (20) expr -> . expr OR expr
+    (21) expr -> . expr GT expr
+    (22) expr -> . expr LT expr
+    (23) expr -> . expr EQ expr
+    (24) expr -> . OPENBR expr CLOSEBR
+    (25) expr -> . NUM
+    (26) expr -> . id
+    (32) id -> . ID
 
-    MINUS           shift and go to state 9
-    NOT             shift and go to state 10
-    OPENBR          shift and go to state 11
-    NUM             shift and go to state 12
-    ID              shift and go to state 18
+    MINUS           shift and go to state 12
+    NOT             shift and go to state 13
+    INC             shift and go to state 14
+    DEC             shift and go to state 16
+    OPENBR          shift and go to state 10
+    NUM             shift and go to state 17
+    ID              shift and go to state 22
 
-    expr                           shift and go to state 43
-    id                             shift and go to state 30
+    expr                           shift and go to state 47
+    id                             shift and go to state 35
 
 state 26
 
-    (17) expr -> expr LT . expr
-    (9) expr -> . MINUS expr
-    (10) expr -> . NOT expr
-    (11) expr -> . expr PLUS expr
-    (12) expr -> . expr MINUS expr
-    (13) expr -> . expr MUL expr
-    (14) expr -> . expr DIV expr
-    (15) expr -> . expr OR expr
-    (16) expr -> . expr GT expr
-    (17) expr -> . expr LT expr
-    (18) expr -> . expr EQ expr
-    (19) expr -> . OPENBR expr CLOSEBR
-    (20) expr -> . NUM
-    (21) expr -> . id
-    (27) id -> . ID
+    (18) expr -> expr MUL . expr
+    (12) expr -> . MINUS expr
+    (13) expr -> . NOT expr
+    (14) expr -> . INC id
+    (15) expr -> . DEC id
+    (16) expr -> . expr PLUS expr
+    (17) expr -> . expr MINUS expr
+    (18) expr -> . expr MUL expr
+    (19) expr -> . expr DIV expr
+    (20) expr -> . expr OR expr
+    (21) expr -> . expr GT expr
+    (22) expr -> . expr LT expr
+    (23) expr -> . expr EQ expr
+    (24) expr -> . OPENBR expr CLOSEBR
+    (25) expr -> . NUM
+    (26) expr -> . id
+    (32) id -> . ID
 
-    MINUS           shift and go to state 9
-    NOT             shift and go to state 10
-    OPENBR          shift and go to state 11
-    NUM             shift and go to state 12
-    ID              shift and go to state 18
+    MINUS           shift and go to state 12
+    NOT             shift and go to state 13
+    INC             shift and go to state 14
+    DEC             shift and go to state 16
+    OPENBR          shift and go to state 10
+    NUM             shift and go to state 17
+    ID              shift and go to state 22
 
-    expr                           shift and go to state 44
-    id                             shift and go to state 30
+    expr                           shift and go to state 48
+    id                             shift and go to state 35
 
 state 27
 
-    (18) expr -> expr EQ . expr
-    (9) expr -> . MINUS expr
-    (10) expr -> . NOT expr
-    (11) expr -> . expr PLUS expr
-    (12) expr -> . expr MINUS expr
-    (13) expr -> . expr MUL expr
-    (14) expr -> . expr DIV expr
-    (15) expr -> . expr OR expr
-    (16) expr -> . expr GT expr
-    (17) expr -> . expr LT expr
-    (18) expr -> . expr EQ expr
-    (19) expr -> . OPENBR expr CLOSEBR
-    (20) expr -> . NUM
-    (21) expr -> . id
-    (27) id -> . ID
+    (19) expr -> expr DIV . expr
+    (12) expr -> . MINUS expr
+    (13) expr -> . NOT expr
+    (14) expr -> . INC id
+    (15) expr -> . DEC id
+    (16) expr -> . expr PLUS expr
+    (17) expr -> . expr MINUS expr
+    (18) expr -> . expr MUL expr
+    (19) expr -> . expr DIV expr
+    (20) expr -> . expr OR expr
+    (21) expr -> . expr GT expr
+    (22) expr -> . expr LT expr
+    (23) expr -> . expr EQ expr
+    (24) expr -> . OPENBR expr CLOSEBR
+    (25) expr -> . NUM
+    (26) expr -> . id
+    (32) id -> . ID
 
-    MINUS           shift and go to state 9
-    NOT             shift and go to state 10
-    OPENBR          shift and go to state 11
-    NUM             shift and go to state 12
-    ID              shift and go to state 18
+    MINUS           shift and go to state 12
+    NOT             shift and go to state 13
+    INC             shift and go to state 14
+    DEC             shift and go to state 16
+    OPENBR          shift and go to state 10
+    NUM             shift and go to state 17
+    ID              shift and go to state 22
 
-    expr                           shift and go to state 45
-    id                             shift and go to state 30
+    expr                           shift and go to state 49
+    id                             shift and go to state 35
 
 state 28
 
-    (6) statement -> OPENST statement . CLOSEST
+    (20) expr -> expr OR . expr
+    (12) expr -> . MINUS expr
+    (13) expr -> . NOT expr
+    (14) expr -> . INC id
+    (15) expr -> . DEC id
+    (16) expr -> . expr PLUS expr
+    (17) expr -> . expr MINUS expr
+    (18) expr -> . expr MUL expr
+    (19) expr -> . expr DIV expr
+    (20) expr -> . expr OR expr
+    (21) expr -> . expr GT expr
+    (22) expr -> . expr LT expr
+    (23) expr -> . expr EQ expr
+    (24) expr -> . OPENBR expr CLOSEBR
+    (25) expr -> . NUM
+    (26) expr -> . id
+    (32) id -> . ID
 
-    CLOSEST         shift and go to state 46
+    MINUS           shift and go to state 12
+    NOT             shift and go to state 13
+    INC             shift and go to state 14
+    DEC             shift and go to state 16
+    OPENBR          shift and go to state 10
+    NUM             shift and go to state 17
+    ID              shift and go to state 22
 
+    expr                           shift and go to state 50
+    id                             shift and go to state 35
 
 state 29
 
-    (9) expr -> MINUS expr .
-    (11) expr -> expr . PLUS expr
-    (12) expr -> expr . MINUS expr
-    (13) expr -> expr . MUL expr
-    (14) expr -> expr . DIV expr
-    (15) expr -> expr . OR expr
-    (16) expr -> expr . GT expr
-    (17) expr -> expr . LT expr
-    (18) expr -> expr . EQ expr
+    (21) expr -> expr GT . expr
+    (12) expr -> . MINUS expr
+    (13) expr -> . NOT expr
+    (14) expr -> . INC id
+    (15) expr -> . DEC id
+    (16) expr -> . expr PLUS expr
+    (17) expr -> . expr MINUS expr
+    (18) expr -> . expr MUL expr
+    (19) expr -> . expr DIV expr
+    (20) expr -> . expr OR expr
+    (21) expr -> . expr GT expr
+    (22) expr -> . expr LT expr
+    (23) expr -> . expr EQ expr
+    (24) expr -> . OPENBR expr CLOSEBR
+    (25) expr -> . NUM
+    (26) expr -> . id
+    (32) id -> . ID
 
-    PLUS            reduce using rule 9 (expr -> MINUS expr .)
-    MINUS           reduce using rule 9 (expr -> MINUS expr .)
-    MUL             reduce using rule 9 (expr -> MINUS expr .)
-    DIV             reduce using rule 9 (expr -> MINUS expr .)
-    OR              reduce using rule 9 (expr -> MINUS expr .)
-    GT              reduce using rule 9 (expr -> MINUS expr .)
-    LT              reduce using rule 9 (expr -> MINUS expr .)
-    EQ              reduce using rule 9 (expr -> MINUS expr .)
-    error           reduce using rule 9 (expr -> MINUS expr .)
-    OPENST          reduce using rule 9 (expr -> MINUS expr .)
-    NOT             reduce using rule 9 (expr -> MINUS expr .)
-    OPENBR          reduce using rule 9 (expr -> MINUS expr .)
-    NUM             reduce using rule 9 (expr -> MINUS expr .)
-    UINT            reduce using rule 9 (expr -> MINUS expr .)
-    CUINT           reduce using rule 9 (expr -> MINUS expr .)
-    BOOL            reduce using rule 9 (expr -> MINUS expr .)
-    CBOOL           reduce using rule 9 (expr -> MINUS expr .)
-    ID              reduce using rule 9 (expr -> MINUS expr .)
-    $end            reduce using rule 9 (expr -> MINUS expr .)
-    CLOSEST         reduce using rule 9 (expr -> MINUS expr .)
-    CLOSEBR         reduce using rule 9 (expr -> MINUS expr .)
+    MINUS           shift and go to state 12
+    NOT             shift and go to state 13
+    INC             shift and go to state 14
+    DEC             shift and go to state 16
+    OPENBR          shift and go to state 10
+    NUM             shift and go to state 17
+    ID              shift and go to state 22
 
-  ! PLUS            [ shift and go to state 20 ]
-  ! MINUS           [ shift and go to state 21 ]
-  ! MUL             [ shift and go to state 22 ]
-  ! DIV             [ shift and go to state 23 ]
-  ! OR              [ shift and go to state 24 ]
-  ! GT              [ shift and go to state 25 ]
-  ! LT              [ shift and go to state 26 ]
-  ! EQ              [ shift and go to state 27 ]
-
+    expr                           shift and go to state 51
+    id                             shift and go to state 35
 
 state 30
 
-    (21) expr -> id .
+    (22) expr -> expr LT . expr
+    (12) expr -> . MINUS expr
+    (13) expr -> . NOT expr
+    (14) expr -> . INC id
+    (15) expr -> . DEC id
+    (16) expr -> . expr PLUS expr
+    (17) expr -> . expr MINUS expr
+    (18) expr -> . expr MUL expr
+    (19) expr -> . expr DIV expr
+    (20) expr -> . expr OR expr
+    (21) expr -> . expr GT expr
+    (22) expr -> . expr LT expr
+    (23) expr -> . expr EQ expr
+    (24) expr -> . OPENBR expr CLOSEBR
+    (25) expr -> . NUM
+    (26) expr -> . id
+    (32) id -> . ID
 
-    PLUS            reduce using rule 21 (expr -> id .)
-    MINUS           reduce using rule 21 (expr -> id .)
-    MUL             reduce using rule 21 (expr -> id .)
-    DIV             reduce using rule 21 (expr -> id .)
-    OR              reduce using rule 21 (expr -> id .)
-    GT              reduce using rule 21 (expr -> id .)
-    LT              reduce using rule 21 (expr -> id .)
-    EQ              reduce using rule 21 (expr -> id .)
-    error           reduce using rule 21 (expr -> id .)
-    OPENST          reduce using rule 21 (expr -> id .)
-    NOT             reduce using rule 21 (expr -> id .)
-    OPENBR          reduce using rule 21 (expr -> id .)
-    NUM             reduce using rule 21 (expr -> id .)
-    UINT            reduce using rule 21 (expr -> id .)
-    CUINT           reduce using rule 21 (expr -> id .)
-    BOOL            reduce using rule 21 (expr -> id .)
-    CBOOL           reduce using rule 21 (expr -> id .)
-    ID              reduce using rule 21 (expr -> id .)
-    $end            reduce using rule 21 (expr -> id .)
-    CLOSEST         reduce using rule 21 (expr -> id .)
-    CLOSEBR         reduce using rule 21 (expr -> id .)
+    MINUS           shift and go to state 12
+    NOT             shift and go to state 13
+    INC             shift and go to state 14
+    DEC             shift and go to state 16
+    OPENBR          shift and go to state 10
+    NUM             shift and go to state 17
+    ID              shift and go to state 22
 
+    expr                           shift and go to state 52
+    id                             shift and go to state 35
 
 state 31
 
-    (10) expr -> NOT expr .
-    (11) expr -> expr . PLUS expr
-    (12) expr -> expr . MINUS expr
-    (13) expr -> expr . MUL expr
-    (14) expr -> expr . DIV expr
-    (15) expr -> expr . OR expr
-    (16) expr -> expr . GT expr
-    (17) expr -> expr . LT expr
-    (18) expr -> expr . EQ expr
+    (23) expr -> expr EQ . expr
+    (12) expr -> . MINUS expr
+    (13) expr -> . NOT expr
+    (14) expr -> . INC id
+    (15) expr -> . DEC id
+    (16) expr -> . expr PLUS expr
+    (17) expr -> . expr MINUS expr
+    (18) expr -> . expr MUL expr
+    (19) expr -> . expr DIV expr
+    (20) expr -> . expr OR expr
+    (21) expr -> . expr GT expr
+    (22) expr -> . expr LT expr
+    (23) expr -> . expr EQ expr
+    (24) expr -> . OPENBR expr CLOSEBR
+    (25) expr -> . NUM
+    (26) expr -> . id
+    (32) id -> . ID
 
-    PLUS            reduce using rule 10 (expr -> NOT expr .)
-    MINUS           reduce using rule 10 (expr -> NOT expr .)
-    MUL             reduce using rule 10 (expr -> NOT expr .)
-    DIV             reduce using rule 10 (expr -> NOT expr .)
-    OR              reduce using rule 10 (expr -> NOT expr .)
-    GT              reduce using rule 10 (expr -> NOT expr .)
-    LT              reduce using rule 10 (expr -> NOT expr .)
-    EQ              reduce using rule 10 (expr -> NOT expr .)
-    error           reduce using rule 10 (expr -> NOT expr .)
-    OPENST          reduce using rule 10 (expr -> NOT expr .)
-    NOT             reduce using rule 10 (expr -> NOT expr .)
-    OPENBR          reduce using rule 10 (expr -> NOT expr .)
-    NUM             reduce using rule 10 (expr -> NOT expr .)
-    UINT            reduce using rule 10 (expr -> NOT expr .)
-    CUINT           reduce using rule 10 (expr -> NOT expr .)
-    BOOL            reduce using rule 10 (expr -> NOT expr .)
-    CBOOL           reduce using rule 10 (expr -> NOT expr .)
-    ID              reduce using rule 10 (expr -> NOT expr .)
-    $end            reduce using rule 10 (expr -> NOT expr .)
-    CLOSEST         reduce using rule 10 (expr -> NOT expr .)
-    CLOSEBR         reduce using rule 10 (expr -> NOT expr .)
+    MINUS           shift and go to state 12
+    NOT             shift and go to state 13
+    INC             shift and go to state 14
+    DEC             shift and go to state 16
+    OPENBR          shift and go to state 10
+    NUM             shift and go to state 17
+    ID              shift and go to state 22
 
-  ! PLUS            [ shift and go to state 20 ]
-  ! MINUS           [ shift and go to state 21 ]
-  ! MUL             [ shift and go to state 22 ]
-  ! DIV             [ shift and go to state 23 ]
-  ! OR              [ shift and go to state 24 ]
-  ! GT              [ shift and go to state 25 ]
-  ! LT              [ shift and go to state 26 ]
-  ! EQ              [ shift and go to state 27 ]
-
+    expr                           shift and go to state 53
+    id                             shift and go to state 35
 
 state 32
 
-    (19) expr -> OPENBR expr . CLOSEBR
-    (11) expr -> expr . PLUS expr
-    (12) expr -> expr . MINUS expr
-    (13) expr -> expr . MUL expr
-    (14) expr -> expr . DIV expr
-    (15) expr -> expr . OR expr
-    (16) expr -> expr . GT expr
-    (17) expr -> expr . LT expr
-    (18) expr -> expr . EQ expr
+    (6) statement -> OPENST stmt_list . CLOSEST
+    (3) stmt_list -> stmt_list . statement
+    (4) statement -> . error
+    (5) statement -> . expr
+    (6) statement -> . OPENST stmt_list CLOSEST
+    (7) statement -> . create_id
+    (8) statement -> . assign
+    (9) statement -> . WHILE OPENBR expr CLOSEBR DO statement
+    (10) statement -> . IF OPENBR expr CLOSEBR statement
+    (11) statement -> . IF OPENBR expr CLOSEBR statement ELSE statement
+    (12) expr -> . MINUS expr
+    (13) expr -> . NOT expr
+    (14) expr -> . INC id
+    (15) expr -> . DEC id
+    (16) expr -> . expr PLUS expr
+    (17) expr -> . expr MINUS expr
+    (18) expr -> . expr MUL expr
+    (19) expr -> . expr DIV expr
+    (20) expr -> . expr OR expr
+    (21) expr -> . expr GT expr
+    (22) expr -> . expr LT expr
+    (23) expr -> . expr EQ expr
+    (24) expr -> . OPENBR expr CLOSEBR
+    (25) expr -> . NUM
+    (26) expr -> . id
+    (27) create_id -> . UINT id ASGN expr
+    (28) create_id -> . CUINT id ASGN expr
+    (29) create_id -> . BOOL id ASGN expr
+    (30) create_id -> . CBOOL id ASGN expr
+    (31) assign -> . id ASGN expr
+    (32) id -> . ID
 
-    CLOSEBR         shift and go to state 47
-    PLUS            shift and go to state 20
-    MINUS           shift and go to state 21
-    MUL             shift and go to state 22
-    DIV             shift and go to state 23
-    OR              shift and go to state 24
-    GT              shift and go to state 25
-    LT              shift and go to state 26
-    EQ              shift and go to state 27
+    CLOSEST         shift and go to state 54
+    error           shift and go to state 4
+    OPENST          shift and go to state 6
+    WHILE           shift and go to state 9
+    IF              shift and go to state 11
+    MINUS           shift and go to state 12
+    NOT             shift and go to state 13
+    INC             shift and go to state 14
+    DEC             shift and go to state 16
+    OPENBR          shift and go to state 10
+    NUM             shift and go to state 17
+    UINT            shift and go to state 18
+    CUINT           shift and go to state 19
+    BOOL            shift and go to state 20
+    CBOOL           shift and go to state 21
+    ID              shift and go to state 22
 
+    statement                      shift and go to state 23
+    expr                           shift and go to state 5
+    create_id                      shift and go to state 7
+    assign                         shift and go to state 8
+    id                             shift and go to state 15
 
 state 33
 
-    (26) assign -> id ASGN . expr
-    (9) expr -> . MINUS expr
-    (10) expr -> . NOT expr
-    (11) expr -> . expr PLUS expr
-    (12) expr -> . expr MINUS expr
-    (13) expr -> . expr MUL expr
-    (14) expr -> . expr DIV expr
-    (15) expr -> . expr OR expr
-    (16) expr -> . expr GT expr
-    (17) expr -> . expr LT expr
-    (18) expr -> . expr EQ expr
-    (19) expr -> . OPENBR expr CLOSEBR
-    (20) expr -> . NUM
-    (21) expr -> . id
-    (27) id -> . ID
+    (9) statement -> WHILE OPENBR . expr CLOSEBR DO statement
+    (12) expr -> . MINUS expr
+    (13) expr -> . NOT expr
+    (14) expr -> . INC id
+    (15) expr -> . DEC id
+    (16) expr -> . expr PLUS expr
+    (17) expr -> . expr MINUS expr
+    (18) expr -> . expr MUL expr
+    (19) expr -> . expr DIV expr
+    (20) expr -> . expr OR expr
+    (21) expr -> . expr GT expr
+    (22) expr -> . expr LT expr
+    (23) expr -> . expr EQ expr
+    (24) expr -> . OPENBR expr CLOSEBR
+    (25) expr -> . NUM
+    (26) expr -> . id
+    (32) id -> . ID
 
-    MINUS           shift and go to state 9
-    NOT             shift and go to state 10
-    OPENBR          shift and go to state 11
-    NUM             shift and go to state 12
-    ID              shift and go to state 18
+    MINUS           shift and go to state 12
+    NOT             shift and go to state 13
+    INC             shift and go to state 14
+    DEC             shift and go to state 16
+    OPENBR          shift and go to state 10
+    NUM             shift and go to state 17
+    ID              shift and go to state 22
 
-    id                             shift and go to state 30
-    expr                           shift and go to state 48
+    expr                           shift and go to state 55
+    id                             shift and go to state 35
 
 state 34
 
-    (22) create_id -> UINT id . ASGN expr
+    (24) expr -> OPENBR expr . CLOSEBR
+    (16) expr -> expr . PLUS expr
+    (17) expr -> expr . MINUS expr
+    (18) expr -> expr . MUL expr
+    (19) expr -> expr . DIV expr
+    (20) expr -> expr . OR expr
+    (21) expr -> expr . GT expr
+    (22) expr -> expr . LT expr
+    (23) expr -> expr . EQ expr
 
-    ASGN            shift and go to state 49
+    CLOSEBR         shift and go to state 56
+    PLUS            shift and go to state 24
+    MINUS           shift and go to state 25
+    MUL             shift and go to state 26
+    DIV             shift and go to state 27
+    OR              shift and go to state 28
+    GT              shift and go to state 29
+    LT              shift and go to state 30
+    EQ              shift and go to state 31
 
 
 state 35
 
-    (23) create_id -> CUINT id . ASGN expr
+    (26) expr -> id .
 
-    ASGN            shift and go to state 50
+    CLOSEBR         reduce using rule 26 (expr -> id .)
+    PLUS            reduce using rule 26 (expr -> id .)
+    MINUS           reduce using rule 26 (expr -> id .)
+    MUL             reduce using rule 26 (expr -> id .)
+    DIV             reduce using rule 26 (expr -> id .)
+    OR              reduce using rule 26 (expr -> id .)
+    GT              reduce using rule 26 (expr -> id .)
+    LT              reduce using rule 26 (expr -> id .)
+    EQ              reduce using rule 26 (expr -> id .)
+    error           reduce using rule 26 (expr -> id .)
+    OPENST          reduce using rule 26 (expr -> id .)
+    WHILE           reduce using rule 26 (expr -> id .)
+    IF              reduce using rule 26 (expr -> id .)
+    NOT             reduce using rule 26 (expr -> id .)
+    INC             reduce using rule 26 (expr -> id .)
+    DEC             reduce using rule 26 (expr -> id .)
+    OPENBR          reduce using rule 26 (expr -> id .)
+    NUM             reduce using rule 26 (expr -> id .)
+    UINT            reduce using rule 26 (expr -> id .)
+    CUINT           reduce using rule 26 (expr -> id .)
+    BOOL            reduce using rule 26 (expr -> id .)
+    CBOOL           reduce using rule 26 (expr -> id .)
+    ID              reduce using rule 26 (expr -> id .)
+    $end            reduce using rule 26 (expr -> id .)
+    CLOSEST         reduce using rule 26 (expr -> id .)
+    ELSE            reduce using rule 26 (expr -> id .)
 
 
 state 36
 
-    (24) create_id -> BOOL id . ASGN expr
+    (10) statement -> IF OPENBR . expr CLOSEBR statement
+    (11) statement -> IF OPENBR . expr CLOSEBR statement ELSE statement
+    (12) expr -> . MINUS expr
+    (13) expr -> . NOT expr
+    (14) expr -> . INC id
+    (15) expr -> . DEC id
+    (16) expr -> . expr PLUS expr
+    (17) expr -> . expr MINUS expr
+    (18) expr -> . expr MUL expr
+    (19) expr -> . expr DIV expr
+    (20) expr -> . expr OR expr
+    (21) expr -> . expr GT expr
+    (22) expr -> . expr LT expr
+    (23) expr -> . expr EQ expr
+    (24) expr -> . OPENBR expr CLOSEBR
+    (25) expr -> . NUM
+    (26) expr -> . id
+    (32) id -> . ID
 
-    ASGN            shift and go to state 51
+    MINUS           shift and go to state 12
+    NOT             shift and go to state 13
+    INC             shift and go to state 14
+    DEC             shift and go to state 16
+    OPENBR          shift and go to state 10
+    NUM             shift and go to state 17
+    ID              shift and go to state 22
 
+    expr                           shift and go to state 57
+    id                             shift and go to state 35
 
 state 37
 
-    (25) create_id -> CBOOL id . ASGN expr
+    (12) expr -> MINUS expr .
+    (16) expr -> expr . PLUS expr
+    (17) expr -> expr . MINUS expr
+    (18) expr -> expr . MUL expr
+    (19) expr -> expr . DIV expr
+    (20) expr -> expr . OR expr
+    (21) expr -> expr . GT expr
+    (22) expr -> expr . LT expr
+    (23) expr -> expr . EQ expr
 
-    ASGN            shift and go to state 52
+    PLUS            reduce using rule 12 (expr -> MINUS expr .)
+    MINUS           reduce using rule 12 (expr -> MINUS expr .)
+    MUL             reduce using rule 12 (expr -> MINUS expr .)
+    DIV             reduce using rule 12 (expr -> MINUS expr .)
+    OR              reduce using rule 12 (expr -> MINUS expr .)
+    GT              reduce using rule 12 (expr -> MINUS expr .)
+    LT              reduce using rule 12 (expr -> MINUS expr .)
+    EQ              reduce using rule 12 (expr -> MINUS expr .)
+    error           reduce using rule 12 (expr -> MINUS expr .)
+    OPENST          reduce using rule 12 (expr -> MINUS expr .)
+    WHILE           reduce using rule 12 (expr -> MINUS expr .)
+    IF              reduce using rule 12 (expr -> MINUS expr .)
+    NOT             reduce using rule 12 (expr -> MINUS expr .)
+    INC             reduce using rule 12 (expr -> MINUS expr .)
+    DEC             reduce using rule 12 (expr -> MINUS expr .)
+    OPENBR          reduce using rule 12 (expr -> MINUS expr .)
+    NUM             reduce using rule 12 (expr -> MINUS expr .)
+    UINT            reduce using rule 12 (expr -> MINUS expr .)
+    CUINT           reduce using rule 12 (expr -> MINUS expr .)
+    BOOL            reduce using rule 12 (expr -> MINUS expr .)
+    CBOOL           reduce using rule 12 (expr -> MINUS expr .)
+    ID              reduce using rule 12 (expr -> MINUS expr .)
+    $end            reduce using rule 12 (expr -> MINUS expr .)
+    CLOSEST         reduce using rule 12 (expr -> MINUS expr .)
+    CLOSEBR         reduce using rule 12 (expr -> MINUS expr .)
+    ELSE            reduce using rule 12 (expr -> MINUS expr .)
+
+  ! PLUS            [ shift and go to state 24 ]
+  ! MINUS           [ shift and go to state 25 ]
+  ! MUL             [ shift and go to state 26 ]
+  ! DIV             [ shift and go to state 27 ]
+  ! OR              [ shift and go to state 28 ]
+  ! GT              [ shift and go to state 29 ]
+  ! LT              [ shift and go to state 30 ]
+  ! EQ              [ shift and go to state 31 ]
 
 
 state 38
 
-    (11) expr -> expr PLUS expr .
-    (11) expr -> expr . PLUS expr
-    (12) expr -> expr . MINUS expr
-    (13) expr -> expr . MUL expr
-    (14) expr -> expr . DIV expr
-    (15) expr -> expr . OR expr
-    (16) expr -> expr . GT expr
-    (17) expr -> expr . LT expr
-    (18) expr -> expr . EQ expr
+    (13) expr -> NOT expr .
+    (16) expr -> expr . PLUS expr
+    (17) expr -> expr . MINUS expr
+    (18) expr -> expr . MUL expr
+    (19) expr -> expr . DIV expr
+    (20) expr -> expr . OR expr
+    (21) expr -> expr . GT expr
+    (22) expr -> expr . LT expr
+    (23) expr -> expr . EQ expr
 
-    PLUS            reduce using rule 11 (expr -> expr PLUS expr .)
-    MINUS           reduce using rule 11 (expr -> expr PLUS expr .)
-    OR              reduce using rule 11 (expr -> expr PLUS expr .)
-    GT              reduce using rule 11 (expr -> expr PLUS expr .)
-    LT              reduce using rule 11 (expr -> expr PLUS expr .)
-    EQ              reduce using rule 11 (expr -> expr PLUS expr .)
-    error           reduce using rule 11 (expr -> expr PLUS expr .)
-    OPENST          reduce using rule 11 (expr -> expr PLUS expr .)
-    NOT             reduce using rule 11 (expr -> expr PLUS expr .)
-    OPENBR          reduce using rule 11 (expr -> expr PLUS expr .)
-    NUM             reduce using rule 11 (expr -> expr PLUS expr .)
-    UINT            reduce using rule 11 (expr -> expr PLUS expr .)
-    CUINT           reduce using rule 11 (expr -> expr PLUS expr .)
-    BOOL            reduce using rule 11 (expr -> expr PLUS expr .)
-    CBOOL           reduce using rule 11 (expr -> expr PLUS expr .)
-    ID              reduce using rule 11 (expr -> expr PLUS expr .)
-    $end            reduce using rule 11 (expr -> expr PLUS expr .)
-    CLOSEST         reduce using rule 11 (expr -> expr PLUS expr .)
-    CLOSEBR         reduce using rule 11 (expr -> expr PLUS expr .)
-    MUL             shift and go to state 22
-    DIV             shift and go to state 23
+    PLUS            reduce using rule 13 (expr -> NOT expr .)
+    MINUS           reduce using rule 13 (expr -> NOT expr .)
+    MUL             reduce using rule 13 (expr -> NOT expr .)
+    DIV             reduce using rule 13 (expr -> NOT expr .)
+    OR              reduce using rule 13 (expr -> NOT expr .)
+    GT              reduce using rule 13 (expr -> NOT expr .)
+    LT              reduce using rule 13 (expr -> NOT expr .)
+    EQ              reduce using rule 13 (expr -> NOT expr .)
+    error           reduce using rule 13 (expr -> NOT expr .)
+    OPENST          reduce using rule 13 (expr -> NOT expr .)
+    WHILE           reduce using rule 13 (expr -> NOT expr .)
+    IF              reduce using rule 13 (expr -> NOT expr .)
+    NOT             reduce using rule 13 (expr -> NOT expr .)
+    INC             reduce using rule 13 (expr -> NOT expr .)
+    DEC             reduce using rule 13 (expr -> NOT expr .)
+    OPENBR          reduce using rule 13 (expr -> NOT expr .)
+    NUM             reduce using rule 13 (expr -> NOT expr .)
+    UINT            reduce using rule 13 (expr -> NOT expr .)
+    CUINT           reduce using rule 13 (expr -> NOT expr .)
+    BOOL            reduce using rule 13 (expr -> NOT expr .)
+    CBOOL           reduce using rule 13 (expr -> NOT expr .)
+    ID              reduce using rule 13 (expr -> NOT expr .)
+    $end            reduce using rule 13 (expr -> NOT expr .)
+    CLOSEST         reduce using rule 13 (expr -> NOT expr .)
+    CLOSEBR         reduce using rule 13 (expr -> NOT expr .)
+    ELSE            reduce using rule 13 (expr -> NOT expr .)
 
-  ! MUL             [ reduce using rule 11 (expr -> expr PLUS expr .) ]
-  ! DIV             [ reduce using rule 11 (expr -> expr PLUS expr .) ]
-  ! PLUS            [ shift and go to state 20 ]
-  ! MINUS           [ shift and go to state 21 ]
-  ! OR              [ shift and go to state 24 ]
-  ! GT              [ shift and go to state 25 ]
-  ! LT              [ shift and go to state 26 ]
-  ! EQ              [ shift and go to state 27 ]
+  ! PLUS            [ shift and go to state 24 ]
+  ! MINUS           [ shift and go to state 25 ]
+  ! MUL             [ shift and go to state 26 ]
+  ! DIV             [ shift and go to state 27 ]
+  ! OR              [ shift and go to state 28 ]
+  ! GT              [ shift and go to state 29 ]
+  ! LT              [ shift and go to state 30 ]
+  ! EQ              [ shift and go to state 31 ]
 
 
 state 39
 
-    (12) expr -> expr MINUS expr .
-    (11) expr -> expr . PLUS expr
-    (12) expr -> expr . MINUS expr
-    (13) expr -> expr . MUL expr
-    (14) expr -> expr . DIV expr
-    (15) expr -> expr . OR expr
-    (16) expr -> expr . GT expr
-    (17) expr -> expr . LT expr
-    (18) expr -> expr . EQ expr
+    (14) expr -> INC id .
 
-    PLUS            reduce using rule 12 (expr -> expr MINUS expr .)
-    MINUS           reduce using rule 12 (expr -> expr MINUS expr .)
-    OR              reduce using rule 12 (expr -> expr MINUS expr .)
-    GT              reduce using rule 12 (expr -> expr MINUS expr .)
-    LT              reduce using rule 12 (expr -> expr MINUS expr .)
-    EQ              reduce using rule 12 (expr -> expr MINUS expr .)
-    error           reduce using rule 12 (expr -> expr MINUS expr .)
-    OPENST          reduce using rule 12 (expr -> expr MINUS expr .)
-    NOT             reduce using rule 12 (expr -> expr MINUS expr .)
-    OPENBR          reduce using rule 12 (expr -> expr MINUS expr .)
-    NUM             reduce using rule 12 (expr -> expr MINUS expr .)
-    UINT            reduce using rule 12 (expr -> expr MINUS expr .)
-    CUINT           reduce using rule 12 (expr -> expr MINUS expr .)
-    BOOL            reduce using rule 12 (expr -> expr MINUS expr .)
-    CBOOL           reduce using rule 12 (expr -> expr MINUS expr .)
-    ID              reduce using rule 12 (expr -> expr MINUS expr .)
-    $end            reduce using rule 12 (expr -> expr MINUS expr .)
-    CLOSEST         reduce using rule 12 (expr -> expr MINUS expr .)
-    CLOSEBR         reduce using rule 12 (expr -> expr MINUS expr .)
-    MUL             shift and go to state 22
-    DIV             shift and go to state 23
-
-  ! MUL             [ reduce using rule 12 (expr -> expr MINUS expr .) ]
-  ! DIV             [ reduce using rule 12 (expr -> expr MINUS expr .) ]
-  ! PLUS            [ shift and go to state 20 ]
-  ! MINUS           [ shift and go to state 21 ]
-  ! OR              [ shift and go to state 24 ]
-  ! GT              [ shift and go to state 25 ]
-  ! LT              [ shift and go to state 26 ]
-  ! EQ              [ shift and go to state 27 ]
+    PLUS            reduce using rule 14 (expr -> INC id .)
+    MINUS           reduce using rule 14 (expr -> INC id .)
+    MUL             reduce using rule 14 (expr -> INC id .)
+    DIV             reduce using rule 14 (expr -> INC id .)
+    OR              reduce using rule 14 (expr -> INC id .)
+    GT              reduce using rule 14 (expr -> INC id .)
+    LT              reduce using rule 14 (expr -> INC id .)
+    EQ              reduce using rule 14 (expr -> INC id .)
+    error           reduce using rule 14 (expr -> INC id .)
+    OPENST          reduce using rule 14 (expr -> INC id .)
+    WHILE           reduce using rule 14 (expr -> INC id .)
+    IF              reduce using rule 14 (expr -> INC id .)
+    NOT             reduce using rule 14 (expr -> INC id .)
+    INC             reduce using rule 14 (expr -> INC id .)
+    DEC             reduce using rule 14 (expr -> INC id .)
+    OPENBR          reduce using rule 14 (expr -> INC id .)
+    NUM             reduce using rule 14 (expr -> INC id .)
+    UINT            reduce using rule 14 (expr -> INC id .)
+    CUINT           reduce using rule 14 (expr -> INC id .)
+    BOOL            reduce using rule 14 (expr -> INC id .)
+    CBOOL           reduce using rule 14 (expr -> INC id .)
+    ID              reduce using rule 14 (expr -> INC id .)
+    $end            reduce using rule 14 (expr -> INC id .)
+    CLOSEST         reduce using rule 14 (expr -> INC id .)
+    CLOSEBR         reduce using rule 14 (expr -> INC id .)
+    ELSE            reduce using rule 14 (expr -> INC id .)
 
 
 state 40
 
-    (13) expr -> expr MUL expr .
-    (11) expr -> expr . PLUS expr
-    (12) expr -> expr . MINUS expr
-    (13) expr -> expr . MUL expr
-    (14) expr -> expr . DIV expr
-    (15) expr -> expr . OR expr
-    (16) expr -> expr . GT expr
-    (17) expr -> expr . LT expr
-    (18) expr -> expr . EQ expr
+    (31) assign -> id ASGN . expr
+    (12) expr -> . MINUS expr
+    (13) expr -> . NOT expr
+    (14) expr -> . INC id
+    (15) expr -> . DEC id
+    (16) expr -> . expr PLUS expr
+    (17) expr -> . expr MINUS expr
+    (18) expr -> . expr MUL expr
+    (19) expr -> . expr DIV expr
+    (20) expr -> . expr OR expr
+    (21) expr -> . expr GT expr
+    (22) expr -> . expr LT expr
+    (23) expr -> . expr EQ expr
+    (24) expr -> . OPENBR expr CLOSEBR
+    (25) expr -> . NUM
+    (26) expr -> . id
+    (32) id -> . ID
 
-    PLUS            reduce using rule 13 (expr -> expr MUL expr .)
-    MINUS           reduce using rule 13 (expr -> expr MUL expr .)
-    MUL             reduce using rule 13 (expr -> expr MUL expr .)
-    DIV             reduce using rule 13 (expr -> expr MUL expr .)
-    OR              reduce using rule 13 (expr -> expr MUL expr .)
-    GT              reduce using rule 13 (expr -> expr MUL expr .)
-    LT              reduce using rule 13 (expr -> expr MUL expr .)
-    EQ              reduce using rule 13 (expr -> expr MUL expr .)
-    error           reduce using rule 13 (expr -> expr MUL expr .)
-    OPENST          reduce using rule 13 (expr -> expr MUL expr .)
-    NOT             reduce using rule 13 (expr -> expr MUL expr .)
-    OPENBR          reduce using rule 13 (expr -> expr MUL expr .)
-    NUM             reduce using rule 13 (expr -> expr MUL expr .)
-    UINT            reduce using rule 13 (expr -> expr MUL expr .)
-    CUINT           reduce using rule 13 (expr -> expr MUL expr .)
-    BOOL            reduce using rule 13 (expr -> expr MUL expr .)
-    CBOOL           reduce using rule 13 (expr -> expr MUL expr .)
-    ID              reduce using rule 13 (expr -> expr MUL expr .)
-    $end            reduce using rule 13 (expr -> expr MUL expr .)
-    CLOSEST         reduce using rule 13 (expr -> expr MUL expr .)
-    CLOSEBR         reduce using rule 13 (expr -> expr MUL expr .)
+    MINUS           shift and go to state 12
+    NOT             shift and go to state 13
+    INC             shift and go to state 14
+    DEC             shift and go to state 16
+    OPENBR          shift and go to state 10
+    NUM             shift and go to state 17
+    ID              shift and go to state 22
 
-  ! PLUS            [ shift and go to state 20 ]
-  ! MINUS           [ shift and go to state 21 ]
-  ! MUL             [ shift and go to state 22 ]
-  ! DIV             [ shift and go to state 23 ]
-  ! OR              [ shift and go to state 24 ]
-  ! GT              [ shift and go to state 25 ]
-  ! LT              [ shift and go to state 26 ]
-  ! EQ              [ shift and go to state 27 ]
-
+    id                             shift and go to state 35
+    expr                           shift and go to state 58
 
 state 41
 
-    (14) expr -> expr DIV expr .
-    (11) expr -> expr . PLUS expr
-    (12) expr -> expr . MINUS expr
-    (13) expr -> expr . MUL expr
-    (14) expr -> expr . DIV expr
-    (15) expr -> expr . OR expr
-    (16) expr -> expr . GT expr
-    (17) expr -> expr . LT expr
-    (18) expr -> expr . EQ expr
+    (15) expr -> DEC id .
 
-    PLUS            reduce using rule 14 (expr -> expr DIV expr .)
-    MINUS           reduce using rule 14 (expr -> expr DIV expr .)
-    MUL             reduce using rule 14 (expr -> expr DIV expr .)
-    DIV             reduce using rule 14 (expr -> expr DIV expr .)
-    OR              reduce using rule 14 (expr -> expr DIV expr .)
-    GT              reduce using rule 14 (expr -> expr DIV expr .)
-    LT              reduce using rule 14 (expr -> expr DIV expr .)
-    EQ              reduce using rule 14 (expr -> expr DIV expr .)
-    error           reduce using rule 14 (expr -> expr DIV expr .)
-    OPENST          reduce using rule 14 (expr -> expr DIV expr .)
-    NOT             reduce using rule 14 (expr -> expr DIV expr .)
-    OPENBR          reduce using rule 14 (expr -> expr DIV expr .)
-    NUM             reduce using rule 14 (expr -> expr DIV expr .)
-    UINT            reduce using rule 14 (expr -> expr DIV expr .)
-    CUINT           reduce using rule 14 (expr -> expr DIV expr .)
-    BOOL            reduce using rule 14 (expr -> expr DIV expr .)
-    CBOOL           reduce using rule 14 (expr -> expr DIV expr .)
-    ID              reduce using rule 14 (expr -> expr DIV expr .)
-    $end            reduce using rule 14 (expr -> expr DIV expr .)
-    CLOSEST         reduce using rule 14 (expr -> expr DIV expr .)
-    CLOSEBR         reduce using rule 14 (expr -> expr DIV expr .)
-
-  ! PLUS            [ shift and go to state 20 ]
-  ! MINUS           [ shift and go to state 21 ]
-  ! MUL             [ shift and go to state 22 ]
-  ! DIV             [ shift and go to state 23 ]
-  ! OR              [ shift and go to state 24 ]
-  ! GT              [ shift and go to state 25 ]
-  ! LT              [ shift and go to state 26 ]
-  ! EQ              [ shift and go to state 27 ]
+    PLUS            reduce using rule 15 (expr -> DEC id .)
+    MINUS           reduce using rule 15 (expr -> DEC id .)
+    MUL             reduce using rule 15 (expr -> DEC id .)
+    DIV             reduce using rule 15 (expr -> DEC id .)
+    OR              reduce using rule 15 (expr -> DEC id .)
+    GT              reduce using rule 15 (expr -> DEC id .)
+    LT              reduce using rule 15 (expr -> DEC id .)
+    EQ              reduce using rule 15 (expr -> DEC id .)
+    error           reduce using rule 15 (expr -> DEC id .)
+    OPENST          reduce using rule 15 (expr -> DEC id .)
+    WHILE           reduce using rule 15 (expr -> DEC id .)
+    IF              reduce using rule 15 (expr -> DEC id .)
+    NOT             reduce using rule 15 (expr -> DEC id .)
+    INC             reduce using rule 15 (expr -> DEC id .)
+    DEC             reduce using rule 15 (expr -> DEC id .)
+    OPENBR          reduce using rule 15 (expr -> DEC id .)
+    NUM             reduce using rule 15 (expr -> DEC id .)
+    UINT            reduce using rule 15 (expr -> DEC id .)
+    CUINT           reduce using rule 15 (expr -> DEC id .)
+    BOOL            reduce using rule 15 (expr -> DEC id .)
+    CBOOL           reduce using rule 15 (expr -> DEC id .)
+    ID              reduce using rule 15 (expr -> DEC id .)
+    $end            reduce using rule 15 (expr -> DEC id .)
+    CLOSEST         reduce using rule 15 (expr -> DEC id .)
+    CLOSEBR         reduce using rule 15 (expr -> DEC id .)
+    ELSE            reduce using rule 15 (expr -> DEC id .)
 
 
 state 42
 
-    (15) expr -> expr OR expr .
-    (11) expr -> expr . PLUS expr
-    (12) expr -> expr . MINUS expr
-    (13) expr -> expr . MUL expr
-    (14) expr -> expr . DIV expr
-    (15) expr -> expr . OR expr
-    (16) expr -> expr . GT expr
-    (17) expr -> expr . LT expr
-    (18) expr -> expr . EQ expr
+    (27) create_id -> UINT id . ASGN expr
+
+    ASGN            shift and go to state 59
+
+
+state 43
+
+    (28) create_id -> CUINT id . ASGN expr
+
+    ASGN            shift and go to state 60
+
+
+state 44
+
+    (29) create_id -> BOOL id . ASGN expr
+
+    ASGN            shift and go to state 61
+
+
+state 45
+
+    (30) create_id -> CBOOL id . ASGN expr
+
+    ASGN            shift and go to state 62
+
+
+state 46
+
+    (16) expr -> expr PLUS expr .
+    (16) expr -> expr . PLUS expr
+    (17) expr -> expr . MINUS expr
+    (18) expr -> expr . MUL expr
+    (19) expr -> expr . DIV expr
+    (20) expr -> expr . OR expr
+    (21) expr -> expr . GT expr
+    (22) expr -> expr . LT expr
+    (23) expr -> expr . EQ expr
+
+    PLUS            reduce using rule 16 (expr -> expr PLUS expr .)
+    MINUS           reduce using rule 16 (expr -> expr PLUS expr .)
+    OR              reduce using rule 16 (expr -> expr PLUS expr .)
+    GT              reduce using rule 16 (expr -> expr PLUS expr .)
+    LT              reduce using rule 16 (expr -> expr PLUS expr .)
+    EQ              reduce using rule 16 (expr -> expr PLUS expr .)
+    error           reduce using rule 16 (expr -> expr PLUS expr .)
+    OPENST          reduce using rule 16 (expr -> expr PLUS expr .)
+    WHILE           reduce using rule 16 (expr -> expr PLUS expr .)
+    IF              reduce using rule 16 (expr -> expr PLUS expr .)
+    NOT             reduce using rule 16 (expr -> expr PLUS expr .)
+    INC             reduce using rule 16 (expr -> expr PLUS expr .)
+    DEC             reduce using rule 16 (expr -> expr PLUS expr .)
+    OPENBR          reduce using rule 16 (expr -> expr PLUS expr .)
+    NUM             reduce using rule 16 (expr -> expr PLUS expr .)
+    UINT            reduce using rule 16 (expr -> expr PLUS expr .)
+    CUINT           reduce using rule 16 (expr -> expr PLUS expr .)
+    BOOL            reduce using rule 16 (expr -> expr PLUS expr .)
+    CBOOL           reduce using rule 16 (expr -> expr PLUS expr .)
+    ID              reduce using rule 16 (expr -> expr PLUS expr .)
+    $end            reduce using rule 16 (expr -> expr PLUS expr .)
+    CLOSEST         reduce using rule 16 (expr -> expr PLUS expr .)
+    CLOSEBR         reduce using rule 16 (expr -> expr PLUS expr .)
+    ELSE            reduce using rule 16 (expr -> expr PLUS expr .)
+    MUL             shift and go to state 26
+    DIV             shift and go to state 27
+
+  ! MUL             [ reduce using rule 16 (expr -> expr PLUS expr .) ]
+  ! DIV             [ reduce using rule 16 (expr -> expr PLUS expr .) ]
+  ! PLUS            [ shift and go to state 24 ]
+  ! MINUS           [ shift and go to state 25 ]
+  ! OR              [ shift and go to state 28 ]
+  ! GT              [ shift and go to state 29 ]
+  ! LT              [ shift and go to state 30 ]
+  ! EQ              [ shift and go to state 31 ]
+
+
+state 47
+
+    (17) expr -> expr MINUS expr .
+    (16) expr -> expr . PLUS expr
+    (17) expr -> expr . MINUS expr
+    (18) expr -> expr . MUL expr
+    (19) expr -> expr . DIV expr
+    (20) expr -> expr . OR expr
+    (21) expr -> expr . GT expr
+    (22) expr -> expr . LT expr
+    (23) expr -> expr . EQ expr
+
+    PLUS            reduce using rule 17 (expr -> expr MINUS expr .)
+    MINUS           reduce using rule 17 (expr -> expr MINUS expr .)
+    OR              reduce using rule 17 (expr -> expr MINUS expr .)
+    GT              reduce using rule 17 (expr -> expr MINUS expr .)
+    LT              reduce using rule 17 (expr -> expr MINUS expr .)
+    EQ              reduce using rule 17 (expr -> expr MINUS expr .)
+    error           reduce using rule 17 (expr -> expr MINUS expr .)
+    OPENST          reduce using rule 17 (expr -> expr MINUS expr .)
+    WHILE           reduce using rule 17 (expr -> expr MINUS expr .)
+    IF              reduce using rule 17 (expr -> expr MINUS expr .)
+    NOT             reduce using rule 17 (expr -> expr MINUS expr .)
+    INC             reduce using rule 17 (expr -> expr MINUS expr .)
+    DEC             reduce using rule 17 (expr -> expr MINUS expr .)
+    OPENBR          reduce using rule 17 (expr -> expr MINUS expr .)
+    NUM             reduce using rule 17 (expr -> expr MINUS expr .)
+    UINT            reduce using rule 17 (expr -> expr MINUS expr .)
+    CUINT           reduce using rule 17 (expr -> expr MINUS expr .)
+    BOOL            reduce using rule 17 (expr -> expr MINUS expr .)
+    CBOOL           reduce using rule 17 (expr -> expr MINUS expr .)
+    ID              reduce using rule 17 (expr -> expr MINUS expr .)
+    $end            reduce using rule 17 (expr -> expr MINUS expr .)
+    CLOSEST         reduce using rule 17 (expr -> expr MINUS expr .)
+    CLOSEBR         reduce using rule 17 (expr -> expr MINUS expr .)
+    ELSE            reduce using rule 17 (expr -> expr MINUS expr .)
+    MUL             shift and go to state 26
+    DIV             shift and go to state 27
+
+  ! MUL             [ reduce using rule 17 (expr -> expr MINUS expr .) ]
+  ! DIV             [ reduce using rule 17 (expr -> expr MINUS expr .) ]
+  ! PLUS            [ shift and go to state 24 ]
+  ! MINUS           [ shift and go to state 25 ]
+  ! OR              [ shift and go to state 28 ]
+  ! GT              [ shift and go to state 29 ]
+  ! LT              [ shift and go to state 30 ]
+  ! EQ              [ shift and go to state 31 ]
+
+
+state 48
+
+    (18) expr -> expr MUL expr .
+    (16) expr -> expr . PLUS expr
+    (17) expr -> expr . MINUS expr
+    (18) expr -> expr . MUL expr
+    (19) expr -> expr . DIV expr
+    (20) expr -> expr . OR expr
+    (21) expr -> expr . GT expr
+    (22) expr -> expr . LT expr
+    (23) expr -> expr . EQ expr
+
+    PLUS            reduce using rule 18 (expr -> expr MUL expr .)
+    MINUS           reduce using rule 18 (expr -> expr MUL expr .)
+    MUL             reduce using rule 18 (expr -> expr MUL expr .)
+    DIV             reduce using rule 18 (expr -> expr MUL expr .)
+    OR              reduce using rule 18 (expr -> expr MUL expr .)
+    GT              reduce using rule 18 (expr -> expr MUL expr .)
+    LT              reduce using rule 18 (expr -> expr MUL expr .)
+    EQ              reduce using rule 18 (expr -> expr MUL expr .)
+    error           reduce using rule 18 (expr -> expr MUL expr .)
+    OPENST          reduce using rule 18 (expr -> expr MUL expr .)
+    WHILE           reduce using rule 18 (expr -> expr MUL expr .)
+    IF              reduce using rule 18 (expr -> expr MUL expr .)
+    NOT             reduce using rule 18 (expr -> expr MUL expr .)
+    INC             reduce using rule 18 (expr -> expr MUL expr .)
+    DEC             reduce using rule 18 (expr -> expr MUL expr .)
+    OPENBR          reduce using rule 18 (expr -> expr MUL expr .)
+    NUM             reduce using rule 18 (expr -> expr MUL expr .)
+    UINT            reduce using rule 18 (expr -> expr MUL expr .)
+    CUINT           reduce using rule 18 (expr -> expr MUL expr .)
+    BOOL            reduce using rule 18 (expr -> expr MUL expr .)
+    CBOOL           reduce using rule 18 (expr -> expr MUL expr .)
+    ID              reduce using rule 18 (expr -> expr MUL expr .)
+    $end            reduce using rule 18 (expr -> expr MUL expr .)
+    CLOSEST         reduce using rule 18 (expr -> expr MUL expr .)
+    CLOSEBR         reduce using rule 18 (expr -> expr MUL expr .)
+    ELSE            reduce using rule 18 (expr -> expr MUL expr .)
+
+  ! PLUS            [ shift and go to state 24 ]
+  ! MINUS           [ shift and go to state 25 ]
+  ! MUL             [ shift and go to state 26 ]
+  ! DIV             [ shift and go to state 27 ]
+  ! OR              [ shift and go to state 28 ]
+  ! GT              [ shift and go to state 29 ]
+  ! LT              [ shift and go to state 30 ]
+  ! EQ              [ shift and go to state 31 ]
+
+
+state 49
+
+    (19) expr -> expr DIV expr .
+    (16) expr -> expr . PLUS expr
+    (17) expr -> expr . MINUS expr
+    (18) expr -> expr . MUL expr
+    (19) expr -> expr . DIV expr
+    (20) expr -> expr . OR expr
+    (21) expr -> expr . GT expr
+    (22) expr -> expr . LT expr
+    (23) expr -> expr . EQ expr
+
+    PLUS            reduce using rule 19 (expr -> expr DIV expr .)
+    MINUS           reduce using rule 19 (expr -> expr DIV expr .)
+    MUL             reduce using rule 19 (expr -> expr DIV expr .)
+    DIV             reduce using rule 19 (expr -> expr DIV expr .)
+    OR              reduce using rule 19 (expr -> expr DIV expr .)
+    GT              reduce using rule 19 (expr -> expr DIV expr .)
+    LT              reduce using rule 19 (expr -> expr DIV expr .)
+    EQ              reduce using rule 19 (expr -> expr DIV expr .)
+    error           reduce using rule 19 (expr -> expr DIV expr .)
+    OPENST          reduce using rule 19 (expr -> expr DIV expr .)
+    WHILE           reduce using rule 19 (expr -> expr DIV expr .)
+    IF              reduce using rule 19 (expr -> expr DIV expr .)
+    NOT             reduce using rule 19 (expr -> expr DIV expr .)
+    INC             reduce using rule 19 (expr -> expr DIV expr .)
+    DEC             reduce using rule 19 (expr -> expr DIV expr .)
+    OPENBR          reduce using rule 19 (expr -> expr DIV expr .)
+    NUM             reduce using rule 19 (expr -> expr DIV expr .)
+    UINT            reduce using rule 19 (expr -> expr DIV expr .)
+    CUINT           reduce using rule 19 (expr -> expr DIV expr .)
+    BOOL            reduce using rule 19 (expr -> expr DIV expr .)
+    CBOOL           reduce using rule 19 (expr -> expr DIV expr .)
+    ID              reduce using rule 19 (expr -> expr DIV expr .)
+    $end            reduce using rule 19 (expr -> expr DIV expr .)
+    CLOSEST         reduce using rule 19 (expr -> expr DIV expr .)
+    CLOSEBR         reduce using rule 19 (expr -> expr DIV expr .)
+    ELSE            reduce using rule 19 (expr -> expr DIV expr .)
+
+  ! PLUS            [ shift and go to state 24 ]
+  ! MINUS           [ shift and go to state 25 ]
+  ! MUL             [ shift and go to state 26 ]
+  ! DIV             [ shift and go to state 27 ]
+  ! OR              [ shift and go to state 28 ]
+  ! GT              [ shift and go to state 29 ]
+  ! LT              [ shift and go to state 30 ]
+  ! EQ              [ shift and go to state 31 ]
+
+
+state 50
+
+    (20) expr -> expr OR expr .
+    (16) expr -> expr . PLUS expr
+    (17) expr -> expr . MINUS expr
+    (18) expr -> expr . MUL expr
+    (19) expr -> expr . DIV expr
+    (20) expr -> expr . OR expr
+    (21) expr -> expr . GT expr
+    (22) expr -> expr . LT expr
+    (23) expr -> expr . EQ expr
 
   ! shift/reduce conflict for PLUS resolved as shift
   ! shift/reduce conflict for MINUS resolved as shift
@@ -1233,512 +1600,878 @@ state 42
   ! shift/reduce conflict for GT resolved as shift
   ! shift/reduce conflict for LT resolved as shift
   ! shift/reduce conflict for EQ resolved as shift
-    error           reduce using rule 15 (expr -> expr OR expr .)
-    OPENST          reduce using rule 15 (expr -> expr OR expr .)
-    NOT             reduce using rule 15 (expr -> expr OR expr .)
-    OPENBR          reduce using rule 15 (expr -> expr OR expr .)
-    NUM             reduce using rule 15 (expr -> expr OR expr .)
-    UINT            reduce using rule 15 (expr -> expr OR expr .)
-    CUINT           reduce using rule 15 (expr -> expr OR expr .)
-    BOOL            reduce using rule 15 (expr -> expr OR expr .)
-    CBOOL           reduce using rule 15 (expr -> expr OR expr .)
-    ID              reduce using rule 15 (expr -> expr OR expr .)
-    $end            reduce using rule 15 (expr -> expr OR expr .)
-    CLOSEST         reduce using rule 15 (expr -> expr OR expr .)
-    CLOSEBR         reduce using rule 15 (expr -> expr OR expr .)
-    PLUS            shift and go to state 20
-    MINUS           shift and go to state 21
-    MUL             shift and go to state 22
-    DIV             shift and go to state 23
-    OR              shift and go to state 24
-    GT              shift and go to state 25
-    LT              shift and go to state 26
-    EQ              shift and go to state 27
+    error           reduce using rule 20 (expr -> expr OR expr .)
+    OPENST          reduce using rule 20 (expr -> expr OR expr .)
+    WHILE           reduce using rule 20 (expr -> expr OR expr .)
+    IF              reduce using rule 20 (expr -> expr OR expr .)
+    NOT             reduce using rule 20 (expr -> expr OR expr .)
+    INC             reduce using rule 20 (expr -> expr OR expr .)
+    DEC             reduce using rule 20 (expr -> expr OR expr .)
+    OPENBR          reduce using rule 20 (expr -> expr OR expr .)
+    NUM             reduce using rule 20 (expr -> expr OR expr .)
+    UINT            reduce using rule 20 (expr -> expr OR expr .)
+    CUINT           reduce using rule 20 (expr -> expr OR expr .)
+    BOOL            reduce using rule 20 (expr -> expr OR expr .)
+    CBOOL           reduce using rule 20 (expr -> expr OR expr .)
+    ID              reduce using rule 20 (expr -> expr OR expr .)
+    $end            reduce using rule 20 (expr -> expr OR expr .)
+    CLOSEST         reduce using rule 20 (expr -> expr OR expr .)
+    CLOSEBR         reduce using rule 20 (expr -> expr OR expr .)
+    ELSE            reduce using rule 20 (expr -> expr OR expr .)
+    PLUS            shift and go to state 24
+    MINUS           shift and go to state 25
+    MUL             shift and go to state 26
+    DIV             shift and go to state 27
+    OR              shift and go to state 28
+    GT              shift and go to state 29
+    LT              shift and go to state 30
+    EQ              shift and go to state 31
 
-  ! PLUS            [ reduce using rule 15 (expr -> expr OR expr .) ]
-  ! MINUS           [ reduce using rule 15 (expr -> expr OR expr .) ]
-  ! MUL             [ reduce using rule 15 (expr -> expr OR expr .) ]
-  ! DIV             [ reduce using rule 15 (expr -> expr OR expr .) ]
-  ! OR              [ reduce using rule 15 (expr -> expr OR expr .) ]
-  ! GT              [ reduce using rule 15 (expr -> expr OR expr .) ]
-  ! LT              [ reduce using rule 15 (expr -> expr OR expr .) ]
-  ! EQ              [ reduce using rule 15 (expr -> expr OR expr .) ]
+  ! PLUS            [ reduce using rule 20 (expr -> expr OR expr .) ]
+  ! MINUS           [ reduce using rule 20 (expr -> expr OR expr .) ]
+  ! MUL             [ reduce using rule 20 (expr -> expr OR expr .) ]
+  ! DIV             [ reduce using rule 20 (expr -> expr OR expr .) ]
+  ! OR              [ reduce using rule 20 (expr -> expr OR expr .) ]
+  ! GT              [ reduce using rule 20 (expr -> expr OR expr .) ]
+  ! LT              [ reduce using rule 20 (expr -> expr OR expr .) ]
+  ! EQ              [ reduce using rule 20 (expr -> expr OR expr .) ]
 
-
-state 43
-
-    (16) expr -> expr GT expr .
-    (11) expr -> expr . PLUS expr
-    (12) expr -> expr . MINUS expr
-    (13) expr -> expr . MUL expr
-    (14) expr -> expr . DIV expr
-    (15) expr -> expr . OR expr
-    (16) expr -> expr . GT expr
-    (17) expr -> expr . LT expr
-    (18) expr -> expr . EQ expr
-
-    OR              reduce using rule 16 (expr -> expr GT expr .)
-    GT              reduce using rule 16 (expr -> expr GT expr .)
-    LT              reduce using rule 16 (expr -> expr GT expr .)
-    EQ              reduce using rule 16 (expr -> expr GT expr .)
-    error           reduce using rule 16 (expr -> expr GT expr .)
-    OPENST          reduce using rule 16 (expr -> expr GT expr .)
-    NOT             reduce using rule 16 (expr -> expr GT expr .)
-    OPENBR          reduce using rule 16 (expr -> expr GT expr .)
-    NUM             reduce using rule 16 (expr -> expr GT expr .)
-    UINT            reduce using rule 16 (expr -> expr GT expr .)
-    CUINT           reduce using rule 16 (expr -> expr GT expr .)
-    BOOL            reduce using rule 16 (expr -> expr GT expr .)
-    CBOOL           reduce using rule 16 (expr -> expr GT expr .)
-    ID              reduce using rule 16 (expr -> expr GT expr .)
-    $end            reduce using rule 16 (expr -> expr GT expr .)
-    CLOSEST         reduce using rule 16 (expr -> expr GT expr .)
-    CLOSEBR         reduce using rule 16 (expr -> expr GT expr .)
-    PLUS            shift and go to state 20
-    MINUS           shift and go to state 21
-    MUL             shift and go to state 22
-    DIV             shift and go to state 23
-
-  ! PLUS            [ reduce using rule 16 (expr -> expr GT expr .) ]
-  ! MINUS           [ reduce using rule 16 (expr -> expr GT expr .) ]
-  ! MUL             [ reduce using rule 16 (expr -> expr GT expr .) ]
-  ! DIV             [ reduce using rule 16 (expr -> expr GT expr .) ]
-  ! OR              [ shift and go to state 24 ]
-  ! GT              [ shift and go to state 25 ]
-  ! LT              [ shift and go to state 26 ]
-  ! EQ              [ shift and go to state 27 ]
-
-
-state 44
-
-    (17) expr -> expr LT expr .
-    (11) expr -> expr . PLUS expr
-    (12) expr -> expr . MINUS expr
-    (13) expr -> expr . MUL expr
-    (14) expr -> expr . DIV expr
-    (15) expr -> expr . OR expr
-    (16) expr -> expr . GT expr
-    (17) expr -> expr . LT expr
-    (18) expr -> expr . EQ expr
-
-    OR              reduce using rule 17 (expr -> expr LT expr .)
-    GT              reduce using rule 17 (expr -> expr LT expr .)
-    LT              reduce using rule 17 (expr -> expr LT expr .)
-    EQ              reduce using rule 17 (expr -> expr LT expr .)
-    error           reduce using rule 17 (expr -> expr LT expr .)
-    OPENST          reduce using rule 17 (expr -> expr LT expr .)
-    NOT             reduce using rule 17 (expr -> expr LT expr .)
-    OPENBR          reduce using rule 17 (expr -> expr LT expr .)
-    NUM             reduce using rule 17 (expr -> expr LT expr .)
-    UINT            reduce using rule 17 (expr -> expr LT expr .)
-    CUINT           reduce using rule 17 (expr -> expr LT expr .)
-    BOOL            reduce using rule 17 (expr -> expr LT expr .)
-    CBOOL           reduce using rule 17 (expr -> expr LT expr .)
-    ID              reduce using rule 17 (expr -> expr LT expr .)
-    $end            reduce using rule 17 (expr -> expr LT expr .)
-    CLOSEST         reduce using rule 17 (expr -> expr LT expr .)
-    CLOSEBR         reduce using rule 17 (expr -> expr LT expr .)
-    PLUS            shift and go to state 20
-    MINUS           shift and go to state 21
-    MUL             shift and go to state 22
-    DIV             shift and go to state 23
-
-  ! PLUS            [ reduce using rule 17 (expr -> expr LT expr .) ]
-  ! MINUS           [ reduce using rule 17 (expr -> expr LT expr .) ]
-  ! MUL             [ reduce using rule 17 (expr -> expr LT expr .) ]
-  ! DIV             [ reduce using rule 17 (expr -> expr LT expr .) ]
-  ! OR              [ shift and go to state 24 ]
-  ! GT              [ shift and go to state 25 ]
-  ! LT              [ shift and go to state 26 ]
-  ! EQ              [ shift and go to state 27 ]
-
-
-state 45
-
-    (18) expr -> expr EQ expr .
-    (11) expr -> expr . PLUS expr
-    (12) expr -> expr . MINUS expr
-    (13) expr -> expr . MUL expr
-    (14) expr -> expr . DIV expr
-    (15) expr -> expr . OR expr
-    (16) expr -> expr . GT expr
-    (17) expr -> expr . LT expr
-    (18) expr -> expr . EQ expr
-
-    OR              reduce using rule 18 (expr -> expr EQ expr .)
-    GT              reduce using rule 18 (expr -> expr EQ expr .)
-    LT              reduce using rule 18 (expr -> expr EQ expr .)
-    EQ              reduce using rule 18 (expr -> expr EQ expr .)
-    error           reduce using rule 18 (expr -> expr EQ expr .)
-    OPENST          reduce using rule 18 (expr -> expr EQ expr .)
-    NOT             reduce using rule 18 (expr -> expr EQ expr .)
-    OPENBR          reduce using rule 18 (expr -> expr EQ expr .)
-    NUM             reduce using rule 18 (expr -> expr EQ expr .)
-    UINT            reduce using rule 18 (expr -> expr EQ expr .)
-    CUINT           reduce using rule 18 (expr -> expr EQ expr .)
-    BOOL            reduce using rule 18 (expr -> expr EQ expr .)
-    CBOOL           reduce using rule 18 (expr -> expr EQ expr .)
-    ID              reduce using rule 18 (expr -> expr EQ expr .)
-    $end            reduce using rule 18 (expr -> expr EQ expr .)
-    CLOSEST         reduce using rule 18 (expr -> expr EQ expr .)
-    CLOSEBR         reduce using rule 18 (expr -> expr EQ expr .)
-    PLUS            shift and go to state 20
-    MINUS           shift and go to state 21
-    MUL             shift and go to state 22
-    DIV             shift and go to state 23
-
-  ! PLUS            [ reduce using rule 18 (expr -> expr EQ expr .) ]
-  ! MINUS           [ reduce using rule 18 (expr -> expr EQ expr .) ]
-  ! MUL             [ reduce using rule 18 (expr -> expr EQ expr .) ]
-  ! DIV             [ reduce using rule 18 (expr -> expr EQ expr .) ]
-  ! OR              [ shift and go to state 24 ]
-  ! GT              [ shift and go to state 25 ]
-  ! LT              [ shift and go to state 26 ]
-  ! EQ              [ shift and go to state 27 ]
-
-
-state 46
-
-    (6) statement -> OPENST statement CLOSEST .
-
-    error           reduce using rule 6 (statement -> OPENST statement CLOSEST .)
-    OPENST          reduce using rule 6 (statement -> OPENST statement CLOSEST .)
-    MINUS           reduce using rule 6 (statement -> OPENST statement CLOSEST .)
-    NOT             reduce using rule 6 (statement -> OPENST statement CLOSEST .)
-    OPENBR          reduce using rule 6 (statement -> OPENST statement CLOSEST .)
-    NUM             reduce using rule 6 (statement -> OPENST statement CLOSEST .)
-    UINT            reduce using rule 6 (statement -> OPENST statement CLOSEST .)
-    CUINT           reduce using rule 6 (statement -> OPENST statement CLOSEST .)
-    BOOL            reduce using rule 6 (statement -> OPENST statement CLOSEST .)
-    CBOOL           reduce using rule 6 (statement -> OPENST statement CLOSEST .)
-    ID              reduce using rule 6 (statement -> OPENST statement CLOSEST .)
-    $end            reduce using rule 6 (statement -> OPENST statement CLOSEST .)
-    CLOSEST         reduce using rule 6 (statement -> OPENST statement CLOSEST .)
-
-
-state 47
-
-    (19) expr -> OPENBR expr CLOSEBR .
-
-    PLUS            reduce using rule 19 (expr -> OPENBR expr CLOSEBR .)
-    MINUS           reduce using rule 19 (expr -> OPENBR expr CLOSEBR .)
-    MUL             reduce using rule 19 (expr -> OPENBR expr CLOSEBR .)
-    DIV             reduce using rule 19 (expr -> OPENBR expr CLOSEBR .)
-    OR              reduce using rule 19 (expr -> OPENBR expr CLOSEBR .)
-    GT              reduce using rule 19 (expr -> OPENBR expr CLOSEBR .)
-    LT              reduce using rule 19 (expr -> OPENBR expr CLOSEBR .)
-    EQ              reduce using rule 19 (expr -> OPENBR expr CLOSEBR .)
-    error           reduce using rule 19 (expr -> OPENBR expr CLOSEBR .)
-    OPENST          reduce using rule 19 (expr -> OPENBR expr CLOSEBR .)
-    NOT             reduce using rule 19 (expr -> OPENBR expr CLOSEBR .)
-    OPENBR          reduce using rule 19 (expr -> OPENBR expr CLOSEBR .)
-    NUM             reduce using rule 19 (expr -> OPENBR expr CLOSEBR .)
-    UINT            reduce using rule 19 (expr -> OPENBR expr CLOSEBR .)
-    CUINT           reduce using rule 19 (expr -> OPENBR expr CLOSEBR .)
-    BOOL            reduce using rule 19 (expr -> OPENBR expr CLOSEBR .)
-    CBOOL           reduce using rule 19 (expr -> OPENBR expr CLOSEBR .)
-    ID              reduce using rule 19 (expr -> OPENBR expr CLOSEBR .)
-    $end            reduce using rule 19 (expr -> OPENBR expr CLOSEBR .)
-    CLOSEST         reduce using rule 19 (expr -> OPENBR expr CLOSEBR .)
-    CLOSEBR         reduce using rule 19 (expr -> OPENBR expr CLOSEBR .)
-
-
-state 48
-
-    (26) assign -> id ASGN expr .
-    (11) expr -> expr . PLUS expr
-    (12) expr -> expr . MINUS expr
-    (13) expr -> expr . MUL expr
-    (14) expr -> expr . DIV expr
-    (15) expr -> expr . OR expr
-    (16) expr -> expr . GT expr
-    (17) expr -> expr . LT expr
-    (18) expr -> expr . EQ expr
-
-    error           reduce using rule 26 (assign -> id ASGN expr .)
-    OPENST          reduce using rule 26 (assign -> id ASGN expr .)
-    NOT             reduce using rule 26 (assign -> id ASGN expr .)
-    OPENBR          reduce using rule 26 (assign -> id ASGN expr .)
-    NUM             reduce using rule 26 (assign -> id ASGN expr .)
-    UINT            reduce using rule 26 (assign -> id ASGN expr .)
-    CUINT           reduce using rule 26 (assign -> id ASGN expr .)
-    BOOL            reduce using rule 26 (assign -> id ASGN expr .)
-    CBOOL           reduce using rule 26 (assign -> id ASGN expr .)
-    ID              reduce using rule 26 (assign -> id ASGN expr .)
-    $end            reduce using rule 26 (assign -> id ASGN expr .)
-    CLOSEST         reduce using rule 26 (assign -> id ASGN expr .)
-    PLUS            shift and go to state 20
-    MINUS           shift and go to state 21
-    MUL             shift and go to state 22
-    DIV             shift and go to state 23
-    OR              shift and go to state 24
-    GT              shift and go to state 25
-    LT              shift and go to state 26
-    EQ              shift and go to state 27
-
-  ! MINUS           [ reduce using rule 26 (assign -> id ASGN expr .) ]
-
-
-state 49
-
-    (22) create_id -> UINT id ASGN . expr
-    (9) expr -> . MINUS expr
-    (10) expr -> . NOT expr
-    (11) expr -> . expr PLUS expr
-    (12) expr -> . expr MINUS expr
-    (13) expr -> . expr MUL expr
-    (14) expr -> . expr DIV expr
-    (15) expr -> . expr OR expr
-    (16) expr -> . expr GT expr
-    (17) expr -> . expr LT expr
-    (18) expr -> . expr EQ expr
-    (19) expr -> . OPENBR expr CLOSEBR
-    (20) expr -> . NUM
-    (21) expr -> . id
-    (27) id -> . ID
-
-    MINUS           shift and go to state 9
-    NOT             shift and go to state 10
-    OPENBR          shift and go to state 11
-    NUM             shift and go to state 12
-    ID              shift and go to state 18
-
-    id                             shift and go to state 30
-    expr                           shift and go to state 53
-
-state 50
-
-    (23) create_id -> CUINT id ASGN . expr
-    (9) expr -> . MINUS expr
-    (10) expr -> . NOT expr
-    (11) expr -> . expr PLUS expr
-    (12) expr -> . expr MINUS expr
-    (13) expr -> . expr MUL expr
-    (14) expr -> . expr DIV expr
-    (15) expr -> . expr OR expr
-    (16) expr -> . expr GT expr
-    (17) expr -> . expr LT expr
-    (18) expr -> . expr EQ expr
-    (19) expr -> . OPENBR expr CLOSEBR
-    (20) expr -> . NUM
-    (21) expr -> . id
-    (27) id -> . ID
-
-    MINUS           shift and go to state 9
-    NOT             shift and go to state 10
-    OPENBR          shift and go to state 11
-    NUM             shift and go to state 12
-    ID              shift and go to state 18
-
-    id                             shift and go to state 30
-    expr                           shift and go to state 54
 
 state 51
 
-    (24) create_id -> BOOL id ASGN . expr
-    (9) expr -> . MINUS expr
-    (10) expr -> . NOT expr
-    (11) expr -> . expr PLUS expr
-    (12) expr -> . expr MINUS expr
-    (13) expr -> . expr MUL expr
-    (14) expr -> . expr DIV expr
-    (15) expr -> . expr OR expr
-    (16) expr -> . expr GT expr
-    (17) expr -> . expr LT expr
-    (18) expr -> . expr EQ expr
-    (19) expr -> . OPENBR expr CLOSEBR
-    (20) expr -> . NUM
-    (21) expr -> . id
-    (27) id -> . ID
+    (21) expr -> expr GT expr .
+    (16) expr -> expr . PLUS expr
+    (17) expr -> expr . MINUS expr
+    (18) expr -> expr . MUL expr
+    (19) expr -> expr . DIV expr
+    (20) expr -> expr . OR expr
+    (21) expr -> expr . GT expr
+    (22) expr -> expr . LT expr
+    (23) expr -> expr . EQ expr
 
-    MINUS           shift and go to state 9
-    NOT             shift and go to state 10
-    OPENBR          shift and go to state 11
-    NUM             shift and go to state 12
-    ID              shift and go to state 18
+    OR              reduce using rule 21 (expr -> expr GT expr .)
+    GT              reduce using rule 21 (expr -> expr GT expr .)
+    LT              reduce using rule 21 (expr -> expr GT expr .)
+    EQ              reduce using rule 21 (expr -> expr GT expr .)
+    error           reduce using rule 21 (expr -> expr GT expr .)
+    OPENST          reduce using rule 21 (expr -> expr GT expr .)
+    WHILE           reduce using rule 21 (expr -> expr GT expr .)
+    IF              reduce using rule 21 (expr -> expr GT expr .)
+    NOT             reduce using rule 21 (expr -> expr GT expr .)
+    INC             reduce using rule 21 (expr -> expr GT expr .)
+    DEC             reduce using rule 21 (expr -> expr GT expr .)
+    OPENBR          reduce using rule 21 (expr -> expr GT expr .)
+    NUM             reduce using rule 21 (expr -> expr GT expr .)
+    UINT            reduce using rule 21 (expr -> expr GT expr .)
+    CUINT           reduce using rule 21 (expr -> expr GT expr .)
+    BOOL            reduce using rule 21 (expr -> expr GT expr .)
+    CBOOL           reduce using rule 21 (expr -> expr GT expr .)
+    ID              reduce using rule 21 (expr -> expr GT expr .)
+    $end            reduce using rule 21 (expr -> expr GT expr .)
+    CLOSEST         reduce using rule 21 (expr -> expr GT expr .)
+    CLOSEBR         reduce using rule 21 (expr -> expr GT expr .)
+    ELSE            reduce using rule 21 (expr -> expr GT expr .)
+    PLUS            shift and go to state 24
+    MINUS           shift and go to state 25
+    MUL             shift and go to state 26
+    DIV             shift and go to state 27
 
-    id                             shift and go to state 30
-    expr                           shift and go to state 55
+  ! PLUS            [ reduce using rule 21 (expr -> expr GT expr .) ]
+  ! MINUS           [ reduce using rule 21 (expr -> expr GT expr .) ]
+  ! MUL             [ reduce using rule 21 (expr -> expr GT expr .) ]
+  ! DIV             [ reduce using rule 21 (expr -> expr GT expr .) ]
+  ! OR              [ shift and go to state 28 ]
+  ! GT              [ shift and go to state 29 ]
+  ! LT              [ shift and go to state 30 ]
+  ! EQ              [ shift and go to state 31 ]
+
 
 state 52
 
-    (25) create_id -> CBOOL id ASGN . expr
-    (9) expr -> . MINUS expr
-    (10) expr -> . NOT expr
-    (11) expr -> . expr PLUS expr
-    (12) expr -> . expr MINUS expr
-    (13) expr -> . expr MUL expr
-    (14) expr -> . expr DIV expr
-    (15) expr -> . expr OR expr
-    (16) expr -> . expr GT expr
-    (17) expr -> . expr LT expr
-    (18) expr -> . expr EQ expr
-    (19) expr -> . OPENBR expr CLOSEBR
-    (20) expr -> . NUM
-    (21) expr -> . id
-    (27) id -> . ID
+    (22) expr -> expr LT expr .
+    (16) expr -> expr . PLUS expr
+    (17) expr -> expr . MINUS expr
+    (18) expr -> expr . MUL expr
+    (19) expr -> expr . DIV expr
+    (20) expr -> expr . OR expr
+    (21) expr -> expr . GT expr
+    (22) expr -> expr . LT expr
+    (23) expr -> expr . EQ expr
 
-    MINUS           shift and go to state 9
-    NOT             shift and go to state 10
-    OPENBR          shift and go to state 11
-    NUM             shift and go to state 12
-    ID              shift and go to state 18
+    OR              reduce using rule 22 (expr -> expr LT expr .)
+    GT              reduce using rule 22 (expr -> expr LT expr .)
+    LT              reduce using rule 22 (expr -> expr LT expr .)
+    EQ              reduce using rule 22 (expr -> expr LT expr .)
+    error           reduce using rule 22 (expr -> expr LT expr .)
+    OPENST          reduce using rule 22 (expr -> expr LT expr .)
+    WHILE           reduce using rule 22 (expr -> expr LT expr .)
+    IF              reduce using rule 22 (expr -> expr LT expr .)
+    NOT             reduce using rule 22 (expr -> expr LT expr .)
+    INC             reduce using rule 22 (expr -> expr LT expr .)
+    DEC             reduce using rule 22 (expr -> expr LT expr .)
+    OPENBR          reduce using rule 22 (expr -> expr LT expr .)
+    NUM             reduce using rule 22 (expr -> expr LT expr .)
+    UINT            reduce using rule 22 (expr -> expr LT expr .)
+    CUINT           reduce using rule 22 (expr -> expr LT expr .)
+    BOOL            reduce using rule 22 (expr -> expr LT expr .)
+    CBOOL           reduce using rule 22 (expr -> expr LT expr .)
+    ID              reduce using rule 22 (expr -> expr LT expr .)
+    $end            reduce using rule 22 (expr -> expr LT expr .)
+    CLOSEST         reduce using rule 22 (expr -> expr LT expr .)
+    CLOSEBR         reduce using rule 22 (expr -> expr LT expr .)
+    ELSE            reduce using rule 22 (expr -> expr LT expr .)
+    PLUS            shift and go to state 24
+    MINUS           shift and go to state 25
+    MUL             shift and go to state 26
+    DIV             shift and go to state 27
 
-    id                             shift and go to state 30
-    expr                           shift and go to state 56
+  ! PLUS            [ reduce using rule 22 (expr -> expr LT expr .) ]
+  ! MINUS           [ reduce using rule 22 (expr -> expr LT expr .) ]
+  ! MUL             [ reduce using rule 22 (expr -> expr LT expr .) ]
+  ! DIV             [ reduce using rule 22 (expr -> expr LT expr .) ]
+  ! OR              [ shift and go to state 28 ]
+  ! GT              [ shift and go to state 29 ]
+  ! LT              [ shift and go to state 30 ]
+  ! EQ              [ shift and go to state 31 ]
+
 
 state 53
 
-    (22) create_id -> UINT id ASGN expr .
-    (11) expr -> expr . PLUS expr
-    (12) expr -> expr . MINUS expr
-    (13) expr -> expr . MUL expr
-    (14) expr -> expr . DIV expr
-    (15) expr -> expr . OR expr
-    (16) expr -> expr . GT expr
-    (17) expr -> expr . LT expr
-    (18) expr -> expr . EQ expr
+    (23) expr -> expr EQ expr .
+    (16) expr -> expr . PLUS expr
+    (17) expr -> expr . MINUS expr
+    (18) expr -> expr . MUL expr
+    (19) expr -> expr . DIV expr
+    (20) expr -> expr . OR expr
+    (21) expr -> expr . GT expr
+    (22) expr -> expr . LT expr
+    (23) expr -> expr . EQ expr
 
-    error           reduce using rule 22 (create_id -> UINT id ASGN expr .)
-    OPENST          reduce using rule 22 (create_id -> UINT id ASGN expr .)
-    NOT             reduce using rule 22 (create_id -> UINT id ASGN expr .)
-    OPENBR          reduce using rule 22 (create_id -> UINT id ASGN expr .)
-    NUM             reduce using rule 22 (create_id -> UINT id ASGN expr .)
-    UINT            reduce using rule 22 (create_id -> UINT id ASGN expr .)
-    CUINT           reduce using rule 22 (create_id -> UINT id ASGN expr .)
-    BOOL            reduce using rule 22 (create_id -> UINT id ASGN expr .)
-    CBOOL           reduce using rule 22 (create_id -> UINT id ASGN expr .)
-    ID              reduce using rule 22 (create_id -> UINT id ASGN expr .)
-    $end            reduce using rule 22 (create_id -> UINT id ASGN expr .)
-    CLOSEST         reduce using rule 22 (create_id -> UINT id ASGN expr .)
-    PLUS            shift and go to state 20
-    MINUS           shift and go to state 21
-    MUL             shift and go to state 22
-    DIV             shift and go to state 23
-    OR              shift and go to state 24
-    GT              shift and go to state 25
-    LT              shift and go to state 26
-    EQ              shift and go to state 27
+    OR              reduce using rule 23 (expr -> expr EQ expr .)
+    GT              reduce using rule 23 (expr -> expr EQ expr .)
+    LT              reduce using rule 23 (expr -> expr EQ expr .)
+    EQ              reduce using rule 23 (expr -> expr EQ expr .)
+    error           reduce using rule 23 (expr -> expr EQ expr .)
+    OPENST          reduce using rule 23 (expr -> expr EQ expr .)
+    WHILE           reduce using rule 23 (expr -> expr EQ expr .)
+    IF              reduce using rule 23 (expr -> expr EQ expr .)
+    NOT             reduce using rule 23 (expr -> expr EQ expr .)
+    INC             reduce using rule 23 (expr -> expr EQ expr .)
+    DEC             reduce using rule 23 (expr -> expr EQ expr .)
+    OPENBR          reduce using rule 23 (expr -> expr EQ expr .)
+    NUM             reduce using rule 23 (expr -> expr EQ expr .)
+    UINT            reduce using rule 23 (expr -> expr EQ expr .)
+    CUINT           reduce using rule 23 (expr -> expr EQ expr .)
+    BOOL            reduce using rule 23 (expr -> expr EQ expr .)
+    CBOOL           reduce using rule 23 (expr -> expr EQ expr .)
+    ID              reduce using rule 23 (expr -> expr EQ expr .)
+    $end            reduce using rule 23 (expr -> expr EQ expr .)
+    CLOSEST         reduce using rule 23 (expr -> expr EQ expr .)
+    CLOSEBR         reduce using rule 23 (expr -> expr EQ expr .)
+    ELSE            reduce using rule 23 (expr -> expr EQ expr .)
+    PLUS            shift and go to state 24
+    MINUS           shift and go to state 25
+    MUL             shift and go to state 26
+    DIV             shift and go to state 27
 
-  ! MINUS           [ reduce using rule 22 (create_id -> UINT id ASGN expr .) ]
+  ! PLUS            [ reduce using rule 23 (expr -> expr EQ expr .) ]
+  ! MINUS           [ reduce using rule 23 (expr -> expr EQ expr .) ]
+  ! MUL             [ reduce using rule 23 (expr -> expr EQ expr .) ]
+  ! DIV             [ reduce using rule 23 (expr -> expr EQ expr .) ]
+  ! OR              [ shift and go to state 28 ]
+  ! GT              [ shift and go to state 29 ]
+  ! LT              [ shift and go to state 30 ]
+  ! EQ              [ shift and go to state 31 ]
 
 
 state 54
 
-    (23) create_id -> CUINT id ASGN expr .
-    (11) expr -> expr . PLUS expr
-    (12) expr -> expr . MINUS expr
-    (13) expr -> expr . MUL expr
-    (14) expr -> expr . DIV expr
-    (15) expr -> expr . OR expr
-    (16) expr -> expr . GT expr
-    (17) expr -> expr . LT expr
-    (18) expr -> expr . EQ expr
+    (6) statement -> OPENST stmt_list CLOSEST .
 
-    error           reduce using rule 23 (create_id -> CUINT id ASGN expr .)
-    OPENST          reduce using rule 23 (create_id -> CUINT id ASGN expr .)
-    NOT             reduce using rule 23 (create_id -> CUINT id ASGN expr .)
-    OPENBR          reduce using rule 23 (create_id -> CUINT id ASGN expr .)
-    NUM             reduce using rule 23 (create_id -> CUINT id ASGN expr .)
-    UINT            reduce using rule 23 (create_id -> CUINT id ASGN expr .)
-    CUINT           reduce using rule 23 (create_id -> CUINT id ASGN expr .)
-    BOOL            reduce using rule 23 (create_id -> CUINT id ASGN expr .)
-    CBOOL           reduce using rule 23 (create_id -> CUINT id ASGN expr .)
-    ID              reduce using rule 23 (create_id -> CUINT id ASGN expr .)
-    $end            reduce using rule 23 (create_id -> CUINT id ASGN expr .)
-    CLOSEST         reduce using rule 23 (create_id -> CUINT id ASGN expr .)
-    PLUS            shift and go to state 20
-    MINUS           shift and go to state 21
-    MUL             shift and go to state 22
-    DIV             shift and go to state 23
-    OR              shift and go to state 24
-    GT              shift and go to state 25
-    LT              shift and go to state 26
-    EQ              shift and go to state 27
-
-  ! MINUS           [ reduce using rule 23 (create_id -> CUINT id ASGN expr .) ]
+    error           reduce using rule 6 (statement -> OPENST stmt_list CLOSEST .)
+    OPENST          reduce using rule 6 (statement -> OPENST stmt_list CLOSEST .)
+    WHILE           reduce using rule 6 (statement -> OPENST stmt_list CLOSEST .)
+    IF              reduce using rule 6 (statement -> OPENST stmt_list CLOSEST .)
+    MINUS           reduce using rule 6 (statement -> OPENST stmt_list CLOSEST .)
+    NOT             reduce using rule 6 (statement -> OPENST stmt_list CLOSEST .)
+    INC             reduce using rule 6 (statement -> OPENST stmt_list CLOSEST .)
+    DEC             reduce using rule 6 (statement -> OPENST stmt_list CLOSEST .)
+    OPENBR          reduce using rule 6 (statement -> OPENST stmt_list CLOSEST .)
+    NUM             reduce using rule 6 (statement -> OPENST stmt_list CLOSEST .)
+    UINT            reduce using rule 6 (statement -> OPENST stmt_list CLOSEST .)
+    CUINT           reduce using rule 6 (statement -> OPENST stmt_list CLOSEST .)
+    BOOL            reduce using rule 6 (statement -> OPENST stmt_list CLOSEST .)
+    CBOOL           reduce using rule 6 (statement -> OPENST stmt_list CLOSEST .)
+    ID              reduce using rule 6 (statement -> OPENST stmt_list CLOSEST .)
+    $end            reduce using rule 6 (statement -> OPENST stmt_list CLOSEST .)
+    CLOSEST         reduce using rule 6 (statement -> OPENST stmt_list CLOSEST .)
+    ELSE            reduce using rule 6 (statement -> OPENST stmt_list CLOSEST .)
 
 
 state 55
 
-    (24) create_id -> BOOL id ASGN expr .
-    (11) expr -> expr . PLUS expr
-    (12) expr -> expr . MINUS expr
-    (13) expr -> expr . MUL expr
-    (14) expr -> expr . DIV expr
-    (15) expr -> expr . OR expr
-    (16) expr -> expr . GT expr
-    (17) expr -> expr . LT expr
-    (18) expr -> expr . EQ expr
+    (9) statement -> WHILE OPENBR expr . CLOSEBR DO statement
+    (16) expr -> expr . PLUS expr
+    (17) expr -> expr . MINUS expr
+    (18) expr -> expr . MUL expr
+    (19) expr -> expr . DIV expr
+    (20) expr -> expr . OR expr
+    (21) expr -> expr . GT expr
+    (22) expr -> expr . LT expr
+    (23) expr -> expr . EQ expr
 
-    error           reduce using rule 24 (create_id -> BOOL id ASGN expr .)
-    OPENST          reduce using rule 24 (create_id -> BOOL id ASGN expr .)
-    NOT             reduce using rule 24 (create_id -> BOOL id ASGN expr .)
-    OPENBR          reduce using rule 24 (create_id -> BOOL id ASGN expr .)
-    NUM             reduce using rule 24 (create_id -> BOOL id ASGN expr .)
-    UINT            reduce using rule 24 (create_id -> BOOL id ASGN expr .)
-    CUINT           reduce using rule 24 (create_id -> BOOL id ASGN expr .)
-    BOOL            reduce using rule 24 (create_id -> BOOL id ASGN expr .)
-    CBOOL           reduce using rule 24 (create_id -> BOOL id ASGN expr .)
-    ID              reduce using rule 24 (create_id -> BOOL id ASGN expr .)
-    $end            reduce using rule 24 (create_id -> BOOL id ASGN expr .)
-    CLOSEST         reduce using rule 24 (create_id -> BOOL id ASGN expr .)
-    PLUS            shift and go to state 20
-    MINUS           shift and go to state 21
-    MUL             shift and go to state 22
-    DIV             shift and go to state 23
-    OR              shift and go to state 24
-    GT              shift and go to state 25
-    LT              shift and go to state 26
-    EQ              shift and go to state 27
-
-  ! MINUS           [ reduce using rule 24 (create_id -> BOOL id ASGN expr .) ]
+    CLOSEBR         shift and go to state 63
+    PLUS            shift and go to state 24
+    MINUS           shift and go to state 25
+    MUL             shift and go to state 26
+    DIV             shift and go to state 27
+    OR              shift and go to state 28
+    GT              shift and go to state 29
+    LT              shift and go to state 30
+    EQ              shift and go to state 31
 
 
 state 56
 
-    (25) create_id -> CBOOL id ASGN expr .
-    (11) expr -> expr . PLUS expr
-    (12) expr -> expr . MINUS expr
-    (13) expr -> expr . MUL expr
-    (14) expr -> expr . DIV expr
-    (15) expr -> expr . OR expr
-    (16) expr -> expr . GT expr
-    (17) expr -> expr . LT expr
-    (18) expr -> expr . EQ expr
+    (24) expr -> OPENBR expr CLOSEBR .
 
-    error           reduce using rule 25 (create_id -> CBOOL id ASGN expr .)
-    OPENST          reduce using rule 25 (create_id -> CBOOL id ASGN expr .)
-    NOT             reduce using rule 25 (create_id -> CBOOL id ASGN expr .)
-    OPENBR          reduce using rule 25 (create_id -> CBOOL id ASGN expr .)
-    NUM             reduce using rule 25 (create_id -> CBOOL id ASGN expr .)
-    UINT            reduce using rule 25 (create_id -> CBOOL id ASGN expr .)
-    CUINT           reduce using rule 25 (create_id -> CBOOL id ASGN expr .)
-    BOOL            reduce using rule 25 (create_id -> CBOOL id ASGN expr .)
-    CBOOL           reduce using rule 25 (create_id -> CBOOL id ASGN expr .)
-    ID              reduce using rule 25 (create_id -> CBOOL id ASGN expr .)
-    $end            reduce using rule 25 (create_id -> CBOOL id ASGN expr .)
-    CLOSEST         reduce using rule 25 (create_id -> CBOOL id ASGN expr .)
-    PLUS            shift and go to state 20
-    MINUS           shift and go to state 21
-    MUL             shift and go to state 22
-    DIV             shift and go to state 23
-    OR              shift and go to state 24
-    GT              shift and go to state 25
-    LT              shift and go to state 26
-    EQ              shift and go to state 27
+    PLUS            reduce using rule 24 (expr -> OPENBR expr CLOSEBR .)
+    MINUS           reduce using rule 24 (expr -> OPENBR expr CLOSEBR .)
+    MUL             reduce using rule 24 (expr -> OPENBR expr CLOSEBR .)
+    DIV             reduce using rule 24 (expr -> OPENBR expr CLOSEBR .)
+    OR              reduce using rule 24 (expr -> OPENBR expr CLOSEBR .)
+    GT              reduce using rule 24 (expr -> OPENBR expr CLOSEBR .)
+    LT              reduce using rule 24 (expr -> OPENBR expr CLOSEBR .)
+    EQ              reduce using rule 24 (expr -> OPENBR expr CLOSEBR .)
+    error           reduce using rule 24 (expr -> OPENBR expr CLOSEBR .)
+    OPENST          reduce using rule 24 (expr -> OPENBR expr CLOSEBR .)
+    WHILE           reduce using rule 24 (expr -> OPENBR expr CLOSEBR .)
+    IF              reduce using rule 24 (expr -> OPENBR expr CLOSEBR .)
+    NOT             reduce using rule 24 (expr -> OPENBR expr CLOSEBR .)
+    INC             reduce using rule 24 (expr -> OPENBR expr CLOSEBR .)
+    DEC             reduce using rule 24 (expr -> OPENBR expr CLOSEBR .)
+    OPENBR          reduce using rule 24 (expr -> OPENBR expr CLOSEBR .)
+    NUM             reduce using rule 24 (expr -> OPENBR expr CLOSEBR .)
+    UINT            reduce using rule 24 (expr -> OPENBR expr CLOSEBR .)
+    CUINT           reduce using rule 24 (expr -> OPENBR expr CLOSEBR .)
+    BOOL            reduce using rule 24 (expr -> OPENBR expr CLOSEBR .)
+    CBOOL           reduce using rule 24 (expr -> OPENBR expr CLOSEBR .)
+    ID              reduce using rule 24 (expr -> OPENBR expr CLOSEBR .)
+    $end            reduce using rule 24 (expr -> OPENBR expr CLOSEBR .)
+    CLOSEST         reduce using rule 24 (expr -> OPENBR expr CLOSEBR .)
+    CLOSEBR         reduce using rule 24 (expr -> OPENBR expr CLOSEBR .)
+    ELSE            reduce using rule 24 (expr -> OPENBR expr CLOSEBR .)
 
-  ! MINUS           [ reduce using rule 25 (create_id -> CBOOL id ASGN expr .) ]
+
+state 57
+
+    (10) statement -> IF OPENBR expr . CLOSEBR statement
+    (11) statement -> IF OPENBR expr . CLOSEBR statement ELSE statement
+    (16) expr -> expr . PLUS expr
+    (17) expr -> expr . MINUS expr
+    (18) expr -> expr . MUL expr
+    (19) expr -> expr . DIV expr
+    (20) expr -> expr . OR expr
+    (21) expr -> expr . GT expr
+    (22) expr -> expr . LT expr
+    (23) expr -> expr . EQ expr
+
+    CLOSEBR         shift and go to state 64
+    PLUS            shift and go to state 24
+    MINUS           shift and go to state 25
+    MUL             shift and go to state 26
+    DIV             shift and go to state 27
+    OR              shift and go to state 28
+    GT              shift and go to state 29
+    LT              shift and go to state 30
+    EQ              shift and go to state 31
+
+
+state 58
+
+    (31) assign -> id ASGN expr .
+    (16) expr -> expr . PLUS expr
+    (17) expr -> expr . MINUS expr
+    (18) expr -> expr . MUL expr
+    (19) expr -> expr . DIV expr
+    (20) expr -> expr . OR expr
+    (21) expr -> expr . GT expr
+    (22) expr -> expr . LT expr
+    (23) expr -> expr . EQ expr
+
+    error           reduce using rule 31 (assign -> id ASGN expr .)
+    OPENST          reduce using rule 31 (assign -> id ASGN expr .)
+    WHILE           reduce using rule 31 (assign -> id ASGN expr .)
+    IF              reduce using rule 31 (assign -> id ASGN expr .)
+    NOT             reduce using rule 31 (assign -> id ASGN expr .)
+    INC             reduce using rule 31 (assign -> id ASGN expr .)
+    DEC             reduce using rule 31 (assign -> id ASGN expr .)
+    OPENBR          reduce using rule 31 (assign -> id ASGN expr .)
+    NUM             reduce using rule 31 (assign -> id ASGN expr .)
+    UINT            reduce using rule 31 (assign -> id ASGN expr .)
+    CUINT           reduce using rule 31 (assign -> id ASGN expr .)
+    BOOL            reduce using rule 31 (assign -> id ASGN expr .)
+    CBOOL           reduce using rule 31 (assign -> id ASGN expr .)
+    ID              reduce using rule 31 (assign -> id ASGN expr .)
+    $end            reduce using rule 31 (assign -> id ASGN expr .)
+    CLOSEST         reduce using rule 31 (assign -> id ASGN expr .)
+    ELSE            reduce using rule 31 (assign -> id ASGN expr .)
+    PLUS            shift and go to state 24
+    MINUS           shift and go to state 25
+    MUL             shift and go to state 26
+    DIV             shift and go to state 27
+    OR              shift and go to state 28
+    GT              shift and go to state 29
+    LT              shift and go to state 30
+    EQ              shift and go to state 31
+
+  ! MINUS           [ reduce using rule 31 (assign -> id ASGN expr .) ]
+
+
+state 59
+
+    (27) create_id -> UINT id ASGN . expr
+    (12) expr -> . MINUS expr
+    (13) expr -> . NOT expr
+    (14) expr -> . INC id
+    (15) expr -> . DEC id
+    (16) expr -> . expr PLUS expr
+    (17) expr -> . expr MINUS expr
+    (18) expr -> . expr MUL expr
+    (19) expr -> . expr DIV expr
+    (20) expr -> . expr OR expr
+    (21) expr -> . expr GT expr
+    (22) expr -> . expr LT expr
+    (23) expr -> . expr EQ expr
+    (24) expr -> . OPENBR expr CLOSEBR
+    (25) expr -> . NUM
+    (26) expr -> . id
+    (32) id -> . ID
+
+    MINUS           shift and go to state 12
+    NOT             shift and go to state 13
+    INC             shift and go to state 14
+    DEC             shift and go to state 16
+    OPENBR          shift and go to state 10
+    NUM             shift and go to state 17
+    ID              shift and go to state 22
+
+    id                             shift and go to state 35
+    expr                           shift and go to state 65
+
+state 60
+
+    (28) create_id -> CUINT id ASGN . expr
+    (12) expr -> . MINUS expr
+    (13) expr -> . NOT expr
+    (14) expr -> . INC id
+    (15) expr -> . DEC id
+    (16) expr -> . expr PLUS expr
+    (17) expr -> . expr MINUS expr
+    (18) expr -> . expr MUL expr
+    (19) expr -> . expr DIV expr
+    (20) expr -> . expr OR expr
+    (21) expr -> . expr GT expr
+    (22) expr -> . expr LT expr
+    (23) expr -> . expr EQ expr
+    (24) expr -> . OPENBR expr CLOSEBR
+    (25) expr -> . NUM
+    (26) expr -> . id
+    (32) id -> . ID
+
+    MINUS           shift and go to state 12
+    NOT             shift and go to state 13
+    INC             shift and go to state 14
+    DEC             shift and go to state 16
+    OPENBR          shift and go to state 10
+    NUM             shift and go to state 17
+    ID              shift and go to state 22
+
+    id                             shift and go to state 35
+    expr                           shift and go to state 66
+
+state 61
+
+    (29) create_id -> BOOL id ASGN . expr
+    (12) expr -> . MINUS expr
+    (13) expr -> . NOT expr
+    (14) expr -> . INC id
+    (15) expr -> . DEC id
+    (16) expr -> . expr PLUS expr
+    (17) expr -> . expr MINUS expr
+    (18) expr -> . expr MUL expr
+    (19) expr -> . expr DIV expr
+    (20) expr -> . expr OR expr
+    (21) expr -> . expr GT expr
+    (22) expr -> . expr LT expr
+    (23) expr -> . expr EQ expr
+    (24) expr -> . OPENBR expr CLOSEBR
+    (25) expr -> . NUM
+    (26) expr -> . id
+    (32) id -> . ID
+
+    MINUS           shift and go to state 12
+    NOT             shift and go to state 13
+    INC             shift and go to state 14
+    DEC             shift and go to state 16
+    OPENBR          shift and go to state 10
+    NUM             shift and go to state 17
+    ID              shift and go to state 22
+
+    id                             shift and go to state 35
+    expr                           shift and go to state 67
+
+state 62
+
+    (30) create_id -> CBOOL id ASGN . expr
+    (12) expr -> . MINUS expr
+    (13) expr -> . NOT expr
+    (14) expr -> . INC id
+    (15) expr -> . DEC id
+    (16) expr -> . expr PLUS expr
+    (17) expr -> . expr MINUS expr
+    (18) expr -> . expr MUL expr
+    (19) expr -> . expr DIV expr
+    (20) expr -> . expr OR expr
+    (21) expr -> . expr GT expr
+    (22) expr -> . expr LT expr
+    (23) expr -> . expr EQ expr
+    (24) expr -> . OPENBR expr CLOSEBR
+    (25) expr -> . NUM
+    (26) expr -> . id
+    (32) id -> . ID
+
+    MINUS           shift and go to state 12
+    NOT             shift and go to state 13
+    INC             shift and go to state 14
+    DEC             shift and go to state 16
+    OPENBR          shift and go to state 10
+    NUM             shift and go to state 17
+    ID              shift and go to state 22
+
+    id                             shift and go to state 35
+    expr                           shift and go to state 68
+
+state 63
+
+    (9) statement -> WHILE OPENBR expr CLOSEBR . DO statement
+
+    DO              shift and go to state 69
+
+
+state 64
+
+    (10) statement -> IF OPENBR expr CLOSEBR . statement
+    (11) statement -> IF OPENBR expr CLOSEBR . statement ELSE statement
+    (4) statement -> . error
+    (5) statement -> . expr
+    (6) statement -> . OPENST stmt_list CLOSEST
+    (7) statement -> . create_id
+    (8) statement -> . assign
+    (9) statement -> . WHILE OPENBR expr CLOSEBR DO statement
+    (10) statement -> . IF OPENBR expr CLOSEBR statement
+    (11) statement -> . IF OPENBR expr CLOSEBR statement ELSE statement
+    (12) expr -> . MINUS expr
+    (13) expr -> . NOT expr
+    (14) expr -> . INC id
+    (15) expr -> . DEC id
+    (16) expr -> . expr PLUS expr
+    (17) expr -> . expr MINUS expr
+    (18) expr -> . expr MUL expr
+    (19) expr -> . expr DIV expr
+    (20) expr -> . expr OR expr
+    (21) expr -> . expr GT expr
+    (22) expr -> . expr LT expr
+    (23) expr -> . expr EQ expr
+    (24) expr -> . OPENBR expr CLOSEBR
+    (25) expr -> . NUM
+    (26) expr -> . id
+    (27) create_id -> . UINT id ASGN expr
+    (28) create_id -> . CUINT id ASGN expr
+    (29) create_id -> . BOOL id ASGN expr
+    (30) create_id -> . CBOOL id ASGN expr
+    (31) assign -> . id ASGN expr
+    (32) id -> . ID
+
+    error           shift and go to state 4
+    OPENST          shift and go to state 6
+    WHILE           shift and go to state 9
+    IF              shift and go to state 11
+    MINUS           shift and go to state 12
+    NOT             shift and go to state 13
+    INC             shift and go to state 14
+    DEC             shift and go to state 16
+    OPENBR          shift and go to state 10
+    NUM             shift and go to state 17
+    UINT            shift and go to state 18
+    CUINT           shift and go to state 19
+    BOOL            shift and go to state 20
+    CBOOL           shift and go to state 21
+    ID              shift and go to state 22
+
+    expr                           shift and go to state 5
+    statement                      shift and go to state 70
+    create_id                      shift and go to state 7
+    assign                         shift and go to state 8
+    id                             shift and go to state 15
+
+state 65
+
+    (27) create_id -> UINT id ASGN expr .
+    (16) expr -> expr . PLUS expr
+    (17) expr -> expr . MINUS expr
+    (18) expr -> expr . MUL expr
+    (19) expr -> expr . DIV expr
+    (20) expr -> expr . OR expr
+    (21) expr -> expr . GT expr
+    (22) expr -> expr . LT expr
+    (23) expr -> expr . EQ expr
+
+    error           reduce using rule 27 (create_id -> UINT id ASGN expr .)
+    OPENST          reduce using rule 27 (create_id -> UINT id ASGN expr .)
+    WHILE           reduce using rule 27 (create_id -> UINT id ASGN expr .)
+    IF              reduce using rule 27 (create_id -> UINT id ASGN expr .)
+    NOT             reduce using rule 27 (create_id -> UINT id ASGN expr .)
+    INC             reduce using rule 27 (create_id -> UINT id ASGN expr .)
+    DEC             reduce using rule 27 (create_id -> UINT id ASGN expr .)
+    OPENBR          reduce using rule 27 (create_id -> UINT id ASGN expr .)
+    NUM             reduce using rule 27 (create_id -> UINT id ASGN expr .)
+    UINT            reduce using rule 27 (create_id -> UINT id ASGN expr .)
+    CUINT           reduce using rule 27 (create_id -> UINT id ASGN expr .)
+    BOOL            reduce using rule 27 (create_id -> UINT id ASGN expr .)
+    CBOOL           reduce using rule 27 (create_id -> UINT id ASGN expr .)
+    ID              reduce using rule 27 (create_id -> UINT id ASGN expr .)
+    $end            reduce using rule 27 (create_id -> UINT id ASGN expr .)
+    CLOSEST         reduce using rule 27 (create_id -> UINT id ASGN expr .)
+    ELSE            reduce using rule 27 (create_id -> UINT id ASGN expr .)
+    PLUS            shift and go to state 24
+    MINUS           shift and go to state 25
+    MUL             shift and go to state 26
+    DIV             shift and go to state 27
+    OR              shift and go to state 28
+    GT              shift and go to state 29
+    LT              shift and go to state 30
+    EQ              shift and go to state 31
+
+  ! MINUS           [ reduce using rule 27 (create_id -> UINT id ASGN expr .) ]
+
+
+state 66
+
+    (28) create_id -> CUINT id ASGN expr .
+    (16) expr -> expr . PLUS expr
+    (17) expr -> expr . MINUS expr
+    (18) expr -> expr . MUL expr
+    (19) expr -> expr . DIV expr
+    (20) expr -> expr . OR expr
+    (21) expr -> expr . GT expr
+    (22) expr -> expr . LT expr
+    (23) expr -> expr . EQ expr
+
+    error           reduce using rule 28 (create_id -> CUINT id ASGN expr .)
+    OPENST          reduce using rule 28 (create_id -> CUINT id ASGN expr .)
+    WHILE           reduce using rule 28 (create_id -> CUINT id ASGN expr .)
+    IF              reduce using rule 28 (create_id -> CUINT id ASGN expr .)
+    NOT             reduce using rule 28 (create_id -> CUINT id ASGN expr .)
+    INC             reduce using rule 28 (create_id -> CUINT id ASGN expr .)
+    DEC             reduce using rule 28 (create_id -> CUINT id ASGN expr .)
+    OPENBR          reduce using rule 28 (create_id -> CUINT id ASGN expr .)
+    NUM             reduce using rule 28 (create_id -> CUINT id ASGN expr .)
+    UINT            reduce using rule 28 (create_id -> CUINT id ASGN expr .)
+    CUINT           reduce using rule 28 (create_id -> CUINT id ASGN expr .)
+    BOOL            reduce using rule 28 (create_id -> CUINT id ASGN expr .)
+    CBOOL           reduce using rule 28 (create_id -> CUINT id ASGN expr .)
+    ID              reduce using rule 28 (create_id -> CUINT id ASGN expr .)
+    $end            reduce using rule 28 (create_id -> CUINT id ASGN expr .)
+    CLOSEST         reduce using rule 28 (create_id -> CUINT id ASGN expr .)
+    ELSE            reduce using rule 28 (create_id -> CUINT id ASGN expr .)
+    PLUS            shift and go to state 24
+    MINUS           shift and go to state 25
+    MUL             shift and go to state 26
+    DIV             shift and go to state 27
+    OR              shift and go to state 28
+    GT              shift and go to state 29
+    LT              shift and go to state 30
+    EQ              shift and go to state 31
+
+  ! MINUS           [ reduce using rule 28 (create_id -> CUINT id ASGN expr .) ]
+
+
+state 67
+
+    (29) create_id -> BOOL id ASGN expr .
+    (16) expr -> expr . PLUS expr
+    (17) expr -> expr . MINUS expr
+    (18) expr -> expr . MUL expr
+    (19) expr -> expr . DIV expr
+    (20) expr -> expr . OR expr
+    (21) expr -> expr . GT expr
+    (22) expr -> expr . LT expr
+    (23) expr -> expr . EQ expr
+
+    error           reduce using rule 29 (create_id -> BOOL id ASGN expr .)
+    OPENST          reduce using rule 29 (create_id -> BOOL id ASGN expr .)
+    WHILE           reduce using rule 29 (create_id -> BOOL id ASGN expr .)
+    IF              reduce using rule 29 (create_id -> BOOL id ASGN expr .)
+    NOT             reduce using rule 29 (create_id -> BOOL id ASGN expr .)
+    INC             reduce using rule 29 (create_id -> BOOL id ASGN expr .)
+    DEC             reduce using rule 29 (create_id -> BOOL id ASGN expr .)
+    OPENBR          reduce using rule 29 (create_id -> BOOL id ASGN expr .)
+    NUM             reduce using rule 29 (create_id -> BOOL id ASGN expr .)
+    UINT            reduce using rule 29 (create_id -> BOOL id ASGN expr .)
+    CUINT           reduce using rule 29 (create_id -> BOOL id ASGN expr .)
+    BOOL            reduce using rule 29 (create_id -> BOOL id ASGN expr .)
+    CBOOL           reduce using rule 29 (create_id -> BOOL id ASGN expr .)
+    ID              reduce using rule 29 (create_id -> BOOL id ASGN expr .)
+    $end            reduce using rule 29 (create_id -> BOOL id ASGN expr .)
+    CLOSEST         reduce using rule 29 (create_id -> BOOL id ASGN expr .)
+    ELSE            reduce using rule 29 (create_id -> BOOL id ASGN expr .)
+    PLUS            shift and go to state 24
+    MINUS           shift and go to state 25
+    MUL             shift and go to state 26
+    DIV             shift and go to state 27
+    OR              shift and go to state 28
+    GT              shift and go to state 29
+    LT              shift and go to state 30
+    EQ              shift and go to state 31
+
+  ! MINUS           [ reduce using rule 29 (create_id -> BOOL id ASGN expr .) ]
+
+
+state 68
+
+    (30) create_id -> CBOOL id ASGN expr .
+    (16) expr -> expr . PLUS expr
+    (17) expr -> expr . MINUS expr
+    (18) expr -> expr . MUL expr
+    (19) expr -> expr . DIV expr
+    (20) expr -> expr . OR expr
+    (21) expr -> expr . GT expr
+    (22) expr -> expr . LT expr
+    (23) expr -> expr . EQ expr
+
+    error           reduce using rule 30 (create_id -> CBOOL id ASGN expr .)
+    OPENST          reduce using rule 30 (create_id -> CBOOL id ASGN expr .)
+    WHILE           reduce using rule 30 (create_id -> CBOOL id ASGN expr .)
+    IF              reduce using rule 30 (create_id -> CBOOL id ASGN expr .)
+    NOT             reduce using rule 30 (create_id -> CBOOL id ASGN expr .)
+    INC             reduce using rule 30 (create_id -> CBOOL id ASGN expr .)
+    DEC             reduce using rule 30 (create_id -> CBOOL id ASGN expr .)
+    OPENBR          reduce using rule 30 (create_id -> CBOOL id ASGN expr .)
+    NUM             reduce using rule 30 (create_id -> CBOOL id ASGN expr .)
+    UINT            reduce using rule 30 (create_id -> CBOOL id ASGN expr .)
+    CUINT           reduce using rule 30 (create_id -> CBOOL id ASGN expr .)
+    BOOL            reduce using rule 30 (create_id -> CBOOL id ASGN expr .)
+    CBOOL           reduce using rule 30 (create_id -> CBOOL id ASGN expr .)
+    ID              reduce using rule 30 (create_id -> CBOOL id ASGN expr .)
+    $end            reduce using rule 30 (create_id -> CBOOL id ASGN expr .)
+    CLOSEST         reduce using rule 30 (create_id -> CBOOL id ASGN expr .)
+    ELSE            reduce using rule 30 (create_id -> CBOOL id ASGN expr .)
+    PLUS            shift and go to state 24
+    MINUS           shift and go to state 25
+    MUL             shift and go to state 26
+    DIV             shift and go to state 27
+    OR              shift and go to state 28
+    GT              shift and go to state 29
+    LT              shift and go to state 30
+    EQ              shift and go to state 31
+
+  ! MINUS           [ reduce using rule 30 (create_id -> CBOOL id ASGN expr .) ]
+
+
+state 69
+
+    (9) statement -> WHILE OPENBR expr CLOSEBR DO . statement
+    (4) statement -> . error
+    (5) statement -> . expr
+    (6) statement -> . OPENST stmt_list CLOSEST
+    (7) statement -> . create_id
+    (8) statement -> . assign
+    (9) statement -> . WHILE OPENBR expr CLOSEBR DO statement
+    (10) statement -> . IF OPENBR expr CLOSEBR statement
+    (11) statement -> . IF OPENBR expr CLOSEBR statement ELSE statement
+    (12) expr -> . MINUS expr
+    (13) expr -> . NOT expr
+    (14) expr -> . INC id
+    (15) expr -> . DEC id
+    (16) expr -> . expr PLUS expr
+    (17) expr -> . expr MINUS expr
+    (18) expr -> . expr MUL expr
+    (19) expr -> . expr DIV expr
+    (20) expr -> . expr OR expr
+    (21) expr -> . expr GT expr
+    (22) expr -> . expr LT expr
+    (23) expr -> . expr EQ expr
+    (24) expr -> . OPENBR expr CLOSEBR
+    (25) expr -> . NUM
+    (26) expr -> . id
+    (27) create_id -> . UINT id ASGN expr
+    (28) create_id -> . CUINT id ASGN expr
+    (29) create_id -> . BOOL id ASGN expr
+    (30) create_id -> . CBOOL id ASGN expr
+    (31) assign -> . id ASGN expr
+    (32) id -> . ID
+
+    error           shift and go to state 4
+    OPENST          shift and go to state 6
+    WHILE           shift and go to state 9
+    IF              shift and go to state 11
+    MINUS           shift and go to state 12
+    NOT             shift and go to state 13
+    INC             shift and go to state 14
+    DEC             shift and go to state 16
+    OPENBR          shift and go to state 10
+    NUM             shift and go to state 17
+    UINT            shift and go to state 18
+    CUINT           shift and go to state 19
+    BOOL            shift and go to state 20
+    CBOOL           shift and go to state 21
+    ID              shift and go to state 22
+
+    expr                           shift and go to state 5
+    statement                      shift and go to state 71
+    create_id                      shift and go to state 7
+    assign                         shift and go to state 8
+    id                             shift and go to state 15
+
+state 70
+
+    (10) statement -> IF OPENBR expr CLOSEBR statement .
+    (11) statement -> IF OPENBR expr CLOSEBR statement . ELSE statement
+
+    error           reduce using rule 10 (statement -> IF OPENBR expr CLOSEBR statement .)
+    OPENST          reduce using rule 10 (statement -> IF OPENBR expr CLOSEBR statement .)
+    WHILE           reduce using rule 10 (statement -> IF OPENBR expr CLOSEBR statement .)
+    IF              reduce using rule 10 (statement -> IF OPENBR expr CLOSEBR statement .)
+    MINUS           reduce using rule 10 (statement -> IF OPENBR expr CLOSEBR statement .)
+    NOT             reduce using rule 10 (statement -> IF OPENBR expr CLOSEBR statement .)
+    INC             reduce using rule 10 (statement -> IF OPENBR expr CLOSEBR statement .)
+    DEC             reduce using rule 10 (statement -> IF OPENBR expr CLOSEBR statement .)
+    OPENBR          reduce using rule 10 (statement -> IF OPENBR expr CLOSEBR statement .)
+    NUM             reduce using rule 10 (statement -> IF OPENBR expr CLOSEBR statement .)
+    UINT            reduce using rule 10 (statement -> IF OPENBR expr CLOSEBR statement .)
+    CUINT           reduce using rule 10 (statement -> IF OPENBR expr CLOSEBR statement .)
+    BOOL            reduce using rule 10 (statement -> IF OPENBR expr CLOSEBR statement .)
+    CBOOL           reduce using rule 10 (statement -> IF OPENBR expr CLOSEBR statement .)
+    ID              reduce using rule 10 (statement -> IF OPENBR expr CLOSEBR statement .)
+    $end            reduce using rule 10 (statement -> IF OPENBR expr CLOSEBR statement .)
+    CLOSEST         reduce using rule 10 (statement -> IF OPENBR expr CLOSEBR statement .)
+    ELSE            shift and go to state 72
+
+  ! ELSE            [ reduce using rule 10 (statement -> IF OPENBR expr CLOSEBR statement .) ]
+
+
+state 71
+
+    (9) statement -> WHILE OPENBR expr CLOSEBR DO statement .
+
+    error           reduce using rule 9 (statement -> WHILE OPENBR expr CLOSEBR DO statement .)
+    OPENST          reduce using rule 9 (statement -> WHILE OPENBR expr CLOSEBR DO statement .)
+    WHILE           reduce using rule 9 (statement -> WHILE OPENBR expr CLOSEBR DO statement .)
+    IF              reduce using rule 9 (statement -> WHILE OPENBR expr CLOSEBR DO statement .)
+    MINUS           reduce using rule 9 (statement -> WHILE OPENBR expr CLOSEBR DO statement .)
+    NOT             reduce using rule 9 (statement -> WHILE OPENBR expr CLOSEBR DO statement .)
+    INC             reduce using rule 9 (statement -> WHILE OPENBR expr CLOSEBR DO statement .)
+    DEC             reduce using rule 9 (statement -> WHILE OPENBR expr CLOSEBR DO statement .)
+    OPENBR          reduce using rule 9 (statement -> WHILE OPENBR expr CLOSEBR DO statement .)
+    NUM             reduce using rule 9 (statement -> WHILE OPENBR expr CLOSEBR DO statement .)
+    UINT            reduce using rule 9 (statement -> WHILE OPENBR expr CLOSEBR DO statement .)
+    CUINT           reduce using rule 9 (statement -> WHILE OPENBR expr CLOSEBR DO statement .)
+    BOOL            reduce using rule 9 (statement -> WHILE OPENBR expr CLOSEBR DO statement .)
+    CBOOL           reduce using rule 9 (statement -> WHILE OPENBR expr CLOSEBR DO statement .)
+    ID              reduce using rule 9 (statement -> WHILE OPENBR expr CLOSEBR DO statement .)
+    $end            reduce using rule 9 (statement -> WHILE OPENBR expr CLOSEBR DO statement .)
+    CLOSEST         reduce using rule 9 (statement -> WHILE OPENBR expr CLOSEBR DO statement .)
+    ELSE            reduce using rule 9 (statement -> WHILE OPENBR expr CLOSEBR DO statement .)
+
+
+state 72
+
+    (11) statement -> IF OPENBR expr CLOSEBR statement ELSE . statement
+    (4) statement -> . error
+    (5) statement -> . expr
+    (6) statement -> . OPENST stmt_list CLOSEST
+    (7) statement -> . create_id
+    (8) statement -> . assign
+    (9) statement -> . WHILE OPENBR expr CLOSEBR DO statement
+    (10) statement -> . IF OPENBR expr CLOSEBR statement
+    (11) statement -> . IF OPENBR expr CLOSEBR statement ELSE statement
+    (12) expr -> . MINUS expr
+    (13) expr -> . NOT expr
+    (14) expr -> . INC id
+    (15) expr -> . DEC id
+    (16) expr -> . expr PLUS expr
+    (17) expr -> . expr MINUS expr
+    (18) expr -> . expr MUL expr
+    (19) expr -> . expr DIV expr
+    (20) expr -> . expr OR expr
+    (21) expr -> . expr GT expr
+    (22) expr -> . expr LT expr
+    (23) expr -> . expr EQ expr
+    (24) expr -> . OPENBR expr CLOSEBR
+    (25) expr -> . NUM
+    (26) expr -> . id
+    (27) create_id -> . UINT id ASGN expr
+    (28) create_id -> . CUINT id ASGN expr
+    (29) create_id -> . BOOL id ASGN expr
+    (30) create_id -> . CBOOL id ASGN expr
+    (31) assign -> . id ASGN expr
+    (32) id -> . ID
+
+    error           shift and go to state 4
+    OPENST          shift and go to state 6
+    WHILE           shift and go to state 9
+    IF              shift and go to state 11
+    MINUS           shift and go to state 12
+    NOT             shift and go to state 13
+    INC             shift and go to state 14
+    DEC             shift and go to state 16
+    OPENBR          shift and go to state 10
+    NUM             shift and go to state 17
+    UINT            shift and go to state 18
+    CUINT           shift and go to state 19
+    BOOL            shift and go to state 20
+    CBOOL           shift and go to state 21
+    ID              shift and go to state 22
+
+    expr                           shift and go to state 5
+    statement                      shift and go to state 73
+    create_id                      shift and go to state 7
+    assign                         shift and go to state 8
+    id                             shift and go to state 15
+
+state 73
+
+    (11) statement -> IF OPENBR expr CLOSEBR statement ELSE statement .
+
+    error           reduce using rule 11 (statement -> IF OPENBR expr CLOSEBR statement ELSE statement .)
+    OPENST          reduce using rule 11 (statement -> IF OPENBR expr CLOSEBR statement ELSE statement .)
+    WHILE           reduce using rule 11 (statement -> IF OPENBR expr CLOSEBR statement ELSE statement .)
+    IF              reduce using rule 11 (statement -> IF OPENBR expr CLOSEBR statement ELSE statement .)
+    MINUS           reduce using rule 11 (statement -> IF OPENBR expr CLOSEBR statement ELSE statement .)
+    NOT             reduce using rule 11 (statement -> IF OPENBR expr CLOSEBR statement ELSE statement .)
+    INC             reduce using rule 11 (statement -> IF OPENBR expr CLOSEBR statement ELSE statement .)
+    DEC             reduce using rule 11 (statement -> IF OPENBR expr CLOSEBR statement ELSE statement .)
+    OPENBR          reduce using rule 11 (statement -> IF OPENBR expr CLOSEBR statement ELSE statement .)
+    NUM             reduce using rule 11 (statement -> IF OPENBR expr CLOSEBR statement ELSE statement .)
+    UINT            reduce using rule 11 (statement -> IF OPENBR expr CLOSEBR statement ELSE statement .)
+    CUINT           reduce using rule 11 (statement -> IF OPENBR expr CLOSEBR statement ELSE statement .)
+    BOOL            reduce using rule 11 (statement -> IF OPENBR expr CLOSEBR statement ELSE statement .)
+    CBOOL           reduce using rule 11 (statement -> IF OPENBR expr CLOSEBR statement ELSE statement .)
+    ID              reduce using rule 11 (statement -> IF OPENBR expr CLOSEBR statement ELSE statement .)
+    $end            reduce using rule 11 (statement -> IF OPENBR expr CLOSEBR statement ELSE statement .)
+    CLOSEST         reduce using rule 11 (statement -> IF OPENBR expr CLOSEBR statement ELSE statement .)
+    ELSE            reduce using rule 11 (statement -> IF OPENBR expr CLOSEBR statement ELSE statement .)
 
 WARNING: 
 WARNING: Conflicts:
 WARNING: 
 WARNING: shift/reduce conflict for MINUS in state 5 resolved as shift
-WARNING: shift/reduce conflict for PLUS in state 42 resolved as shift
-WARNING: shift/reduce conflict for MINUS in state 42 resolved as shift
-WARNING: shift/reduce conflict for MUL in state 42 resolved as shift
-WARNING: shift/reduce conflict for DIV in state 42 resolved as shift
-WARNING: shift/reduce conflict for OR in state 42 resolved as shift
-WARNING: shift/reduce conflict for GT in state 42 resolved as shift
-WARNING: shift/reduce conflict for LT in state 42 resolved as shift
-WARNING: shift/reduce conflict for EQ in state 42 resolved as shift
+WARNING: shift/reduce conflict for PLUS in state 50 resolved as shift
+WARNING: shift/reduce conflict for MINUS in state 50 resolved as shift
+WARNING: shift/reduce conflict for MUL in state 50 resolved as shift
+WARNING: shift/reduce conflict for DIV in state 50 resolved as shift
+WARNING: shift/reduce conflict for OR in state 50 resolved as shift
+WARNING: shift/reduce conflict for GT in state 50 resolved as shift
+WARNING: shift/reduce conflict for LT in state 50 resolved as shift
+WARNING: shift/reduce conflict for EQ in state 50 resolved as shift

@@ -44,7 +44,10 @@ class Parser:
         ('left', 'GT', 'LT', 'EQ'),
         ('left', 'PLUS', 'MINUS'),
         ('left', 'MUL', 'DIV'),
-        ('right', 'UMINUS'),  # Unary minus operator
+        ('nonassoc', 'WHILE'),
+        ('nonassoc', 'IFX'),
+        ('left', 'ELSE'),
+        ('right', 'UOPER'),  # Unary operators INC, DEC, unary -
     )
 
     def __init__(self):
@@ -79,7 +82,7 @@ class Parser:
 
     def p_statement(self, p):
         """statement : expr
-                     | OPENST statement CLOSEST
+                     | OPENST stmt_list CLOSEST
                      | create_id
                      | assign"""
         if len(p) == 2:
@@ -87,10 +90,24 @@ class Parser:
         else:
             p[0] = p[2]
 
-    def p_expr_un(self, p):
-        """expr : MINUS expr %prec UMINUS
-                | NOT expr %prec UMINUS"""
-        p[0] = STNode('invert', None, p[2])
+    def p_statement_while(self, p):
+        """statement : WHILE OPENBR expr CLOSEBR DO statement %prec WHILE"""
+        p[0] = STNode('while', None, p[3], p[6])
+
+    def p_statement_if(self, p):
+        """statement : IF OPENBR expr CLOSEBR statement %prec IFX
+                     | IF OPENBR expr CLOSEBR statement ELSE statement"""
+        if len(p) == 6:
+            p[0] = STNode('if', None, p[3], p[5])
+        else:
+            p[0] = STNode('if', None, p[3], p[5], p[7])
+
+    def p_expr_unary(self, p):
+        """expr : MINUS expr %prec UOPER
+                | NOT expr %prec UOPER
+                | INC id %prec UOPER
+                | DEC id %prec UOPER"""
+        p[0] = STNode('unary', str(p[1]), p[2])
 
     def p_expr(self, p):
         """expr : expr PLUS expr

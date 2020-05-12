@@ -17,7 +17,7 @@ class Lexer:  # added RETURN and EQ statements to task
         'UNDO', 'NL', 'ID', 'NUM'
     )
 
-    t_ignore = ' \t'
+    t_ignore = ' \t\n'
 
     def __init__(self):
         self.lexer = lex.lex(module=self)

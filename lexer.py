@@ -76,18 +76,22 @@ class Lexer:  # added RETURN and EQ statements to task
 
     def t_1DARRBOOL(self, t):
         r"""1DARRAYOFBOOL"""
+        t.value = '1DARRBOOL'
         return t
 
     def t_2DARRBOOL(self, t):
         r"""2DARRAYOFBOOL"""
+        t.value = '2DARRBOOL'
         return t
 
     def t_1DARRINT(self, t):
         r"""1DARRAYOFUINT"""
+        t.value = '1DARRINT'
         return t
 
     def t_2DARRINT(self, t):
         r"""2DARRAYOFUINT"""
+        t.value = '2DARRINT'
         return t
 
     def t_EXTEND1(self, t):
@@ -251,8 +255,6 @@ class Lexer:  # added RETURN and EQ statements to task
     def t_newline(self, t):
         r"""\n+"""
         t.lexer.lineno += t.value.count('\n')
-        t.type = 'NL'
-        return t
 
     def t_error(self, t):
         print("\nIllegal character {0} on line {1}\n".format(t.value[0], t.lexer.lineno))

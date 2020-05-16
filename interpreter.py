@@ -139,7 +139,7 @@ class Interpreter:
             self._interpret_node(node.parts[0])
             return self._interpret_node(node.parts[1])
 
-        elif node.type == 'create':
+        elif node.type == 'create_id':
             if node.parts[0].value in self.LDT.keys():
                 raise RedeclarationError
             if node.value in ('UINT', 'CUINT'):
@@ -147,15 +147,10 @@ class Interpreter:
                                                            self._interpret_node(node.parts[1]),
                                                            node.parts[0])
             elif node.value in ('BOOL', 'CBOOL'):
-
                 res = self._interpret_node(node.parts[1])
-                if res == 0:
+                if res in (0, 1):
                     self.LDT[node.parts[0].value] = Descriptor(node.value,
-                                                               0,
-                                                               node.parts[0])
-                elif res == 1:
-                    self.LDT[node.parts[0].value] = Descriptor(node.value,
-                                                               1,
+                                                               res,
                                                                node.parts[0])
                 else:
                     raise BadBoolAssignment
@@ -194,6 +189,21 @@ class Interpreter:
         elif node.type == 'while':
             while self._interpret_node(node.parts[0]):
                 self._interpret_node(node.parts[1])
+
+        elif node.type == 'create_1darr':
+            if node.parts[0].value in self.LDT.keys():
+                raise RedeclarationError
+            self.LDT[node.parts[0].value] = Descriptor(node.value, [], None)
+            if node.value == '1DARRBOOL':
+                for i in node.parts[1:]:
+                    res = self._interpret_node(i)
+                    if res in (0, 1):
+                        self.LDT[node.parts[0].value].value.append(res)
+                    else:
+                        raise BadBoolAssignment
+            else:
+                self.LDT[node.parts[0].value].value = [self._interpret_node(i) for i in node.parts[1:]]
+            self.LDT[node.parts[0].value].value.reverse()
 
 
 if __name__ == '__main__':

@@ -36,6 +36,10 @@ class STNode(object):
         self.parts.append(part)
         return self
 
+    def add_parts(self, parts):
+        self.parts += parts
+        return self
+
 
 class Parser:
     tokens = Lexer.tokens
@@ -84,7 +88,8 @@ class Parser:
         """statement : expr
                      | OPENST stmt_list CLOSEST
                      | create_id
-                     | assign"""
+                     | assign
+                     | create_1darr"""
         if len(p) == 2:
             p[0] = p[1]
         else:
@@ -134,12 +139,27 @@ class Parser:
         # print("p_factor_id rule")
         p[0] = p[1]
 
+    def p_create_1darr(self, p):
+        """create_1darr : 1DARRBOOL id ASGN OPENIND enum CLOSEIND
+                      | 1DARRINT id ASGN OPENIND enum CLOSEIND"""
+        p[0] = STNode('create_1darr', str(p[1]), p[2])
+        p[0].add_parts(p[5])
+
+    def p_enum(self, p):
+        """enum : expr
+                | expr COMMA enum"""
+        if len(p) == 2:
+            p[0] = [p[1]]
+        else:
+            p[3].append(p[1])
+            p[0] = p[3]
+
     def p_create_id(self, p):
         """create_id : UINT id ASGN expr
                      | CUINT id ASGN expr
                      | BOOL id ASGN expr
                      | CBOOL id ASGN expr"""
-        p[0] = STNode('create', str(p[1]), p[2], p[4])
+        p[0] = STNode('create_id', str(p[1]), p[2], p[4])
 
     def p_assign(self, p):
         """assign : id ASGN expr"""

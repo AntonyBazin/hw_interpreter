@@ -52,6 +52,7 @@ class Parser:
         ('nonassoc', 'IFX'),
         ('left', 'ELSE'),
         ('right', 'UOPER'),  # Unary operators INC, DEC, unary -
+        ('nonassoc', 'EXTEND')
     )
 
     def __init__(self):
@@ -89,7 +90,10 @@ class Parser:
                      | OPENST stmt_list CLOSEST
                      | create_id
                      | assign
-                     | create_1darr"""
+                     | create_1darr
+                     | create_2darr
+                     | extend1
+                     | extend2"""
         if len(p) == 2:
             p[0] = p[1]
         else:
@@ -129,6 +133,18 @@ class Parser:
         """expr : OPENBR expr CLOSEBR"""
         p[0] = p[2]
 
+    def p_expr_ind(self, p):
+        """expr : id OPENBR expr CLOSEBR"""
+        p[0] = STNode('index_1d', None, p[1], p[3])
+
+    def p_expr_sz(self, p):
+        """expr : SZ1 id %prec UOPER"""
+        p[0] = STNode('size_1d', None, p[2])
+
+    def p_expr_sz2(self, p):
+        """expr : SZ2 id expr %prec UOPER"""
+        p[0] = STNode('size_2d', None, p[2], p[3])
+
     def p_expr_const(self, p):
         """expr : NUM"""
         # print("p_factor_const rule")
@@ -141,8 +157,22 @@ class Parser:
 
     def p_create_1darr(self, p):
         """create_1darr : 1DARRBOOL id ASGN OPENIND enum CLOSEIND
-                      | 1DARRINT id ASGN OPENIND enum CLOSEIND"""
+                        | 1DARRINT id ASGN OPENIND enum CLOSEIND"""
         p[0] = STNode('create_1darr', str(p[1]), p[2])
+        p[0].add_parts(p[5])
+
+    def p_extend1(self, p):
+        """extend1 : EXTEND1 id expr %prec EXTEND"""
+        p[0] = STNode('extend1', None, p[2], p[3])
+
+    def p_extend2(self, p):
+        """extend2 : EXTEND2 id OPENBR expr CLOSEBR OPENBR expr CLOSEBR %prec EXTEND"""
+        p[0] = STNode('extend2', None, p[2], p[4], p[7])
+
+    def p_create_2darr(self, p):
+        """create_2darr : 2DARRBOOL id ASGN OPENIND enum2 CLOSEIND
+                        | 2DARRINT id ASGN OPENIND enum2 CLOSEIND"""
+        p[0] = STNode('create_2darr', str(p[1]), p[2])
         p[0].add_parts(p[5])
 
     def p_enum(self, p):
@@ -154,6 +184,15 @@ class Parser:
             p[3].append(p[1])
             p[0] = p[3]
 
+    def p_enum2(self, p):
+        """enum2 : enum
+                 | enum DCOMMA enum2"""
+        if len(p) == 2:
+            p[0] = [STNode('enum', p[1])]
+        else:
+            p[3].append(STNode('enum', p[1]))
+            p[0] = p[3]
+
     def p_create_id(self, p):
         """create_id : UINT id ASGN expr
                      | CUINT id ASGN expr
@@ -162,8 +201,15 @@ class Parser:
         p[0] = STNode('create_id', str(p[1]), p[2], p[4])
 
     def p_assign(self, p):
-        """assign : id ASGN expr"""
-        p[0] = STNode('assign', None, p[1], p[3])
+        """assign : id ASGN expr
+                  | id OPENBR expr CLOSEBR ASGN expr
+                  | id OPENBR expr COMMA expr CLOSEBR ASGN expr"""
+        if len(p) == 4:
+            p[0] = STNode('assign', None, p[1], p[3])
+        elif len(p) == 7:
+            p[0] = STNode('assign', None, p[1], p[3], p[6])
+        else:
+            p[0] = STNode('assign', None, p[1], p[3], p[5], p[8])
 
     def p_id(self, p):
         """id : ID"""

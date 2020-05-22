@@ -4,7 +4,7 @@ from ply import lex
 class Lexer:  # added RETURN and EQ statements to task
     states = ()
     tokens = (
-        'COMMA', 'TRUE', 'FALSE', 'UINT', 'BOOL', 'CUINT', 'CBOOL',
+        'COMMA', 'DCOMMA', 'TRUE', 'FALSE', 'UINT', 'BOOL', 'CUINT', 'CBOOL',
         'PLUS', 'MINUS', 'MUL', 'DIV',
         '1DARRBOOL', '2DARRBOOL', '1DARRINT', '2DARRINT',
         'EXTEND1', 'EXTEND2', 'SZ1', 'SZ2',
@@ -30,6 +30,10 @@ class Lexer:  # added RETURN and EQ statements to task
 
     def t_COMMA(self, t):
         r"""\,"""
+        return t
+
+    def t_DCOMMA(self, t):
+        r"""\;"""
         return t
 
     def t_TRUE(self, t):

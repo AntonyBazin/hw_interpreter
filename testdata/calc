@@ -1,1 +1,23 @@
-5 + 4 - 2 * 7 / 7 + 3
+[UINT a1 = -1, UINT a2 = -1, UINT a3 = -1] FUNCTION gnome_sort(1DARRAYOFUINT a = [0, 0, 0], UINT dir = 0) {
+    UINT pos = 0
+    IF((pos EQ 0) OR (a(pos) GT a(pos-1)) OR (a(pos) EQ a(pos-1))){
+        INC pos
+    } ELSE {
+        [a(pos), a(pos-1)] = swap(a(pos), a(pos-1))
+        DEC pos
+    }
+    a1 = a(0)
+    a2 = a(1)
+    a3 = a(2)
+}
+
+[UINT c = 0, UINT d = 0] FUNCTION swap(UINT a = 0, UINT b = 0){
+c = b
+d = a
+}
+
+1DARRAYOFUINT a = [6, 3, 2, 5, 4, 1]
+UINT a1 = -2
+UINT a2 = -2
+UINT a3 = -2
+[a1, a2, a3] = gnome_sort(a,)

@@ -86,7 +86,8 @@ class Parser:
         print("Syntax error : {}\n".format(str(p[1])))
 
     def p_statement(self, p):
-        """statement : expr
+        """statement :
+                     | expr
                      | OPENST stmt_list CLOSEST
                      | create_id
                      | assign
@@ -98,8 +99,10 @@ class Parser:
                      | call"""
         if len(p) == 2:
             p[0] = p[1]
-        else:
+        elif len(p) == 4:
             p[0] = p[2]
+        else:
+            p[0] = STNode('pass', None)
 
     def p_statement_while(self, p):
         """statement : WHILE OPENBR expr CLOSEBR DO statement %prec WHILE"""
@@ -350,6 +353,10 @@ class Parser:
 
 if __name__ == '__main__':
     parser = Parser()
-    while True:
-        t = parser.parse(input())
-        STNode.paste(t, 0)
+    # while True:
+    #     t = parser.parse(input())
+    #     STNode.paste(t, 0)
+    with open('testdata/calc', 'r') as f:
+        data = f.read()
+    t = parser.parse(data)
+    STNode.paste(t, 0)

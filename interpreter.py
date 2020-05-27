@@ -1,48 +1,59 @@
 from parser import Parser, STNode
 
 
-class InterpreterException(Exception):
-    pass
+class InterpreterError:
+    """Base Error Class"""
+
+    def __str__(self):
+        return self.__doc__
 
 
-class RedeclarationError(InterpreterException):
+class RedeclarationError(InterpreterError):
     """Variable redeclaration error"""
 
 
-class NotFoundError(InterpreterException):
+class NotFoundError(InterpreterError):
     """Name not found error"""
 
 
-class ConstAssignment(InterpreterException):
+class ConstAssignment(InterpreterError):
     """Constant assignment attempt"""
 
 
-class ConstIncrement(InterpreterException):
+class ConstIncrement(InterpreterError):
     """Constant increment attempt"""
 
 
-class ConstDecrement(InterpreterException):
+class ConstDecrement(InterpreterError):
     """Constant decrement attempt"""
 
 
-class BoolIncrement(InterpreterException):
+class BoolIncrement(InterpreterError):
     """Bool increment attempt"""
 
 
-class BoolDecrement(InterpreterException):
+class BoolDecrement(InterpreterError):
     """Bool decrement attempt"""
 
 
-class BadBoolAssignment(InterpreterException):
+class BadBoolAssignment(InterpreterError):
     """Inappropriate value on bool assignment"""
 
 
-class NegativeExtension(InterpreterException):  # TODO show the result
-    """Negative value in expression for extending an array"""
+class BadExtension(InterpreterError):  # TODO show the result
+    """Negative or NoneType value in expression for extending an array"""
 
 
-class InvalidArrayOperator(InterpreterException):
+class InvalidArrayOperator(InterpreterError):
     """Invalid operand for array operator"""
+
+
+class RecursionStackOverflow(InterpreterError):
+    """Too deep level of recursion"""
+
+
+class NoneTypeError(InterpreterError):
+    """Nonetype object at an important place"""
 
 
 class Descriptor:
@@ -62,24 +73,22 @@ class Interpreter:
         self.parser = Parser()
         self.nmsp_stack = []
         self.LDT = {}
+        self._errors = []
 
     def interpret(self, code: str):
         t = self.parser.parse(code)
         STNode.paste(t, 0)
-        try:
-            print(self._int_nd(t))
-        # except InterpreterException as ie:
-        #     print(ie.__doc__)
-        except IndexError as ie:
-            print(ie)
+        print(self._int_nd(t))
         print(self.nmsp_stack)
         print(self.LDT)
+        for e in self._errors:
+            print(e)
         # self.nmsp_stack = []  # for debug with many iterations
         # self.LDT = {}
 
     def create_vars(self, nodes):  # used in functions
-        for node in nodes:
-            self._int_nd(node)
+        for i in range(len(nodes)):
+            self._int_nd(nodes[i])
 
     def asgn_args(self, dst, src):
         for i in range(len(dst)):
@@ -127,7 +136,7 @@ class Interpreter:
                 if dst[i].type == 'id':
                     self._int_nd(STNode('assign', None, dst[i], STNode('number', src[i])))
                     # self.LDT[dst[i].value].value = src[i]
-                elif dst[i].type == 'index_1d':  # TODO
+                elif dst[i].type == 'index_1d':
                     self._int_nd(STNode('assign', None, dst[i].parts[0], dst[i].parts[1], STNode('number', src[i])))
                 elif dst[i].type == 'index_2d':
                     self._int_nd(STNode('assign', None,
@@ -135,7 +144,7 @@ class Interpreter:
                                         dst[i].parts[1],
                                         dst[i].parts[2],
                                         STNode('number',
-                                        src[i])))
+                                               src[i])))
 
     def _int_nd(self, node: STNode):
         if node is None:
@@ -146,38 +155,46 @@ class Interpreter:
                 self.nmsp_stack.append(self.LDT)
             return self._int_nd(node.parts[0])
 
+        elif node.type == 'pass':
+            return None
+
         elif node.type == 'number':
             return node.value
 
         elif node.type == 'oper':
-            if node.value == '+':
-                return self._int_nd(node.parts[0]) \
-                       + self._int_nd(node.parts[1])
-            elif node.value == '-':
-                return self._int_nd(node.parts[0]) \
-                       - self._int_nd(node.parts[1])
-            elif node.value == '*':
-                return self._int_nd(node.parts[0]) \
-                       * self._int_nd(node.parts[1])
-            elif node.value == '/':
-                return self._int_nd(node.parts[0]) \
-                       // self._int_nd(node.parts[1])
-            elif node.value == 'OR':
-                return self._int_nd(node.parts[0]) \
-                       and self._int_nd(node.parts[1])
-            elif node.value == 'GT':
-                return self._int_nd(node.parts[0]) \
-                       > self._int_nd(node.parts[1])
-            elif node.value == 'LT':
-                return self._int_nd(node.parts[0]) \
-                       < self._int_nd(node.parts[1])
-            elif node.value == 'EQ':
-                return self._int_nd(node.parts[0]) \
-                       == self._int_nd(node.parts[1])
+            try:
+                if node.value == '+':
+                    return self._int_nd(node.parts[0]) \
+                           + self._int_nd(node.parts[1])
+                elif node.value == '-':
+                    return self._int_nd(node.parts[0]) \
+                           - self._int_nd(node.parts[1])
+                elif node.value == '*':
+                    return self._int_nd(node.parts[0]) \
+                           * self._int_nd(node.parts[1])
+                elif node.value == '/':
+                    return self._int_nd(node.parts[0]) \
+                           // self._int_nd(node.parts[1])
+                elif node.value == 'OR':
+                    return self._int_nd(node.parts[0]) \
+                           and self._int_nd(node.parts[1])
+                elif node.value == 'GT':
+                    return self._int_nd(node.parts[0]) \
+                           > self._int_nd(node.parts[1])
+                elif node.value == 'LT':
+                    return self._int_nd(node.parts[0]) \
+                           < self._int_nd(node.parts[1])
+                elif node.value == 'EQ':
+                    return self._int_nd(node.parts[0]) \
+                           == self._int_nd(node.parts[1])
+            except TypeError as te:
+                self._errors.append(te)
+                return None
 
         elif node.type == 'id':
             if node.value not in self.LDT.keys():
-                raise NotFoundError
+                self._errors.append(NotFoundError)
+                return None  # TODO check1 NB!
             return self.LDT[node.value].value
 
         elif node.type == 'unary':
@@ -185,39 +202,63 @@ class Interpreter:
                 return -node.parts[0].value
 
             elif node.value == 'NOT':
-                return int(not self._int_nd(node.parts[0]))
+                try:
+                    return int(not self._int_nd(node.parts[0]))
+                except TypeError as te:
+                    self._errors.append(te)
+                    return None
 
             elif node.value == 'INC':
                 if node.parts[0].value not in self.LDT.keys():
-                    raise NotFoundError
-                if self.LDT[node.parts[0].value].type in ('CUINT', 'CBOOL'):
-                    raise ConstIncrement
-                if self.LDT[node.parts[0].value].type == 'BOOL':
-                    raise BoolIncrement
-                self.LDT[node.parts[0].value].value += 1
-                return self._int_nd(node.parts[0])
+                    self._errors.append(NotFoundError)
+                    return None
+                try:
+                    if self.LDT[node.parts[0].value].type in ('CUINT', 'CBOOL'):
+                        self._errors.append(ConstIncrement)
+                        return self._int_nd(node.parts[0])
+                    if self.LDT[node.parts[0].value].type == 'BOOL':
+                        self._errors.append(BoolIncrement)
+                        return self._int_nd(node.parts[0])
+                    self.LDT[node.parts[0].value].value += 1
+                    return self._int_nd(node.parts[0])
+                except TypeError as te:
+                    self._errors.append(te)
+                    return None
 
             elif node.value == 'DEC':
                 if node.parts[0].value not in self.LDT.keys():
-                    raise NotFoundError
-                if self.LDT[node.parts[0].value].type in ('CUINT', 'CBOOL'):
-                    raise ConstDecrement
-                if self.LDT[node.parts[0].value].type == 'BOOL':
-                    raise BoolDecrement
-                self.LDT[node.parts[0].value].value -= 1
-                return self._int_nd(node.parts[0])
+                    self._errors.append(NotFoundError)
+                    return None
+                try:
+                    if self.LDT[node.parts[0].value].type in ('CUINT', 'CBOOL'):
+                        self._errors.append(ConstDecrement)
+                        return self._int_nd(node.parts[0])
+                    if self.LDT[node.parts[0].value].type == 'BOOL':
+                        self._errors.append(BoolDecrement)
+                        return self._int_nd(node.parts[0])
+                    self.LDT[node.parts[0].value].value -= 1
+                    return self._int_nd(node.parts[0])
+                except TypeError as te:
+                    self._errors.append(te)
+                    return None
 
         elif node.type == 'conjunction':
             self._int_nd(node.parts[0])
-            return self._int_nd(node.parts[1])
+            self._int_nd(node.parts[1])
 
         elif node.type == 'create_id':
             if node.parts[0].value in self.LDT.keys():
-                raise RedeclarationError
+                self._errors.append(RedeclarationError)
+                return None
             if node.value in ('UINT', 'CUINT'):
-                self.LDT[node.parts[0].value] = Descriptor(node.value,
-                                                           self._int_nd(node.parts[1]),
-                                                           node.parts[0])
+                val = self._int_nd(node.parts[1])
+                if val is not None:
+                    self.LDT[node.parts[0].value] = Descriptor(node.value,
+                                                               val,
+                                                               node.parts[0])
+                else:
+                    self._errors.append(NoneTypeError)
+                    return None
             elif node.value in ('BOOL', 'CBOOL'):
                 res = self._int_nd(node.parts[1])
                 if res in (0, 1):
@@ -225,45 +266,87 @@ class Interpreter:
                                                                res,
                                                                node.parts[0])
                 else:
-                    raise BadBoolAssignment
-            return self.LDT[node.parts[0].value].value
+                    self._errors.append(BadBoolAssignment)
+                    self.LDT[node.parts[0].value] = Descriptor(node.value,
+                                                               1,
+                                                               node.parts[0])
+            # return self.LDT[node.parts[0].value].value
 
-        elif node.type == 'assign':
+        elif node.type == 'assign':  # TODO
             if node.parts[0].value not in self.LDT.keys():
-                raise NotFoundError
+                self._errors.append(NotFoundError)
+                return None
             if self.LDT[node.parts[0].value].type in ('CUINT', 'CBOOL'):
-                raise ConstAssignment
+                self._errors.append(ConstAssignment)
+                return None
             elif self.LDT[node.parts[0].value].type == 'BOOL':
                 res = self._int_nd(node.parts[1])
                 if res in (0, 1):
                     self.LDT[node.parts[0].value].value = res
                 else:
-                    raise BadBoolAssignment
+                    self._errors.append(BadBoolAssignment)
+                    self.LDT[node.parts[0].value].value = 1
+                    return None
                 return self.LDT[node.parts[0].value].value
             elif self.LDT[node.parts[0].value].type == 'UINT':
-                self.LDT[node.parts[0].value].value = self._int_nd(node.parts[1])
+                res = self._int_nd(node.parts[1])
+                if res is not None:
+                    self.LDT[node.parts[0].value].value = res
+                else:
+                    self._errors.append(NoneTypeError)
+                    return None
                 return self.LDT[node.parts[0].value].value
             elif self.LDT[node.parts[0].value].type == '1DARRINT':
-                self.LDT[node.parts[0].value].value[self._int_nd(node.parts[1])] \
-                    = self._int_nd(node.parts[2])
-                return self.LDT[node.parts[0].value].value[self._int_nd(node.parts[1])]
+                index = self._int_nd(node.parts[1])
+                val = self._int_nd(node.parts[2])
+                if index is not None and val is not None:
+                    try:
+                        self.LDT[node.parts[0].value].value[index] = val
+                        return self.LDT[node.parts[0].value].value[index]
+                    except IndexError as ie:
+                        self._errors.append(ie)
+                        return None
             elif self.LDT[node.parts[0].value].type == '1DARRBOOL':
                 res = self._int_nd(node.parts[2])
-                if res in (0, 1):
-                    self.LDT[node.parts[0].value].value[self._int_nd(node.parts[1])] = res
-                else:
-                    raise BadBoolAssignment
-                return self.LDT[node.parts[0].value].value[self._int_nd(node.parts[1])]
+                index = self._int_nd(node.parts[1])
+                try:
+                    if (res in (0, 1)) and index is not None:
+                        self.LDT[node.parts[0].value].value[index] = res
+                    else:
+                        self._errors.append(BadBoolAssignment)
+                        self.LDT[node.parts[0].value].value[index] = 1
+                        return None
+                    return self.LDT[node.parts[0].value].value[index]
+                except Exception as ie:
+                    self._errors.append(ie)
+                    return None
             elif self.LDT[node.parts[0].value].type == '2DARRINT':
-                self.LDT[node.parts[0].value].value[self._int_nd(node.parts[1])][self._int_nd(node.parts[2])] \
-                    = self._int_nd(node.parts[3])
-            else:
-                res = self._int_nd(node.parts[2])
-                if res in (0, 1):
-                    self.LDT[node.parts[0].value].value[self._int_nd(node.parts[1])][self._int_nd(node.parts[2])] \
-                        = res
+                index1 = self._int_nd(node.parts[1])
+                index2 = self._int_nd(node.parts[2])
+                val = self._int_nd(node.parts[3])
+                try:
+                    if val is not None:
+                        self.LDT[node.parts[0].value].value[index1][index2] = val
+                    else:
+                        self._errors.append(NoneTypeError)
+                        return None
+                except IndexError as ie:
+                    self._errors.append(ie)
+                    return None
+            elif self.LDT[node.parts[0].value].type == '2DARRBOOL':
+                index1 = self._int_nd(node.parts[1])
+                index2 = self._int_nd(node.parts[2])
+                val = self._int_nd(node.parts[3])
+                if val in (0, 1) and index1 is not None and index2 is not None:
+                    self.LDT[node.parts[0].value].value[index1][index2] = val
                 else:
-                    raise BadBoolAssignment
+                    self._errors.append(BadBoolAssignment)
+                    try:
+                        self.LDT[node.parts[0].value].value[index1][index2] = 1
+                    except Exception as e:  # TypeError or IndexError
+                        self._errors.append(e)
+                        return None
+                    return None
 
         elif node.type == 'if':
             if len(node.parts) == 2:
@@ -281,7 +364,8 @@ class Interpreter:
 
         elif node.type == 'create_1darr':
             if node.parts[0].value in self.LDT.keys():
-                raise RedeclarationError
+                self._errors.append(RedeclarationError)
+                return None
             self.LDT[node.parts[0].value] = Descriptor(node.value, [], None)
             if node.value == '1DARRBOOL':
                 for i in node.parts[1:]:
@@ -290,82 +374,129 @@ class Interpreter:
                         self.LDT[node.parts[0].value].value.append(res)
                     else:
                         del self.LDT[node.parts[0].value]
-                        raise BadBoolAssignment
+                        self._errors.append(BadBoolAssignment)
+                        self.LDT[node.parts[0].value].value.append(1)
+                        return None
             else:
-                self.LDT[node.parts[0].value].value = [self._int_nd(i) for i in node.parts[1:]]
+                self.LDT[node.parts[0].value].value = [self._int_nd(i) for i in node.parts[1:] if self._int_nd(i)]
             self.LDT[node.parts[0].value].value.reverse()
 
         elif node.type == 'index_1d':
             if node.parts[0].value not in self.LDT.keys():
-                raise NotFoundError
-            return self.LDT[node.parts[0].value].value[self._int_nd(node.parts[1])]
+                self._errors.append(NotFoundError)
+                return None
+            index = self._int_nd(node.parts[1])
+            if index is not None:
+                return self.LDT[node.parts[0].value].value[index]
+            else:
+                self._errors.append(NoneTypeError)
+                return None
 
         elif node.type == 'index_2d':
             if node.parts[0].value not in self.LDT.keys():
-                raise NotFoundError
-            res = self.LDT[node.parts[0].value].value[self._int_nd(node.parts[1])][self._int_nd(node.parts[2])]
-            return res
+                self._errors.append(NotFoundError)
+                return None
+            index1 = self._int_nd(node.parts[1])
+            index2 = self._int_nd(node.parts[2])
+            if index1 is not None and index2 is not None:
+                try:
+                    res = self.LDT[node.parts[0].value].value[index1][index2]
+                    return res
+                except IndexError as ie:
+                    self._errors.append(ie)
+                    return None
+            else:
+                self._errors.append(NoneTypeError)
+                return None
 
         elif node.type == 'size_1d':
             if node.parts[0].value not in self.LDT.keys():
-                raise NotFoundError
+                self._errors.append(NotFoundError)
+                return None
             return len(self.LDT[node.parts[0].value].value)
 
         elif node.type == 'size_2d':
             if node.parts[0].value not in self.LDT.keys():
-                raise NotFoundError
-            return len(self.LDT[node.parts[0].value].value[self._int_nd(node.parts[1])])
+                self._errors.append(NotFoundError)
+                return None
+            index = self._int_nd(node.parts[1])
+            if index is not None:
+                try:
+                    return len(self.LDT[node.parts[0].value].value[index])
+                except IndexError as ie:
+                    self._errors.append(ie)
+                    return None
+            else:
+                self._errors.append(NoneTypeError)
+                return None
 
         elif node.type == 'extend1':
             if node.parts[0].value not in self.LDT.keys():
-                raise NotFoundError
+                self._errors.append(NotFoundError)
+                return None
             if self.LDT[node.parts[0].value].type in ('1DARRINT', '1DARRBOOL'):
-                if self._int_nd(node.parts[1]) < 0:
-                    raise NegativeExtension
+                if self._int_nd(node.parts[1]) < 0 or self._int_nd(node.parts[1]) is None:
+                    self._errors.append(BadExtension)
+                    return None
                 extension = [0 for _ in range(self._int_nd(node.parts[1]))]
                 self.LDT[node.parts[0].value].value.extend(extension)
             elif self.LDT[node.parts[0].value].type in ('2DARRBOOL', '2DARRINT'):
                 ext_ln = self._int_nd(node.parts[1])
                 int_ln = len(self.LDT[node.parts[0].value].value[-1])
-                if ext_ln < 0:
-                    raise NegativeExtension
+                if ext_ln < 0 or ext_ln is None:
+                    self._errors.append(BadExtension)
+                    return None
                 extension = [[0 for _ in range(int_ln)] for _ in range(ext_ln)]
                 self.LDT[node.parts[0].value].value.extend(extension)
             else:
-                raise InvalidArrayOperator
+                self._errors.append(InvalidArrayOperator)
+                return None
 
         elif node.type == 'create_2darr':
             if node.parts[0].value in self.LDT.keys():
-                raise RedeclarationError
+                self._errors.append(RedeclarationError)
+                return None
             self.LDT[node.parts[0].value] = Descriptor(node.value, [[]], None)
             if node.value == '2DARRBOOL':
                 for i in range(1, len(node.parts)):
                     node.parts[i].value.reverse()
                     for j in node.parts[i]:
                         if j not in (0, 1):
-                            raise BadBoolAssignment
-
-            self.LDT[node.parts[0].value].value = list(map(lambda x: list(map(self._int_nd, x.value)), node.parts[1:]))
+                            self._errors.append(BadBoolAssignment)
+                            j = 1
+                            return None
+            try:
+                self.LDT[node.parts[0].value].value = list(map(lambda x: list(map(self._int_nd, x.value)), node.parts[1:]))
+            except TypeError as te:
+                self._errors.append(te)
+                return None
+            except IndexError as ie:
+                self._errors.append(ie)
+                return None
             for i in self.LDT[node.parts[0].value].value:
                 i.reverse()
             self.LDT[node.parts[0].value].value.reverse()
 
         elif node.type == 'extend2':
             if node.parts[0].value not in self.LDT.keys():
-                raise NotFoundError
+                self._errors.append(NotFoundError)
+                return None
             if self.LDT[node.parts[0].value].type in ('2DARRBOOL', '2DARRINT'):
                 index = self._int_nd(node.parts[1])
-                ext_len = self._int_nd(node.parts[2])
-                if ext_len < 0:
-                    raise NegativeExtension
-                extension = [0 for _ in range(ext_len)]
+                ext_ln = self._int_nd(node.parts[2])
+                if ext_ln < 0 or ext_ln is None:
+                    self._errors.append(BadExtension)
+                    return None
+                extension = [0 for _ in range(ext_ln)]
                 self.LDT[node.parts[0].value].value[index].extend(extension)
             else:
-                raise InvalidArrayOperator
+                self._errors.append(InvalidArrayOperator)
+                return None
 
         elif node.type == 'declare':
             if node.parts[0].value in self.LDT.keys():
-                raise RedeclarationError
+                self._errors.append(RedeclarationError)
+                return None
             node.parts[-1].value.reverse()
             node.parts[-2].value.reverse()
             self.LDT[node.parts[0].value] = Descriptor(node.value,
@@ -374,20 +505,21 @@ class Interpreter:
 
         elif node.type == 'call':
             if node.value.value not in self.LDT.keys():
-                raise NotFoundError
+                self._errors.append(NotFoundError)
+                return None
+            if len(self.nmsp_stack) > 200:
+                self._errors.append(RecursionStackOverflow)
+                return None
             fptr = self.LDT[node.value.value].link  # link to the function declaration
+            current_descriptor = self.LDT[fptr.parts[0].value]
             node.parts[0].value.reverse()  # reverse the args' lists
             node.parts[1].value.reverse()
             args = self.parse_args(node.parts[1].value)
             self.nmsp_stack.append(self.LDT)
-            self.LDT = {}
-            try:
-                self.create_vars(fptr.parts[-1].value)  # create parameters and return values inside the function
-                self.create_vars(fptr.parts[-2].value)
-                self.asgn_args(fptr.parts[-1].value, args)
-            except BadBoolAssignment as bd:
-                self.LDT = self.nmsp_stack.pop()  # restore LDT: pop from stack
-                raise
+            self.LDT = {fptr.parts[0].value: current_descriptor}
+            self.create_vars(fptr.parts[-1].value)  # create parameters and return values inside the function
+            self.create_vars(fptr.parts[-2].value)
+            self.asgn_args(fptr.parts[-1].value, args)
             self._int_nd(fptr.parts[1])  # execute body
             ret_values = self.collect_rets(fptr.parts[-2].value)  # TODO
             self.LDT = self.nmsp_stack.pop()
@@ -399,9 +531,9 @@ if __name__ == '__main__':
     interpreter = Interpreter()
     # choice = input()
     # if choice == '1':
-    while True:
-        interpreter.interpret(input())
-    # else:
-    #     with open('examples', 'r') as f:
-    #         choice = f.read()
-    #     interpreter.interpret(choice)
+    # while True:
+    #     interpreter.interpret(input())
+    with open('testdata/calc', 'r') as f:
+        data = f.read()
+    interpreter.interpret(data)
+    print('lol')

@@ -17,7 +17,7 @@ class Lexer:  # added RETURN and EQ statements to task
         'UNDO', 'NL', 'ID', 'NUM'
     )
 
-    t_ignore = ' \t\n'
+    t_ignore = ' \t'
 
     def __init__(self):
         self.lexer = lex.lex(module=self)
@@ -257,9 +257,10 @@ class Lexer:  # added RETURN and EQ statements to task
         t.type = 'NUM'
         return t
 
-    def t_newline(self, t):
+    def t_NL(self, t):
         r"""\n+"""
         t.lexer.lineno += t.value.count('\n')
+        t.type = 'NL'
 
     def t_error(self, t):
         print("\nIllegal character {0} on line {1}\n".format(t.value[0], t.lexer.lineno))

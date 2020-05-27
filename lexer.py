@@ -188,6 +188,7 @@ class Lexer:  # added RETURN and EQ statements to task
 
     def t_FUNC(self, t):
         r"""FUNCTION"""
+        t.value = "FUNC"
         return t
 
     def t_RET(self, t):

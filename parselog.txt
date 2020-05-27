@@ -1,339 +1,940 @@
    yacc.py: 362:PLY: PARSE DEBUG START
    yacc.py: 410:
    yacc.py: 411:State  : 0
-   yacc.py: 435:Stack  : . LexToken(2DARRINT,'2DARRINT',1,0)
+   yacc.py: 435:Stack  : . LexToken(OPENIND,'[',1,0)
    yacc.py: 445:Action : Shift and goto state 31
    yacc.py: 410:
    yacc.py: 411:State  : 31
-   yacc.py: 435:Stack  : 2DARRINT . LexToken(ID,'A',1,14)
-   yacc.py: 445:Action : Shift and goto state 34
+   yacc.py: 435:Stack  : OPENIND . LexToken(UINT,'UINT',1,1)
+   yacc.py: 445:Action : Shift and goto state 26
    yacc.py: 410:
-   yacc.py: 411:State  : 34
-   yacc.py: 435:Stack  : 2DARRINT ID . LexToken(ASGN,'=',1,16)
-   yacc.py: 471:Action : Reduce rule [id -> ID] with ['A'] and goto state 64
-   yacc.py: 506:Result : <STNode @ 0x7fbf01547208> (id:A)
+   yacc.py: 411:State  : 26
+   yacc.py: 435:Stack  : OPENIND UINT . LexToken(ID,'a',1,6)
+   yacc.py: 445:Action : Shift and goto state 37
    yacc.py: 410:
-   yacc.py: 411:State  : 64
-   yacc.py: 435:Stack  : 2DARRINT id . LexToken(ASGN,'=',1,16)
-   yacc.py: 445:Action : Shift and goto state 90
+   yacc.py: 411:State  : 37
+   yacc.py: 435:Stack  : OPENIND UINT ID . LexToken(ASGN,'=',1,8)
+   yacc.py: 471:Action : Reduce rule [id -> ID] with ['a'] and goto state 60
+   yacc.py: 506:Result : <STNode @ 0x7faf9de886a0> (id:a)
    yacc.py: 410:
-   yacc.py: 411:State  : 90
-   yacc.py: 435:Stack  : 2DARRINT id ASGN . LexToken(OPENIND,'[',1,18)
-   yacc.py: 445:Action : Shift and goto state 105
+   yacc.py: 411:State  : 60
+   yacc.py: 435:Stack  : OPENIND UINT id . LexToken(ASGN,'=',1,8)
+   yacc.py: 445:Action : Shift and goto state 91
    yacc.py: 410:
-   yacc.py: 411:State  : 105
-   yacc.py: 435:Stack  : 2DARRINT id ASGN OPENIND . LexToken(NUM,1,1,19)
-   yacc.py: 445:Action : Shift and goto state 23
+   yacc.py: 411:State  : 91
+   yacc.py: 435:Stack  : OPENIND UINT id ASGN . LexToken(NUM,0,1,10)
+   yacc.py: 445:Action : Shift and goto state 25
    yacc.py: 410:
-   yacc.py: 411:State  : 23
-   yacc.py: 435:Stack  : 2DARRINT id ASGN OPENIND NUM . LexToken(COMMA,',',1,20)
-   yacc.py: 471:Action : Reduce rule [expr -> NUM] with [1] and goto state 113
-   yacc.py: 506:Result : <STNode @ 0x7fbf04a792b0> (number:1)
+   yacc.py: 411:State  : 25
+   yacc.py: 435:Stack  : OPENIND UINT id ASGN NUM . LexToken(COMMA,',',1,11)
+   yacc.py: 471:Action : Reduce rule [expr -> NUM] with [0] and goto state 112
+   yacc.py: 506:Result : <STNode @ 0x7faf9de6c6d8> (number:0)
    yacc.py: 410:
-   yacc.py: 411:State  : 113
-   yacc.py: 435:Stack  : 2DARRINT id ASGN OPENIND expr . LexToken(COMMA,',',1,20)
-   yacc.py: 445:Action : Shift and goto state 124
+   yacc.py: 411:State  : 112
+   yacc.py: 435:Stack  : OPENIND UINT id ASGN expr . LexToken(COMMA,',',1,11)
+   yacc.py: 471:Action : Reduce rule [create_id -> UINT id ASGN expr] with ['UINT',id:a,'=',number:0] and goto state 68
+   yacc.py: 506:Result : <STNode @ 0x7faf9de886d8> (create_id:UINT)
    yacc.py: 410:
-   yacc.py: 411:State  : 124
-   yacc.py: 435:Stack  : 2DARRINT id ASGN OPENIND expr COMMA . LexToken(NUM,2,1,22)
-   yacc.py: 445:Action : Shift and goto state 23
+   yacc.py: 411:State  : 68
+   yacc.py: 435:Stack  : OPENIND create_id . LexToken(COMMA,',',1,11)
+   yacc.py: 445:Action : Shift and goto state 100
    yacc.py: 410:
-   yacc.py: 411:State  : 23
-   yacc.py: 435:Stack  : 2DARRINT id ASGN OPENIND expr COMMA NUM . LexToken(COMMA,',',1,23)
-   yacc.py: 471:Action : Reduce rule [expr -> NUM] with [2] and goto state 113
-   yacc.py: 506:Result : <STNode @ 0x7fbf01551b38> (number:2)
+   yacc.py: 411:State  : 100
+   yacc.py: 435:Stack  : OPENIND create_id COMMA . LexToken(UINT,'UINT',1,13)
+   yacc.py: 445:Action : Shift and goto state 26
    yacc.py: 410:
-   yacc.py: 411:State  : 113
-   yacc.py: 435:Stack  : 2DARRINT id ASGN OPENIND expr COMMA expr . LexToken(COMMA,',',1,23)
-   yacc.py: 445:Action : Shift and goto state 124
+   yacc.py: 411:State  : 26
+   yacc.py: 435:Stack  : OPENIND create_id COMMA UINT . LexToken(ID,'b',1,18)
+   yacc.py: 445:Action : Shift and goto state 37
    yacc.py: 410:
-   yacc.py: 411:State  : 124
-   yacc.py: 435:Stack  : 2DARRINT id ASGN OPENIND expr COMMA expr COMMA . LexToken(NUM,3,1,25)
-   yacc.py: 445:Action : Shift and goto state 23
+   yacc.py: 411:State  : 37
+   yacc.py: 435:Stack  : OPENIND create_id COMMA UINT ID . LexToken(ASGN,'=',1,20)
+   yacc.py: 471:Action : Reduce rule [id -> ID] with ['b'] and goto state 60
+   yacc.py: 506:Result : <STNode @ 0x7fafa07cb278> (id:b)
    yacc.py: 410:
-   yacc.py: 411:State  : 23
-   yacc.py: 435:Stack  : 2DARRINT id ASGN OPENIND expr COMMA expr COMMA NUM . LexToken(DCOMMA,';',1,26)
-   yacc.py: 471:Action : Reduce rule [expr -> NUM] with [3] and goto state 113
-   yacc.py: 506:Result : <STNode @ 0x7fbf01551cf8> (number:3)
+   yacc.py: 411:State  : 60
+   yacc.py: 435:Stack  : OPENIND create_id COMMA UINT id . LexToken(ASGN,'=',1,20)
+   yacc.py: 445:Action : Shift and goto state 91
    yacc.py: 410:
-   yacc.py: 411:State  : 113
-   yacc.py: 435:Stack  : 2DARRINT id ASGN OPENIND expr COMMA expr COMMA expr . LexToken(DCOMMA,';',1,26)
-   yacc.py: 471:Action : Reduce rule [enum -> expr] with [number:3] and goto state 132
-   yacc.py: 506:Result : <list @ 0x7fbf0212c588> ([number:3])
+   yacc.py: 411:State  : 91
+   yacc.py: 435:Stack  : OPENIND create_id COMMA UINT id ASGN . LexToken(NUM,0,1,22)
+   yacc.py: 445:Action : Shift and goto state 25
    yacc.py: 410:
-   yacc.py: 411:State  : 132
-   yacc.py: 435:Stack  : 2DARRINT id ASGN OPENIND expr COMMA expr COMMA enum . LexToken(DCOMMA,';',1,26)
-   yacc.py: 471:Action : Reduce rule [enum -> expr COMMA enum] with [number:2,',',[number:3]] and goto state 132
-   yacc.py: 506:Result : <list @ 0x7fbf0212c588> ([number:3, number:2])
+   yacc.py: 411:State  : 25
+   yacc.py: 435:Stack  : OPENIND create_id COMMA UINT id ASGN NUM . LexToken(CLOSEIND,']',1,23)
+   yacc.py: 471:Action : Reduce rule [expr -> NUM] with [0] and goto state 112
+   yacc.py: 506:Result : <STNode @ 0x7faf9d28d0b8> (number:0)
    yacc.py: 410:
-   yacc.py: 411:State  : 132
-   yacc.py: 435:Stack  : 2DARRINT id ASGN OPENIND expr COMMA enum . LexToken(DCOMMA,';',1,26)
-   yacc.py: 471:Action : Reduce rule [enum -> expr COMMA enum] with [number:1,',',<list @ 0x7fbf0212c588>] and goto state 116
-   yacc.py: 506:Result : <list @ 0x7fbf0212c588> ([number:3, number:2, number:1])
+   yacc.py: 411:State  : 112
+   yacc.py: 435:Stack  : OPENIND create_id COMMA UINT id ASGN expr . LexToken(CLOSEIND,']',1,23)
+   yacc.py: 471:Action : Reduce rule [create_id -> UINT id ASGN expr] with ['UINT',id:b,'=',number:0] and goto state 123
+   yacc.py: 506:Result : <STNode @ 0x7faf9de88828> (create_id:UINT)
    yacc.py: 410:
-   yacc.py: 411:State  : 116
-   yacc.py: 435:Stack  : 2DARRINT id ASGN OPENIND enum . LexToken(DCOMMA,';',1,26)
-   yacc.py: 445:Action : Shift and goto state 127
-   yacc.py: 410:
-   yacc.py: 411:State  : 127
-   yacc.py: 435:Stack  : 2DARRINT id ASGN OPENIND enum DCOMMA . LexToken(NUM,4,1,27)
-   yacc.py: 445:Action : Shift and goto state 23
-   yacc.py: 410:
-   yacc.py: 411:State  : 23
-   yacc.py: 435:Stack  : 2DARRINT id ASGN OPENIND enum DCOMMA NUM . LexToken(COMMA,',',1,28)
-   yacc.py: 471:Action : Reduce rule [expr -> NUM] with [4] and goto state 113
-   yacc.py: 506:Result : <STNode @ 0x7fbf01547d30> (number:4)
-   yacc.py: 410:
-   yacc.py: 411:State  : 113
-   yacc.py: 435:Stack  : 2DARRINT id ASGN OPENIND enum DCOMMA expr . LexToken(COMMA,',',1,28)
-   yacc.py: 445:Action : Shift and goto state 124
+   yacc.py: 411:State  : 123
+   yacc.py: 435:Stack  : OPENIND create_id COMMA create_id . LexToken(CLOSEIND,']',1,23)
+   yacc.py: 471:Action : Reduce rule [enum_ids -> create_id] with [create_id:UINT] and goto state 124
+   yacc.py: 506:Result : <list @ 0x7faf9d28ae08> ([create_id:UINT])
    yacc.py: 410:
    yacc.py: 411:State  : 124
-   yacc.py: 435:Stack  : 2DARRINT id ASGN OPENIND enum DCOMMA expr COMMA . LexToken(NUM,5,1,29)
-   yacc.py: 445:Action : Shift and goto state 23
+   yacc.py: 430:Defaulted state 124: Reduce using 57
+   yacc.py: 435:Stack  : OPENIND create_id COMMA enum_ids . LexToken(CLOSEIND,']',1,23)
+   yacc.py: 471:Action : Reduce rule [enum_rets -> create_id COMMA enum_ids] with [create_id:UINT,',',<list @ 0x7faf9d28ae08>] and goto state 65
+   yacc.py: 506:Result : <list @ 0x7faf9d28ae08> ([create_id:UINT, create_id:UINT])
    yacc.py: 410:
-   yacc.py: 411:State  : 23
-   yacc.py: 435:Stack  : 2DARRINT id ASGN OPENIND enum DCOMMA expr COMMA NUM . LexToken(DCOMMA,';',1,30)
-   yacc.py: 471:Action : Reduce rule [expr -> NUM] with [5] and goto state 113
-   yacc.py: 506:Result : <STNode @ 0x7fbf01551e80> (number:5)
+   yacc.py: 411:State  : 65
+   yacc.py: 435:Stack  : OPENIND enum_rets . LexToken(CLOSEIND,']',1,23)
+   yacc.py: 445:Action : Shift and goto state 96
    yacc.py: 410:
-   yacc.py: 411:State  : 113
-   yacc.py: 435:Stack  : 2DARRINT id ASGN OPENIND enum DCOMMA expr COMMA expr . LexToken(DCOMMA,';',1,30)
-   yacc.py: 471:Action : Reduce rule [enum -> expr] with [number:5] and goto state 132
-   yacc.py: 506:Result : <list @ 0x7fbf0212af88> ([number:5])
-   yacc.py: 410:
-   yacc.py: 411:State  : 132
-   yacc.py: 435:Stack  : 2DARRINT id ASGN OPENIND enum DCOMMA expr COMMA enum . LexToken(DCOMMA,';',1,30)
-   yacc.py: 471:Action : Reduce rule [enum -> expr COMMA enum] with [number:4,',',[number:5]] and goto state 116
-   yacc.py: 506:Result : <list @ 0x7fbf0212af88> ([number:5, number:4])
-   yacc.py: 410:
-   yacc.py: 411:State  : 116
-   yacc.py: 435:Stack  : 2DARRINT id ASGN OPENIND enum DCOMMA enum . LexToken(DCOMMA,';',1,30)
-   yacc.py: 445:Action : Shift and goto state 127
-   yacc.py: 410:
-   yacc.py: 411:State  : 127
-   yacc.py: 435:Stack  : 2DARRINT id ASGN OPENIND enum DCOMMA enum DCOMMA . LexToken(NUM,6,1,31)
-   yacc.py: 445:Action : Shift and goto state 23
-   yacc.py: 410:
-   yacc.py: 411:State  : 23
-   yacc.py: 435:Stack  : 2DARRINT id ASGN OPENIND enum DCOMMA enum DCOMMA NUM . LexToken(COMMA,',',1,32)
-   yacc.py: 471:Action : Reduce rule [expr -> NUM] with [6] and goto state 113
-   yacc.py: 506:Result : <STNode @ 0x7fbf01551c50> (number:6)
-   yacc.py: 410:
-   yacc.py: 411:State  : 113
-   yacc.py: 435:Stack  : 2DARRINT id ASGN OPENIND enum DCOMMA enum DCOMMA expr . LexToken(COMMA,',',1,32)
-   yacc.py: 445:Action : Shift and goto state 124
-   yacc.py: 410:
-   yacc.py: 411:State  : 124
-   yacc.py: 435:Stack  : 2DARRINT id ASGN OPENIND enum DCOMMA enum DCOMMA expr COMMA . LexToken(NUM,6,1,33)
-   yacc.py: 445:Action : Shift and goto state 23
-   yacc.py: 410:
-   yacc.py: 411:State  : 23
-   yacc.py: 435:Stack  : 2DARRINT id ASGN OPENIND enum DCOMMA enum DCOMMA expr COMMA NUM . LexToken(COMMA,',',1,34)
-   yacc.py: 471:Action : Reduce rule [expr -> NUM] with [6] and goto state 113
-   yacc.py: 506:Result : <STNode @ 0x7fbf01551eb8> (number:6)
-   yacc.py: 410:
-   yacc.py: 411:State  : 113
-   yacc.py: 435:Stack  : 2DARRINT id ASGN OPENIND enum DCOMMA enum DCOMMA expr COMMA expr . LexToken(COMMA,',',1,34)
-   yacc.py: 445:Action : Shift and goto state 124
-   yacc.py: 410:
-   yacc.py: 411:State  : 124
-   yacc.py: 435:Stack  : 2DARRINT id ASGN OPENIND enum DCOMMA enum DCOMMA expr COMMA expr COMMA . LexToken(NUM,2,1,35)
-   yacc.py: 445:Action : Shift and goto state 23
-   yacc.py: 410:
-   yacc.py: 411:State  : 23
-   yacc.py: 435:Stack  : 2DARRINT id ASGN OPENIND enum DCOMMA enum DCOMMA expr COMMA expr COMMA NUM . LexToken(PLUS,'+',1,36)
-   yacc.py: 471:Action : Reduce rule [expr -> NUM] with [2] and goto state 113
-   yacc.py: 506:Result : <STNode @ 0x7fbf01551a90> (number:2)
-   yacc.py: 410:
-   yacc.py: 411:State  : 113
-   yacc.py: 435:Stack  : 2DARRINT id ASGN OPENIND enum DCOMMA enum DCOMMA expr COMMA expr COMMA expr . LexToken(PLUS,'+',1,36)
-   yacc.py: 445:Action : Shift and goto state 36
-   yacc.py: 410:
-   yacc.py: 411:State  : 36
-   yacc.py: 435:Stack  : 2DARRINT id ASGN OPENIND enum DCOMMA enum DCOMMA expr COMMA expr COMMA expr PLUS . LexToken(NUM,2,1,37)
-   yacc.py: 445:Action : Shift and goto state 23
-   yacc.py: 410:
-   yacc.py: 411:State  : 23
-   yacc.py: 435:Stack  : 2DARRINT id ASGN OPENIND enum DCOMMA enum DCOMMA expr COMMA expr COMMA expr PLUS NUM . LexToken(MUL,'*',1,38)
-   yacc.py: 471:Action : Reduce rule [expr -> NUM] with [2] and goto state 67
-   yacc.py: 506:Result : <STNode @ 0x7fbf01551a58> (number:2)
-   yacc.py: 410:
-   yacc.py: 411:State  : 67
-   yacc.py: 435:Stack  : 2DARRINT id ASGN OPENIND enum DCOMMA enum DCOMMA expr COMMA expr COMMA expr PLUS expr . LexToken(MUL,'*',1,38)
-   yacc.py: 445:Action : Shift and goto state 38
-   yacc.py: 410:
-   yacc.py: 411:State  : 38
-   yacc.py: 435:Stack  : 2DARRINT id ASGN OPENIND enum DCOMMA enum DCOMMA expr COMMA expr COMMA expr PLUS expr MUL . LexToken(NUM,2,1,39)
-   yacc.py: 445:Action : Shift and goto state 23
-   yacc.py: 410:
-   yacc.py: 411:State  : 23
-   yacc.py: 435:Stack  : 2DARRINT id ASGN OPENIND enum DCOMMA enum DCOMMA expr COMMA expr COMMA expr PLUS expr MUL NUM . LexToken(DCOMMA,';',1,40)
-   yacc.py: 471:Action : Reduce rule [expr -> NUM] with [2] and goto state 69
-   yacc.py: 506:Result : <STNode @ 0x7fbf015518d0> (number:2)
-   yacc.py: 410:
-   yacc.py: 411:State  : 69
-   yacc.py: 435:Stack  : 2DARRINT id ASGN OPENIND enum DCOMMA enum DCOMMA expr COMMA expr COMMA expr PLUS expr MUL expr . LexToken(DCOMMA,';',1,40)
-   yacc.py: 471:Action : Reduce rule [expr -> expr MUL expr] with [number:2,'*',number:2] and goto state 67
-   yacc.py: 506:Result : <STNode @ 0x7fbf01551fd0> (oper:*)
-   yacc.py: 410:
-   yacc.py: 411:State  : 67
-   yacc.py: 435:Stack  : 2DARRINT id ASGN OPENIND enum DCOMMA enum DCOMMA expr COMMA expr COMMA expr PLUS expr . LexToken(DCOMMA,';',1,40)
-   yacc.py: 471:Action : Reduce rule [expr -> expr PLUS expr] with [number:2,'+',oper:*] and goto state 113
-   yacc.py: 506:Result : <STNode @ 0x7fbf015519e8> (oper:+)
-   yacc.py: 410:
-   yacc.py: 411:State  : 113
-   yacc.py: 435:Stack  : 2DARRINT id ASGN OPENIND enum DCOMMA enum DCOMMA expr COMMA expr COMMA expr . LexToken(DCOMMA,';',1,40)
-   yacc.py: 471:Action : Reduce rule [enum -> expr] with [oper:+] and goto state 132
-   yacc.py: 506:Result : <list @ 0x7fbf02172d08> ([oper:+])
-   yacc.py: 410:
-   yacc.py: 411:State  : 132
-   yacc.py: 435:Stack  : 2DARRINT id ASGN OPENIND enum DCOMMA enum DCOMMA expr COMMA expr COMMA enum . LexToken(DCOMMA,';',1,40)
-   yacc.py: 471:Action : Reduce rule [enum -> expr COMMA enum] with [number:6,',',[oper:+]] and goto state 132
-   yacc.py: 506:Result : <list @ 0x7fbf02172d08> ([oper:+, number:6])
-   yacc.py: 410:
-   yacc.py: 411:State  : 132
-   yacc.py: 435:Stack  : 2DARRINT id ASGN OPENIND enum DCOMMA enum DCOMMA expr COMMA enum . LexToken(DCOMMA,';',1,40)
-   yacc.py: 471:Action : Reduce rule [enum -> expr COMMA enum] with [number:6,',',<list @ 0x7fbf02172d08>] and goto state 116
-   yacc.py: 506:Result : <list @ 0x7fbf02172d08> ([oper:+, number:6, number:6])
-   yacc.py: 410:
-   yacc.py: 411:State  : 116
-   yacc.py: 435:Stack  : 2DARRINT id ASGN OPENIND enum DCOMMA enum DCOMMA enum . LexToken(DCOMMA,';',1,40)
-   yacc.py: 445:Action : Shift and goto state 127
-   yacc.py: 410:
-   yacc.py: 411:State  : 127
-   yacc.py: 435:Stack  : 2DARRINT id ASGN OPENIND enum DCOMMA enum DCOMMA enum DCOMMA . LexToken(MINUS,'-',1,41)
-   yacc.py: 445:Action : Shift and goto state 16
-   yacc.py: 410:
-   yacc.py: 411:State  : 16
-   yacc.py: 435:Stack  : 2DARRINT id ASGN OPENIND enum DCOMMA enum DCOMMA enum DCOMMA MINUS . LexToken(NUM,1,1,42)
-   yacc.py: 445:Action : Shift and goto state 23
-   yacc.py: 410:
-   yacc.py: 411:State  : 23
-   yacc.py: 435:Stack  : 2DARRINT id ASGN OPENIND enum DCOMMA enum DCOMMA enum DCOMMA MINUS NUM . LexToken(CLOSEIND,']',1,43)
-   yacc.py: 471:Action : Reduce rule [expr -> NUM] with [1] and goto state 49
-   yacc.py: 506:Result : <STNode @ 0x7fbf01551c88> (number:1)
-   yacc.py: 410:
-   yacc.py: 411:State  : 49
-   yacc.py: 435:Stack  : 2DARRINT id ASGN OPENIND enum DCOMMA enum DCOMMA enum DCOMMA MINUS expr . LexToken(CLOSEIND,']',1,43)
-   yacc.py: 471:Action : Reduce rule [expr -> MINUS expr] with ['-',number:1] and goto state 113
-   yacc.py: 506:Result : <STNode @ 0x7fbf01551be0> (unary:-)
-   yacc.py: 410:
-   yacc.py: 411:State  : 113
-   yacc.py: 435:Stack  : 2DARRINT id ASGN OPENIND enum DCOMMA enum DCOMMA enum DCOMMA expr . LexToken(CLOSEIND,']',1,43)
-   yacc.py: 471:Action : Reduce rule [enum -> expr] with [unary:-] and goto state 116
-   yacc.py: 506:Result : <list @ 0x7fbf02172c88> ([unary:-])
-   yacc.py: 410:
-   yacc.py: 411:State  : 116
-   yacc.py: 435:Stack  : 2DARRINT id ASGN OPENIND enum DCOMMA enum DCOMMA enum DCOMMA enum . LexToken(CLOSEIND,']',1,43)
-   yacc.py: 471:Action : Reduce rule [enum2 -> enum] with [[unary:-]] and goto state 133
-   yacc.py: 506:Result : <list @ 0x7fbf02172648> ([enum:[unary:-]])
-   yacc.py: 410:
-   yacc.py: 411:State  : 133
-   yacc.py: 430:Defaulted state 133: Reduce using 43
-   yacc.py: 435:Stack  : 2DARRINT id ASGN OPENIND enum DCOMMA enum DCOMMA enum DCOMMA enum2 . LexToken(CLOSEIND,']',1,43)
-   yacc.py: 471:Action : Reduce rule [enum2 -> enum DCOMMA enum2] with [<list @ 0x7fbf02172d08>,';',<list @ 0x7fbf02172648>] and goto state 133
-   yacc.py: 506:Result : <list @ 0x7fbf02172648> ([enum:[unary:-], enum:[oper:+, number:6, ...)
-   yacc.py: 410:
-   yacc.py: 411:State  : 133
-   yacc.py: 430:Defaulted state 133: Reduce using 43
-   yacc.py: 435:Stack  : 2DARRINT id ASGN OPENIND enum DCOMMA enum DCOMMA enum2 . LexToken(CLOSEIND,']',1,43)
-   yacc.py: 471:Action : Reduce rule [enum2 -> enum DCOMMA enum2] with [<list @ 0x7fbf0212af88>,';',<list @ 0x7fbf02172648>] and goto state 133
-   yacc.py: 506:Result : <list @ 0x7fbf02172648> ([enum:[unary:-], enum:[oper:+, number:6, ...)
-   yacc.py: 410:
-   yacc.py: 411:State  : 133
-   yacc.py: 430:Defaulted state 133: Reduce using 43
-   yacc.py: 435:Stack  : 2DARRINT id ASGN OPENIND enum DCOMMA enum2 . LexToken(CLOSEIND,']',1,43)
-   yacc.py: 471:Action : Reduce rule [enum2 -> enum DCOMMA enum2] with [<list @ 0x7fbf0212c588>,';',<list @ 0x7fbf02172648>] and goto state 117
-   yacc.py: 506:Result : <list @ 0x7fbf02172648> ([enum:[unary:-], enum:[oper:+, number:6, ...)
+   yacc.py: 411:State  : 96
+   yacc.py: 435:Stack  : OPENIND enum_rets CLOSEIND . LexToken(FUNC,'FUNC',1,25)
+   yacc.py: 445:Action : Shift and goto state 117
    yacc.py: 410:
    yacc.py: 411:State  : 117
-   yacc.py: 435:Stack  : 2DARRINT id ASGN OPENIND enum2 . LexToken(CLOSEIND,']',1,43)
-   yacc.py: 445:Action : Shift and goto state 128
+   yacc.py: 435:Stack  : OPENIND enum_rets CLOSEIND FUNC . LexToken(ID,'LOL',1,34)
+   yacc.py: 445:Action : Shift and goto state 37
    yacc.py: 410:
-   yacc.py: 411:State  : 128
-   yacc.py: 435:Stack  : 2DARRINT id ASGN OPENIND enum2 CLOSEIND . LexToken(EXTEND2,'EXTEND2',1,45)
-   yacc.py: 471:Action : Reduce rule [create_2darr -> 2DARRINT id ASGN OPENIND enum2 CLOSEIND] with ['2DARRINT',id:A,'=','[',<list @ 0x7fbf02172648>,']'] and goto state 10
-   yacc.py: 506:Result : <STNode @ 0x7fbf01551dd8> (create_2darr:2DARRINT)
+   yacc.py: 411:State  : 37
+   yacc.py: 435:Stack  : OPENIND enum_rets CLOSEIND FUNC ID . LexToken(OPENBR,'(',1,37)
+   yacc.py: 471:Action : Reduce rule [id -> ID] with ['LOL'] and goto state 139
+   yacc.py: 506:Result : <STNode @ 0x7faf9d28d048> (id:LOL)
    yacc.py: 410:
-   yacc.py: 411:State  : 10
-   yacc.py: 435:Stack  : create_2darr . LexToken(EXTEND2,'EXTEND2',1,45)
-   yacc.py: 471:Action : Reduce rule [statement -> create_2darr] with [<STNode @ 0x7fbf01551dd8>] and goto state 3
-   yacc.py: 506:Result : <STNode @ 0x7fbf01551dd8> (create_2darr:2DARRINT)
+   yacc.py: 411:State  : 139
+   yacc.py: 435:Stack  : OPENIND enum_rets CLOSEIND FUNC id . LexToken(OPENBR,'(',1,37)
+   yacc.py: 445:Action : Shift and goto state 160
    yacc.py: 410:
-   yacc.py: 411:State  : 3
-   yacc.py: 435:Stack  : statement . LexToken(EXTEND2,'EXTEND2',1,45)
-   yacc.py: 471:Action : Reduce rule [stmt_list -> statement] with [<STNode @ 0x7fbf01551dd8>] and goto state 2
-   yacc.py: 506:Result : <STNode @ 0x7fbf01551dd8> (create_2darr:2DARRINT)
+   yacc.py: 411:State  : 160
+   yacc.py: 435:Stack  : OPENIND enum_rets CLOSEIND FUNC id OPENBR . LexToken(UINT,'UINT',1,38)
+   yacc.py: 445:Action : Shift and goto state 26
    yacc.py: 410:
-   yacc.py: 411:State  : 2
-   yacc.py: 435:Stack  : stmt_list . LexToken(EXTEND2,'EXTEND2',1,45)
-   yacc.py: 445:Action : Shift and goto state 33
+   yacc.py: 411:State  : 26
+   yacc.py: 435:Stack  : OPENIND enum_rets CLOSEIND FUNC id OPENBR UINT . LexToken(ID,'c',1,43)
+   yacc.py: 445:Action : Shift and goto state 37
    yacc.py: 410:
-   yacc.py: 411:State  : 33
-   yacc.py: 435:Stack  : stmt_list EXTEND2 . LexToken(ID,'A',1,53)
+   yacc.py: 411:State  : 37
+   yacc.py: 435:Stack  : OPENIND enum_rets CLOSEIND FUNC id OPENBR UINT ID . LexToken(ASGN,'=',1,45)
+   yacc.py: 471:Action : Reduce rule [id -> ID] with ['c'] and goto state 60
+   yacc.py: 506:Result : <STNode @ 0x7faf9d28d160> (id:c)
+   yacc.py: 410:
+   yacc.py: 411:State  : 60
+   yacc.py: 435:Stack  : OPENIND enum_rets CLOSEIND FUNC id OPENBR UINT id . LexToken(ASGN,'=',1,45)
+   yacc.py: 445:Action : Shift and goto state 91
+   yacc.py: 410:
+   yacc.py: 411:State  : 91
+   yacc.py: 435:Stack  : OPENIND enum_rets CLOSEIND FUNC id OPENBR UINT id ASGN . LexToken(NUM,5,1,47)
+   yacc.py: 445:Action : Shift and goto state 25
+   yacc.py: 410:
+   yacc.py: 411:State  : 25
+   yacc.py: 435:Stack  : OPENIND enum_rets CLOSEIND FUNC id OPENBR UINT id ASGN NUM . LexToken(COMMA,',',1,48)
+   yacc.py: 471:Action : Reduce rule [expr -> NUM] with [5] and goto state 112
+   yacc.py: 506:Result : <STNode @ 0x7faf9d28d320> (number:5)
+   yacc.py: 410:
+   yacc.py: 411:State  : 112
+   yacc.py: 435:Stack  : OPENIND enum_rets CLOSEIND FUNC id OPENBR UINT id ASGN expr . LexToken(COMMA,',',1,48)
+   yacc.py: 471:Action : Reduce rule [create_id -> UINT id ASGN expr] with ['UINT',id:c,'=',number:5] and goto state 123
+   yacc.py: 506:Result : <STNode @ 0x7faf9d28d438> (create_id:UINT)
+   yacc.py: 410:
+   yacc.py: 411:State  : 123
+   yacc.py: 435:Stack  : OPENIND enum_rets CLOSEIND FUNC id OPENBR create_id . LexToken(COMMA,',',1,48)
+   yacc.py: 445:Action : Shift and goto state 145
+   yacc.py: 410:
+   yacc.py: 411:State  : 145
+   yacc.py: 435:Stack  : OPENIND enum_rets CLOSEIND FUNC id OPENBR create_id COMMA . LexToken(BOOL,'BOOL',1,50)
+   yacc.py: 445:Action : Shift and goto state 28
+   yacc.py: 410:
+   yacc.py: 411:State  : 28
+   yacc.py: 435:Stack  : OPENIND enum_rets CLOSEIND FUNC id OPENBR create_id COMMA BOOL . LexToken(ID,'d',1,58)
+   yacc.py: 445:Action : Shift and goto state 37
+   yacc.py: 410:
+   yacc.py: 411:State  : 37
+   yacc.py: 435:Stack  : OPENIND enum_rets CLOSEIND FUNC id OPENBR create_id COMMA BOOL ID . LexToken(ASGN,'=',1,60)
+   yacc.py: 471:Action : Reduce rule [id -> ID] with ['d'] and goto state 62
+   yacc.py: 506:Result : <STNode @ 0x7faf9d28d3c8> (id:d)
+   yacc.py: 410:
+   yacc.py: 411:State  : 62
+   yacc.py: 435:Stack  : OPENIND enum_rets CLOSEIND FUNC id OPENBR create_id COMMA BOOL id . LexToken(ASGN,'=',1,60)
+   yacc.py: 445:Action : Shift and goto state 93
+   yacc.py: 410:
+   yacc.py: 411:State  : 93
+   yacc.py: 435:Stack  : OPENIND enum_rets CLOSEIND FUNC id OPENBR create_id COMMA BOOL id ASGN . LexToken(NUM,0,1,62)
+   yacc.py: 445:Action : Shift and goto state 25
+   yacc.py: 410:
+   yacc.py: 411:State  : 25
+   yacc.py: 435:Stack  : OPENIND enum_rets CLOSEIND FUNC id OPENBR create_id COMMA BOOL id ASGN NUM . LexToken(COMMA,',',1,63)
+   yacc.py: 471:Action : Reduce rule [expr -> NUM] with [0] and goto state 114
+   yacc.py: 506:Result : <STNode @ 0x7faf9d28d5c0> (number:0)
+   yacc.py: 410:
+   yacc.py: 411:State  : 114
+   yacc.py: 435:Stack  : OPENIND enum_rets CLOSEIND FUNC id OPENBR create_id COMMA BOOL id ASGN expr . LexToken(COMMA,',',1,63)
+   yacc.py: 471:Action : Reduce rule [create_id -> BOOL id ASGN expr] with ['BOOL',id:d,'=',number:0] and goto state 123
+   yacc.py: 506:Result : <STNode @ 0x7faf9d28d470> (create_id:BOOL)
+   yacc.py: 410:
+   yacc.py: 411:State  : 123
+   yacc.py: 435:Stack  : OPENIND enum_rets CLOSEIND FUNC id OPENBR create_id COMMA create_id . LexToken(COMMA,',',1,63)
+   yacc.py: 445:Action : Shift and goto state 145
+   yacc.py: 410:
+   yacc.py: 411:State  : 145
+   yacc.py: 435:Stack  : OPENIND enum_rets CLOSEIND FUNC id OPENBR create_id COMMA create_id COMMA . LexToken(2DARRINT,'2DARRINT',1,65)
    yacc.py: 445:Action : Shift and goto state 34
    yacc.py: 410:
    yacc.py: 411:State  : 34
-   yacc.py: 435:Stack  : stmt_list EXTEND2 ID . LexToken(OPENBR,'(',1,54)
-   yacc.py: 471:Action : Reduce rule [id -> ID] with ['A'] and goto state 66
-   yacc.py: 506:Result : <STNode @ 0x7fbf01551da0> (id:A)
+   yacc.py: 435:Stack  : OPENIND enum_rets CLOSEIND FUNC id OPENBR create_id COMMA create_id COMMA 2DARRINT . LexToken(ID,'arr',1,79)
+   yacc.py: 445:Action : Shift and goto state 37
    yacc.py: 410:
-   yacc.py: 411:State  : 66
-   yacc.py: 435:Stack  : stmt_list EXTEND2 id . LexToken(OPENBR,'(',1,54)
-   yacc.py: 445:Action : Shift and goto state 92
+   yacc.py: 411:State  : 37
+   yacc.py: 435:Stack  : OPENIND enum_rets CLOSEIND FUNC id OPENBR create_id COMMA create_id COMMA 2DARRINT ID . LexToken(ASGN,'=',1,83)
+   yacc.py: 471:Action : Reduce rule [id -> ID] with ['arr'] and goto state 72
+   yacc.py: 506:Result : <STNode @ 0x7faf9d28d588> (id:arr)
    yacc.py: 410:
-   yacc.py: 411:State  : 92
-   yacc.py: 435:Stack  : stmt_list EXTEND2 id OPENBR . LexToken(NUM,1,1,55)
-   yacc.py: 445:Action : Shift and goto state 23
+   yacc.py: 411:State  : 72
+   yacc.py: 435:Stack  : OPENIND enum_rets CLOSEIND FUNC id OPENBR create_id COMMA create_id COMMA 2DARRINT id . LexToken(ASGN,'=',1,83)
+   yacc.py: 445:Action : Shift and goto state 104
    yacc.py: 410:
-   yacc.py: 411:State  : 23
-   yacc.py: 435:Stack  : stmt_list EXTEND2 id OPENBR NUM . LexToken(CLOSEBR,')',1,56)
-   yacc.py: 471:Action : Reduce rule [expr -> NUM] with [1] and goto state 106
-   yacc.py: 506:Result : <STNode @ 0x7fbf01547080> (number:1)
-   yacc.py: 410:
-   yacc.py: 411:State  : 106
-   yacc.py: 435:Stack  : stmt_list EXTEND2 id OPENBR expr . LexToken(CLOSEBR,')',1,56)
-   yacc.py: 445:Action : Shift and goto state 118
-   yacc.py: 410:
-   yacc.py: 411:State  : 118
-   yacc.py: 435:Stack  : stmt_list EXTEND2 id OPENBR expr CLOSEBR . LexToken(OPENBR,'(',1,57)
+   yacc.py: 411:State  : 104
+   yacc.py: 435:Stack  : OPENIND enum_rets CLOSEIND FUNC id OPENBR create_id COMMA create_id COMMA 2DARRINT id ASGN . LexToken(OPENIND,'[',1,85)
    yacc.py: 445:Action : Shift and goto state 129
    yacc.py: 410:
    yacc.py: 411:State  : 129
-   yacc.py: 435:Stack  : stmt_list EXTEND2 id OPENBR expr CLOSEBR OPENBR . LexToken(NUM,5,1,58)
-   yacc.py: 445:Action : Shift and goto state 23
+   yacc.py: 435:Stack  : OPENIND enum_rets CLOSEIND FUNC id OPENBR create_id COMMA create_id COMMA 2DARRINT id ASGN OPENIND . LexToken(NUM,1,1,86)
+   yacc.py: 445:Action : Shift and goto state 25
    yacc.py: 410:
-   yacc.py: 411:State  : 23
-   yacc.py: 435:Stack  : stmt_list EXTEND2 id OPENBR expr CLOSEBR OPENBR NUM . LexToken(CLOSEBR,')',1,59)
-   yacc.py: 471:Action : Reduce rule [expr -> NUM] with [5] and goto state 134
-   yacc.py: 506:Result : <STNode @ 0x7fbf01551f98> (number:5)
+   yacc.py: 411:State  : 25
+   yacc.py: 435:Stack  : OPENIND enum_rets CLOSEIND FUNC id OPENBR create_id COMMA create_id COMMA 2DARRINT id ASGN OPENIND NUM . LexToken(COMMA,',',1,87)
+   yacc.py: 471:Action : Reduce rule [expr -> NUM] with [1] and goto state 138
+   yacc.py: 506:Result : <STNode @ 0x7faf9d28d6d8> (number:1)
+   yacc.py: 410:
+   yacc.py: 411:State  : 138
+   yacc.py: 435:Stack  : OPENIND enum_rets CLOSEIND FUNC id OPENBR create_id COMMA create_id COMMA 2DARRINT id ASGN OPENIND expr . LexToken(COMMA,',',1,87)
+   yacc.py: 445:Action : Shift and goto state 159
+   yacc.py: 410:
+   yacc.py: 411:State  : 159
+   yacc.py: 435:Stack  : OPENIND enum_rets CLOSEIND FUNC id OPENBR create_id COMMA create_id COMMA 2DARRINT id ASGN OPENIND expr COMMA . LexToken(NUM,0,1,88)
+   yacc.py: 445:Action : Shift and goto state 25
+   yacc.py: 410:
+   yacc.py: 411:State  : 25
+   yacc.py: 435:Stack  : OPENIND enum_rets CLOSEIND FUNC id OPENBR create_id COMMA create_id COMMA 2DARRINT id ASGN OPENIND expr COMMA NUM . LexToken(DCOMMA,';',1,89)
+   yacc.py: 471:Action : Reduce rule [expr -> NUM] with [0] and goto state 138
+   yacc.py: 506:Result : <STNode @ 0x7faf9d28d4e0> (number:0)
+   yacc.py: 410:
+   yacc.py: 411:State  : 138
+   yacc.py: 435:Stack  : OPENIND enum_rets CLOSEIND FUNC id OPENBR create_id COMMA create_id COMMA 2DARRINT id ASGN OPENIND expr COMMA expr . LexToken(DCOMMA,';',1,89)
+   yacc.py: 471:Action : Reduce rule [enum -> expr] with [number:0] and goto state 177
+   yacc.py: 506:Result : <list @ 0x7fafa0658fc8> ([number:0])
+   yacc.py: 410:
+   yacc.py: 411:State  : 177
+   yacc.py: 435:Stack  : OPENIND enum_rets CLOSEIND FUNC id OPENBR create_id COMMA create_id COMMA 2DARRINT id ASGN OPENIND expr COMMA enum . LexToken(DCOMMA,';',1,89)
+   yacc.py: 471:Action : Reduce rule [enum -> expr COMMA enum] with [number:1,',',[number:0]] and goto state 150
+   yacc.py: 506:Result : <list @ 0x7fafa0658fc8> ([number:0, number:1])
+   yacc.py: 410:
+   yacc.py: 411:State  : 150
+   yacc.py: 435:Stack  : OPENIND enum_rets CLOSEIND FUNC id OPENBR create_id COMMA create_id COMMA 2DARRINT id ASGN OPENIND enum . LexToken(DCOMMA,';',1,89)
+   yacc.py: 445:Action : Shift and goto state 171
+   yacc.py: 410:
+   yacc.py: 411:State  : 171
+   yacc.py: 435:Stack  : OPENIND enum_rets CLOSEIND FUNC id OPENBR create_id COMMA create_id COMMA 2DARRINT id ASGN OPENIND enum DCOMMA . LexToken(NUM,2,1,90)
+   yacc.py: 445:Action : Shift and goto state 25
+   yacc.py: 410:
+   yacc.py: 411:State  : 25
+   yacc.py: 435:Stack  : OPENIND enum_rets CLOSEIND FUNC id OPENBR create_id COMMA create_id COMMA 2DARRINT id ASGN OPENIND enum DCOMMA NUM . LexToken(DCOMMA,';',1,91)
+   yacc.py: 471:Action : Reduce rule [expr -> NUM] with [2] and goto state 138
+   yacc.py: 506:Result : <STNode @ 0x7faf9d28d550> (number:2)
+   yacc.py: 410:
+   yacc.py: 411:State  : 138
+   yacc.py: 435:Stack  : OPENIND enum_rets CLOSEIND FUNC id OPENBR create_id COMMA create_id COMMA 2DARRINT id ASGN OPENIND enum DCOMMA expr . LexToken(DCOMMA,';',1,91)
+   yacc.py: 471:Action : Reduce rule [enum -> expr] with [number:2] and goto state 150
+   yacc.py: 506:Result : <list @ 0x7faf9d28b788> ([number:2])
+   yacc.py: 410:
+   yacc.py: 411:State  : 150
+   yacc.py: 435:Stack  : OPENIND enum_rets CLOSEIND FUNC id OPENBR create_id COMMA create_id COMMA 2DARRINT id ASGN OPENIND enum DCOMMA enum . LexToken(DCOMMA,';',1,91)
+   yacc.py: 445:Action : Shift and goto state 171
+   yacc.py: 410:
+   yacc.py: 411:State  : 171
+   yacc.py: 435:Stack  : OPENIND enum_rets CLOSEIND FUNC id OPENBR create_id COMMA create_id COMMA 2DARRINT id ASGN OPENIND enum DCOMMA enum DCOMMA . LexToken(NUM,3,1,92)
+   yacc.py: 445:Action : Shift and goto state 25
+   yacc.py: 410:
+   yacc.py: 411:State  : 25
+   yacc.py: 435:Stack  : OPENIND enum_rets CLOSEIND FUNC id OPENBR create_id COMMA create_id COMMA 2DARRINT id ASGN OPENIND enum DCOMMA enum DCOMMA NUM . LexToken(CLOSEIND,']',1,93)
+   yacc.py: 471:Action : Reduce rule [expr -> NUM] with [3] and goto state 138
+   yacc.py: 506:Result : <STNode @ 0x7faf9d28d828> (number:3)
+   yacc.py: 410:
+   yacc.py: 411:State  : 138
+   yacc.py: 435:Stack  : OPENIND enum_rets CLOSEIND FUNC id OPENBR create_id COMMA create_id COMMA 2DARRINT id ASGN OPENIND enum DCOMMA enum DCOMMA expr . LexToken(CLOSEIND,']',1,93)
+   yacc.py: 471:Action : Reduce rule [enum -> expr] with [number:3] and goto state 150
+   yacc.py: 506:Result : <list @ 0x7faf9d28bc48> ([number:3])
+   yacc.py: 410:
+   yacc.py: 411:State  : 150
+   yacc.py: 435:Stack  : OPENIND enum_rets CLOSEIND FUNC id OPENBR create_id COMMA create_id COMMA 2DARRINT id ASGN OPENIND enum DCOMMA enum DCOMMA enum . LexToken(CLOSEIND,']',1,93)
+   yacc.py: 471:Action : Reduce rule [enum2 -> enum] with [[number:3]] and goto state 186
+   yacc.py: 506:Result : <list @ 0x7faf9d28be88> ([enum:[number:3]])
+   yacc.py: 410:
+   yacc.py: 411:State  : 186
+   yacc.py: 430:Defaulted state 186: Reduce using 46
+   yacc.py: 435:Stack  : OPENIND enum_rets CLOSEIND FUNC id OPENBR create_id COMMA create_id COMMA 2DARRINT id ASGN OPENIND enum DCOMMA enum DCOMMA enum2 . LexToken(CLOSEIND,']',1,93)
+   yacc.py: 471:Action : Reduce rule [enum2 -> enum DCOMMA enum2] with [[number:2],';',<list @ 0x7faf9d28be88>] and goto state 186
+   yacc.py: 506:Result : <list @ 0x7faf9d28be88> ([enum:[number:3], enum:[number:2]])
+   yacc.py: 410:
+   yacc.py: 411:State  : 186
+   yacc.py: 430:Defaulted state 186: Reduce using 46
+   yacc.py: 435:Stack  : OPENIND enum_rets CLOSEIND FUNC id OPENBR create_id COMMA create_id COMMA 2DARRINT id ASGN OPENIND enum DCOMMA enum2 . LexToken(CLOSEIND,']',1,93)
+   yacc.py: 471:Action : Reduce rule [enum2 -> enum DCOMMA enum2] with [<list @ 0x7fafa0658fc8>,';',<list @ 0x7faf9d28be88>] and goto state 151
+   yacc.py: 506:Result : <list @ 0x7faf9d28be88> ([enum:[number:3], enum:[number:2], enum: ...)
+   yacc.py: 410:
+   yacc.py: 411:State  : 151
+   yacc.py: 435:Stack  : OPENIND enum_rets CLOSEIND FUNC id OPENBR create_id COMMA create_id COMMA 2DARRINT id ASGN OPENIND enum2 . LexToken(CLOSEIND,']',1,93)
+   yacc.py: 445:Action : Shift and goto state 172
+   yacc.py: 410:
+   yacc.py: 411:State  : 172
+   yacc.py: 435:Stack  : OPENIND enum_rets CLOSEIND FUNC id OPENBR create_id COMMA create_id COMMA 2DARRINT id ASGN OPENIND enum2 CLOSEIND . LexToken(CLOSEBR,')',1,94)
+   yacc.py: 471:Action : Reduce rule [create_2darr -> 2DARRINT id ASGN OPENIND enum2 CLOSEIND] with ['2DARRINT',id:arr,'=','[',<list @ 0x7faf9d28be88>,']'] and goto state 126
+   yacc.py: 506:Result : <STNode @ 0x7faf9d28d780> (create_2darr:2DARRINT)
+   yacc.py: 410:
+   yacc.py: 411:State  : 126
+   yacc.py: 435:Stack  : OPENIND enum_rets CLOSEIND FUNC id OPENBR create_id COMMA create_id COMMA create_2darr . LexToken(CLOSEBR,')',1,94)
+   yacc.py: 471:Action : Reduce rule [enum_ids -> create_2darr] with [<STNode @ 0x7faf9d28d780>] and goto state 166
+   yacc.py: 506:Result : <list @ 0x7faf9d291208> ([create_2darr:2DARRINT])
+   yacc.py: 410:
+   yacc.py: 411:State  : 166
+   yacc.py: 435:Stack  : OPENIND enum_rets CLOSEIND FUNC id OPENBR create_id COMMA create_id COMMA enum_ids . LexToken(CLOSEBR,')',1,94)
+   yacc.py: 471:Action : Reduce rule [enum_ids -> create_id COMMA enum_ids] with [create_id:BOOL,',',<list @ 0x7faf9d291208>] and goto state 166
+   yacc.py: 506:Result : <list @ 0x7faf9d291208> ([create_2darr:2DARRINT, create_id:BOOL])
+   yacc.py: 410:
+   yacc.py: 411:State  : 166
+   yacc.py: 435:Stack  : OPENIND enum_rets CLOSEIND FUNC id OPENBR create_id COMMA enum_ids . LexToken(CLOSEBR,')',1,94)
+   yacc.py: 471:Action : Reduce rule [enum_ids -> create_id COMMA enum_ids] with [create_id:UINT,',',<list @ 0x7faf9d291208>] and goto state 179
+   yacc.py: 506:Result : <list @ 0x7faf9d291208> ([create_2darr:2DARRINT, create_id:BOOL,  ...)
+   yacc.py: 410:
+   yacc.py: 411:State  : 179
+   yacc.py: 430:Defaulted state 179: Reduce using 55
+   yacc.py: 435:Stack  : OPENIND enum_rets CLOSEIND FUNC id OPENBR enum_ids . LexToken(CLOSEBR,')',1,94)
+   yacc.py: 471:Action : Reduce rule [opt_enum_ids -> enum_ids] with [<list @ 0x7faf9d291208>] and goto state 178
+   yacc.py: 506:Result : <list @ 0x7faf9d291208> ([create_2darr:2DARRINT, create_id:BOOL,  ...)
+   yacc.py: 410:
+   yacc.py: 411:State  : 178
+   yacc.py: 435:Stack  : OPENIND enum_rets CLOSEIND FUNC id OPENBR opt_enum_ids . LexToken(CLOSEBR,')',1,94)
+   yacc.py: 445:Action : Shift and goto state 189
+   yacc.py: 410:
+   yacc.py: 411:State  : 189
+   yacc.py: 435:Stack  : OPENIND enum_rets CLOSEIND FUNC id OPENBR opt_enum_ids CLOSEBR . LexToken(OPENST,'{',1,95)
+   yacc.py: 445:Action : Shift and goto state 197
+   yacc.py: 410:
+   yacc.py: 411:State  : 197
+   yacc.py: 435:Stack  : OPENIND enum_rets CLOSEIND FUNC id OPENBR opt_enum_ids CLOSEBR OPENST . LexToken(ID,'a',1,96)
+   yacc.py: 445:Action : Shift and goto state 37
+   yacc.py: 410:
+   yacc.py: 411:State  : 37
+   yacc.py: 435:Stack  : OPENIND enum_rets CLOSEIND FUNC id OPENBR opt_enum_ids CLOSEBR OPENST ID . LexToken(ASGN,'=',1,98)
+   yacc.py: 471:Action : Reduce rule [id -> ID] with ['a'] and goto state 21
+   yacc.py: 506:Result : <STNode @ 0x7faf9d28d748> (id:a)
+   yacc.py: 410:
+   yacc.py: 411:State  : 21
+   yacc.py: 435:Stack  : OPENIND enum_rets CLOSEIND FUNC id OPENBR opt_enum_ids CLOSEBR OPENST id . LexToken(ASGN,'=',1,98)
+   yacc.py: 445:Action : Shift and goto state 56
+   yacc.py: 410:
+   yacc.py: 411:State  : 56
+   yacc.py: 435:Stack  : OPENIND enum_rets CLOSEIND FUNC id OPENBR opt_enum_ids CLOSEBR OPENST id ASGN . LexToken(ID,'c',1,100)
+   yacc.py: 445:Action : Shift and goto state 37
+   yacc.py: 410:
+   yacc.py: 411:State  : 37
+   yacc.py: 435:Stack  : OPENIND enum_rets CLOSEIND FUNC id OPENBR opt_enum_ids CLOSEBR OPENST id ASGN ID . LexToken(ID,'b',1,102)
+   yacc.py: 471:Action : Reduce rule [id -> ID] with ['c'] and goto state 50
+   yacc.py: 506:Result : <STNode @ 0x7faf9d28d390> (id:c)
+   yacc.py: 410:
+   yacc.py: 411:State  : 50
+   yacc.py: 435:Stack  : OPENIND enum_rets CLOSEIND FUNC id OPENBR opt_enum_ids CLOSEBR OPENST id ASGN id . LexToken(ID,'b',1,102)
+   yacc.py: 471:Action : Reduce rule [expr -> id] with [id:c] and goto state 89
+   yacc.py: 506:Result : <STNode @ 0x7faf9d28d390> (id:c)
+   yacc.py: 410:
+   yacc.py: 411:State  : 89
+   yacc.py: 435:Stack  : OPENIND enum_rets CLOSEIND FUNC id OPENBR opt_enum_ids CLOSEBR OPENST id ASGN expr . LexToken(ID,'b',1,102)
+   yacc.py: 471:Action : Reduce rule [assign -> id ASGN expr] with [id:a,'=',id:c] and goto state 8
+   yacc.py: 506:Result : <STNode @ 0x7faf9d28d518> (assign:None)
+   yacc.py: 410:
+   yacc.py: 411:State  : 8
+   yacc.py: 435:Stack  : OPENIND enum_rets CLOSEIND FUNC id OPENBR opt_enum_ids CLOSEBR OPENST assign . LexToken(ID,'b',1,102)
+   yacc.py: 471:Action : Reduce rule [statement -> assign] with [assign:None] and goto state 3
+   yacc.py: 506:Result : <STNode @ 0x7faf9d28d518> (assign:None)
+   yacc.py: 410:
+   yacc.py: 411:State  : 3
+   yacc.py: 435:Stack  : OPENIND enum_rets CLOSEIND FUNC id OPENBR opt_enum_ids CLOSEBR OPENST statement . LexToken(ID,'b',1,102)
+   yacc.py: 471:Action : Reduce rule [stmt_list -> statement] with [assign:None] and goto state 202
+   yacc.py: 506:Result : <STNode @ 0x7faf9d28d518> (assign:None)
+   yacc.py: 410:
+   yacc.py: 411:State  : 202
+   yacc.py: 435:Stack  : OPENIND enum_rets CLOSEIND FUNC id OPENBR opt_enum_ids CLOSEBR OPENST stmt_list . LexToken(ID,'b',1,102)
+   yacc.py: 445:Action : Shift and goto state 37
+   yacc.py: 410:
+   yacc.py: 411:State  : 37
+   yacc.py: 435:Stack  : OPENIND enum_rets CLOSEIND FUNC id OPENBR opt_enum_ids CLOSEBR OPENST stmt_list ID . LexToken(ASGN,'=',1,104)
+   yacc.py: 471:Action : Reduce rule [id -> ID] with ['b'] and goto state 21
+   yacc.py: 506:Result : <STNode @ 0x7faf9d28d8d0> (id:b)
+   yacc.py: 410:
+   yacc.py: 411:State  : 21
+   yacc.py: 435:Stack  : OPENIND enum_rets CLOSEIND FUNC id OPENBR opt_enum_ids CLOSEBR OPENST stmt_list id . LexToken(ASGN,'=',1,104)
+   yacc.py: 445:Action : Shift and goto state 56
+   yacc.py: 410:
+   yacc.py: 411:State  : 56
+   yacc.py: 435:Stack  : OPENIND enum_rets CLOSEIND FUNC id OPENBR opt_enum_ids CLOSEBR OPENST stmt_list id ASGN . LexToken(ID,'arr',1,106)
+   yacc.py: 445:Action : Shift and goto state 37
+   yacc.py: 410:
+   yacc.py: 411:State  : 37
+   yacc.py: 435:Stack  : OPENIND enum_rets CLOSEIND FUNC id OPENBR opt_enum_ids CLOSEBR OPENST stmt_list id ASGN ID . LexToken(OPENBR,'(',1,109)
+   yacc.py: 471:Action : Reduce rule [id -> ID] with ['arr'] and goto state 50
+   yacc.py: 506:Result : <STNode @ 0x7faf9d28d710> (id:arr)
+   yacc.py: 410:
+   yacc.py: 411:State  : 50
+   yacc.py: 435:Stack  : OPENIND enum_rets CLOSEIND FUNC id OPENBR opt_enum_ids CLOSEBR OPENST stmt_list id ASGN id . LexToken(OPENBR,'(',1,109)
+   yacc.py: 445:Action : Shift and goto state 86
+   yacc.py: 410:
+   yacc.py: 411:State  : 86
+   yacc.py: 435:Stack  : OPENIND enum_rets CLOSEIND FUNC id OPENBR opt_enum_ids CLOSEBR OPENST stmt_list id ASGN id OPENBR . LexToken(NUM,2,1,110)
+   yacc.py: 445:Action : Shift and goto state 25
+   yacc.py: 410:
+   yacc.py: 411:State  : 25
+   yacc.py: 435:Stack  : OPENIND enum_rets CLOSEIND FUNC id OPENBR opt_enum_ids CLOSEBR OPENST stmt_list id ASGN id OPENBR NUM . LexToken(CLOSEBR,')',1,111)
+   yacc.py: 471:Action : Reduce rule [expr -> NUM] with [2] and goto state 108
+   yacc.py: 506:Result : <STNode @ 0x7faf9d28d978> (number:2)
+   yacc.py: 410:
+   yacc.py: 411:State  : 108
+   yacc.py: 435:Stack  : OPENIND enum_rets CLOSEIND FUNC id OPENBR opt_enum_ids CLOSEBR OPENST stmt_list id ASGN id OPENBR expr . LexToken(CLOSEBR,')',1,111)
+   yacc.py: 445:Action : Shift and goto state 132
+   yacc.py: 410:
+   yacc.py: 411:State  : 132
+   yacc.py: 435:Stack  : OPENIND enum_rets CLOSEIND FUNC id OPENBR opt_enum_ids CLOSEBR OPENST stmt_list id ASGN id OPENBR expr CLOSEBR . LexToken(OPENBR,'(',1,112)
+   yacc.py: 445:Action : Shift and goto state 134
    yacc.py: 410:
    yacc.py: 411:State  : 134
-   yacc.py: 435:Stack  : stmt_list EXTEND2 id OPENBR expr CLOSEBR OPENBR expr . LexToken(CLOSEBR,')',1,59)
-   yacc.py: 445:Action : Shift and goto state 136
+   yacc.py: 435:Stack  : OPENIND enum_rets CLOSEIND FUNC id OPENBR opt_enum_ids CLOSEBR OPENST stmt_list id ASGN id OPENBR expr CLOSEBR OPENBR . LexToken(NUM,0,1,113)
+   yacc.py: 445:Action : Shift and goto state 25
    yacc.py: 410:
-   yacc.py: 411:State  : 136
-   yacc.py: 435:Stack  : stmt_list EXTEND2 id OPENBR expr CLOSEBR OPENBR expr CLOSEBR . $end
-   yacc.py: 471:Action : Reduce rule [extend2 -> EXTEND2 id OPENBR expr CLOSEBR OPENBR expr CLOSEBR] with ['EXTEND2',id:A,'(',number:1,')','(',number:5,')'] and goto state 12
-   yacc.py: 506:Result : <STNode @ 0x7fbf01561d30> (extend2:None)
+   yacc.py: 411:State  : 25
+   yacc.py: 435:Stack  : OPENIND enum_rets CLOSEIND FUNC id OPENBR opt_enum_ids CLOSEBR OPENST stmt_list id ASGN id OPENBR expr CLOSEBR OPENBR NUM . LexToken(CLOSEBR,')',1,114)
+   yacc.py: 471:Action : Reduce rule [expr -> NUM] with [0] and goto state 155
+   yacc.py: 506:Result : <STNode @ 0x7faf9d28da90> (number:0)
    yacc.py: 410:
-   yacc.py: 411:State  : 12
-   yacc.py: 435:Stack  : stmt_list extend2 . $end
-   yacc.py: 471:Action : Reduce rule [statement -> extend2] with [extend2:None] and goto state 35
-   yacc.py: 506:Result : <STNode @ 0x7fbf01561d30> (extend2:None)
+   yacc.py: 411:State  : 155
+   yacc.py: 435:Stack  : OPENIND enum_rets CLOSEIND FUNC id OPENBR opt_enum_ids CLOSEBR OPENST stmt_list id ASGN id OPENBR expr CLOSEBR OPENBR expr . LexToken(CLOSEBR,')',1,114)
+   yacc.py: 445:Action : Shift and goto state 175
    yacc.py: 410:
-   yacc.py: 411:State  : 35
-   yacc.py: 435:Stack  : stmt_list statement . $end
-   yacc.py: 471:Action : Reduce rule [stmt_list -> stmt_list statement] with [<STNode @ 0x7fbf01551dd8>,extend2:None] and goto state 2
-   yacc.py: 506:Result : <STNode @ 0x7fbf01547d68> (conjunction:None)
+   yacc.py: 411:State  : 175
+   yacc.py: 435:Stack  : OPENIND enum_rets CLOSEIND FUNC id OPENBR opt_enum_ids CLOSEBR OPENST stmt_list id ASGN id OPENBR expr CLOSEBR OPENBR expr CLOSEBR . LexToken(CLOSEST,'}',1,115)
+   yacc.py: 471:Action : Reduce rule [expr -> id OPENBR expr CLOSEBR OPENBR expr CLOSEBR] with [id:arr,'(',number:2,')','(',number:0,')'] and goto state 89
+   yacc.py: 506:Result : <STNode @ 0x7faf9d28db00> (index_2d:None)
+   yacc.py: 410:
+   yacc.py: 411:State  : 89
+   yacc.py: 435:Stack  : OPENIND enum_rets CLOSEIND FUNC id OPENBR opt_enum_ids CLOSEBR OPENST stmt_list id ASGN expr . LexToken(CLOSEST,'}',1,115)
+   yacc.py: 471:Action : Reduce rule [assign -> id ASGN expr] with [id:b,'=',index_2d:None] and goto state 8
+   yacc.py: 506:Result : <STNode @ 0x7faf9d28d9b0> (assign:None)
+   yacc.py: 410:
+   yacc.py: 411:State  : 8
+   yacc.py: 435:Stack  : OPENIND enum_rets CLOSEIND FUNC id OPENBR opt_enum_ids CLOSEBR OPENST stmt_list assign . LexToken(CLOSEST,'}',1,115)
+   yacc.py: 471:Action : Reduce rule [statement -> assign] with [assign:None] and goto state 38
+   yacc.py: 506:Result : <STNode @ 0x7faf9d28d9b0> (assign:None)
+   yacc.py: 410:
+   yacc.py: 411:State  : 38
+   yacc.py: 435:Stack  : OPENIND enum_rets CLOSEIND FUNC id OPENBR opt_enum_ids CLOSEBR OPENST stmt_list statement . LexToken(CLOSEST,'}',1,115)
+   yacc.py: 471:Action : Reduce rule [stmt_list -> stmt_list statement] with [assign:None,assign:None] and goto state 202
+   yacc.py: 506:Result : <STNode @ 0x7faf9d28dc18> (conjunction:None)
+   yacc.py: 410:
+   yacc.py: 411:State  : 202
+   yacc.py: 435:Stack  : OPENIND enum_rets CLOSEIND FUNC id OPENBR opt_enum_ids CLOSEBR OPENST stmt_list . LexToken(CLOSEST,'}',1,115)
+   yacc.py: 445:Action : Shift and goto state 205
+   yacc.py: 410:
+   yacc.py: 411:State  : 205
+   yacc.py: 435:Stack  : OPENIND enum_rets CLOSEIND FUNC id OPENBR opt_enum_ids CLOSEBR OPENST stmt_list CLOSEST . $end
+   yacc.py: 471:Action : Reduce rule [declaration -> OPENIND enum_rets CLOSEIND FUNC id OPENBR opt_enum_ids CLOSEBR OPENST stmt_list CLOSEST] with ['[',<list @ 0x7faf9d28ae08>,']','FUNC',id:LOL,'(',<list @ 0x7faf9d291208>,')','{',<STNode @ 0x7faf9d28dc18>,'}'] and goto state 13
+   yacc.py: 506:Result : <STNode @ 0x7faf9d28d7b8> (declare:function)
+   yacc.py: 410:
+   yacc.py: 411:State  : 13
+   yacc.py: 435:Stack  : declaration . $end
+   yacc.py: 471:Action : Reduce rule [statement -> declaration] with [<STNode @ 0x7faf9d28d7b8>] and goto state 3
+   yacc.py: 506:Result : <STNode @ 0x7faf9d28d7b8> (declare:function)
+   yacc.py: 410:
+   yacc.py: 411:State  : 3
+   yacc.py: 435:Stack  : statement . $end
+   yacc.py: 471:Action : Reduce rule [stmt_list -> statement] with [<STNode @ 0x7faf9d28d7b8>] and goto state 2
+   yacc.py: 506:Result : <STNode @ 0x7faf9d28d7b8> (declare:function)
    yacc.py: 410:
    yacc.py: 411:State  : 2
    yacc.py: 435:Stack  : stmt_list . $end
-   yacc.py: 471:Action : Reduce rule [program -> stmt_list] with [<STNode @ 0x7fbf01547d68>] and goto state 1
-   yacc.py: 506:Result : <STNode @ 0x7fbf06230438> (program:None)
+   yacc.py: 471:Action : Reduce rule [program -> stmt_list] with [<STNode @ 0x7faf9d28d7b8>] and goto state 1
+   yacc.py: 506:Result : <STNode @ 0x7faf9de887f0> (program:None)
    yacc.py: 410:
    yacc.py: 411:State  : 1
    yacc.py: 435:Stack  : program . $end
-   yacc.py: 571:Done   : Returning <STNode @ 0x7fbf06230438> (program:None)
+   yacc.py: 571:Done   : Returning <STNode @ 0x7faf9de887f0> (program:None)
+   yacc.py: 572:PLY: PARSE DEBUG END
+   yacc.py: 362:PLY: PARSE DEBUG START
+   yacc.py: 410:
+   yacc.py: 411:State  : 0
+   yacc.py: 435:Stack  : . LexToken(2DARRINT,'2DARRINT',1,0)
+   yacc.py: 445:Action : Shift and goto state 34
+   yacc.py: 410:
+   yacc.py: 411:State  : 34
+   yacc.py: 435:Stack  : 2DARRINT . LexToken(ID,'b',1,14)
+   yacc.py: 445:Action : Shift and goto state 37
+   yacc.py: 410:
+   yacc.py: 411:State  : 37
+   yacc.py: 435:Stack  : 2DARRINT ID . LexToken(ASGN,'=',1,16)
+   yacc.py: 471:Action : Reduce rule [id -> ID] with ['b'] and goto state 72
+   yacc.py: 506:Result : <STNode @ 0x7faf9d28dd30> (id:b)
+   yacc.py: 410:
+   yacc.py: 411:State  : 72
+   yacc.py: 435:Stack  : 2DARRINT id . LexToken(ASGN,'=',1,16)
+   yacc.py: 445:Action : Shift and goto state 104
+   yacc.py: 410:
+   yacc.py: 411:State  : 104
+   yacc.py: 435:Stack  : 2DARRINT id ASGN . LexToken(OPENIND,'[',1,18)
+   yacc.py: 445:Action : Shift and goto state 129
+   yacc.py: 410:
+   yacc.py: 411:State  : 129
+   yacc.py: 435:Stack  : 2DARRINT id ASGN OPENIND . LexToken(NUM,1,1,19)
+   yacc.py: 445:Action : Shift and goto state 25
+   yacc.py: 410:
+   yacc.py: 411:State  : 25
+   yacc.py: 435:Stack  : 2DARRINT id ASGN OPENIND NUM . LexToken(COMMA,',',1,20)
+   yacc.py: 471:Action : Reduce rule [expr -> NUM] with [1] and goto state 138
+   yacc.py: 506:Result : <STNode @ 0x7faf9de6c908> (number:1)
+   yacc.py: 410:
+   yacc.py: 411:State  : 138
+   yacc.py: 435:Stack  : 2DARRINT id ASGN OPENIND expr . LexToken(COMMA,',',1,20)
+   yacc.py: 445:Action : Shift and goto state 159
+   yacc.py: 410:
+   yacc.py: 411:State  : 159
+   yacc.py: 435:Stack  : 2DARRINT id ASGN OPENIND expr COMMA . LexToken(NUM,2,1,22)
+   yacc.py: 445:Action : Shift and goto state 25
+   yacc.py: 410:
+   yacc.py: 411:State  : 25
+   yacc.py: 435:Stack  : 2DARRINT id ASGN OPENIND expr COMMA NUM . LexToken(COMMA,',',1,23)
+   yacc.py: 471:Action : Reduce rule [expr -> NUM] with [2] and goto state 138
+   yacc.py: 506:Result : <STNode @ 0x7faf9d28d9e8> (number:2)
+   yacc.py: 410:
+   yacc.py: 411:State  : 138
+   yacc.py: 435:Stack  : 2DARRINT id ASGN OPENIND expr COMMA expr . LexToken(COMMA,',',1,23)
+   yacc.py: 445:Action : Shift and goto state 159
+   yacc.py: 410:
+   yacc.py: 411:State  : 159
+   yacc.py: 435:Stack  : 2DARRINT id ASGN OPENIND expr COMMA expr COMMA . LexToken(NUM,3,1,25)
+   yacc.py: 445:Action : Shift and goto state 25
+   yacc.py: 410:
+   yacc.py: 411:State  : 25
+   yacc.py: 435:Stack  : 2DARRINT id ASGN OPENIND expr COMMA expr COMMA NUM . LexToken(DCOMMA,';',1,26)
+   yacc.py: 471:Action : Reduce rule [expr -> NUM] with [3] and goto state 138
+   yacc.py: 506:Result : <STNode @ 0x7faf9d28ddd8> (number:3)
+   yacc.py: 410:
+   yacc.py: 411:State  : 138
+   yacc.py: 435:Stack  : 2DARRINT id ASGN OPENIND expr COMMA expr COMMA expr . LexToken(DCOMMA,';',1,26)
+   yacc.py: 471:Action : Reduce rule [enum -> expr] with [number:3] and goto state 177
+   yacc.py: 506:Result : <list @ 0x7faf9d289c88> ([number:3])
+   yacc.py: 410:
+   yacc.py: 411:State  : 177
+   yacc.py: 435:Stack  : 2DARRINT id ASGN OPENIND expr COMMA expr COMMA enum . LexToken(DCOMMA,';',1,26)
+   yacc.py: 471:Action : Reduce rule [enum -> expr COMMA enum] with [number:2,',',[number:3]] and goto state 177
+   yacc.py: 506:Result : <list @ 0x7faf9d289c88> ([number:3, number:2])
+   yacc.py: 410:
+   yacc.py: 411:State  : 177
+   yacc.py: 435:Stack  : 2DARRINT id ASGN OPENIND expr COMMA enum . LexToken(DCOMMA,';',1,26)
+   yacc.py: 471:Action : Reduce rule [enum -> expr COMMA enum] with [number:1,',',<list @ 0x7faf9d289c88>] and goto state 150
+   yacc.py: 506:Result : <list @ 0x7faf9d289c88> ([number:3, number:2, number:1])
+   yacc.py: 410:
+   yacc.py: 411:State  : 150
+   yacc.py: 435:Stack  : 2DARRINT id ASGN OPENIND enum . LexToken(DCOMMA,';',1,26)
+   yacc.py: 445:Action : Shift and goto state 171
+   yacc.py: 410:
+   yacc.py: 411:State  : 171
+   yacc.py: 435:Stack  : 2DARRINT id ASGN OPENIND enum DCOMMA . LexToken(NUM,2,1,28)
+   yacc.py: 445:Action : Shift and goto state 25
+   yacc.py: 410:
+   yacc.py: 411:State  : 25
+   yacc.py: 435:Stack  : 2DARRINT id ASGN OPENIND enum DCOMMA NUM . LexToken(COMMA,',',1,29)
+   yacc.py: 471:Action : Reduce rule [expr -> NUM] with [2] and goto state 138
+   yacc.py: 506:Result : <STNode @ 0x7faf9d28dbe0> (number:2)
+   yacc.py: 410:
+   yacc.py: 411:State  : 138
+   yacc.py: 435:Stack  : 2DARRINT id ASGN OPENIND enum DCOMMA expr . LexToken(COMMA,',',1,29)
+   yacc.py: 445:Action : Shift and goto state 159
+   yacc.py: 410:
+   yacc.py: 411:State  : 159
+   yacc.py: 435:Stack  : 2DARRINT id ASGN OPENIND enum DCOMMA expr COMMA . LexToken(NUM,3,1,31)
+   yacc.py: 445:Action : Shift and goto state 25
+   yacc.py: 410:
+   yacc.py: 411:State  : 25
+   yacc.py: 435:Stack  : 2DARRINT id ASGN OPENIND enum DCOMMA expr COMMA NUM . LexToken(DCOMMA,';',1,32)
+   yacc.py: 471:Action : Reduce rule [expr -> NUM] with [3] and goto state 138
+   yacc.py: 506:Result : <STNode @ 0x7faf9d28def0> (number:3)
+   yacc.py: 410:
+   yacc.py: 411:State  : 138
+   yacc.py: 435:Stack  : 2DARRINT id ASGN OPENIND enum DCOMMA expr COMMA expr . LexToken(DCOMMA,';',1,32)
+   yacc.py: 471:Action : Reduce rule [enum -> expr] with [number:3] and goto state 177
+   yacc.py: 506:Result : <list @ 0x7faf9d28b408> ([number:3])
+   yacc.py: 410:
+   yacc.py: 411:State  : 177
+   yacc.py: 435:Stack  : 2DARRINT id ASGN OPENIND enum DCOMMA expr COMMA enum . LexToken(DCOMMA,';',1,32)
+   yacc.py: 471:Action : Reduce rule [enum -> expr COMMA enum] with [number:2,',',[number:3]] and goto state 150
+   yacc.py: 506:Result : <list @ 0x7faf9d28b408> ([number:3, number:2])
+   yacc.py: 410:
+   yacc.py: 411:State  : 150
+   yacc.py: 435:Stack  : 2DARRINT id ASGN OPENIND enum DCOMMA enum . LexToken(DCOMMA,';',1,32)
+   yacc.py: 445:Action : Shift and goto state 171
+   yacc.py: 410:
+   yacc.py: 411:State  : 171
+   yacc.py: 435:Stack  : 2DARRINT id ASGN OPENIND enum DCOMMA enum DCOMMA . LexToken(NUM,3,1,34)
+   yacc.py: 445:Action : Shift and goto state 25
+   yacc.py: 410:
+   yacc.py: 411:State  : 25
+   yacc.py: 435:Stack  : 2DARRINT id ASGN OPENIND enum DCOMMA enum DCOMMA NUM . LexToken(COMMA,',',1,35)
+   yacc.py: 471:Action : Reduce rule [expr -> NUM] with [3] and goto state 138
+   yacc.py: 506:Result : <STNode @ 0x7faf9d28de10> (number:3)
+   yacc.py: 410:
+   yacc.py: 411:State  : 138
+   yacc.py: 435:Stack  : 2DARRINT id ASGN OPENIND enum DCOMMA enum DCOMMA expr . LexToken(COMMA,',',1,35)
+   yacc.py: 445:Action : Shift and goto state 159
+   yacc.py: 410:
+   yacc.py: 411:State  : 159
+   yacc.py: 435:Stack  : 2DARRINT id ASGN OPENIND enum DCOMMA enum DCOMMA expr COMMA . LexToken(NUM,4,1,37)
+   yacc.py: 445:Action : Shift and goto state 25
+   yacc.py: 410:
+   yacc.py: 411:State  : 25
+   yacc.py: 435:Stack  : 2DARRINT id ASGN OPENIND enum DCOMMA enum DCOMMA expr COMMA NUM . LexToken(COMMA,',',1,38)
+   yacc.py: 471:Action : Reduce rule [expr -> NUM] with [4] and goto state 138
+   yacc.py: 506:Result : <STNode @ 0x7faf9d28de48> (number:4)
+   yacc.py: 410:
+   yacc.py: 411:State  : 138
+   yacc.py: 435:Stack  : 2DARRINT id ASGN OPENIND enum DCOMMA enum DCOMMA expr COMMA expr . LexToken(COMMA,',',1,38)
+   yacc.py: 445:Action : Shift and goto state 159
+   yacc.py: 410:
+   yacc.py: 411:State  : 159
+   yacc.py: 435:Stack  : 2DARRINT id ASGN OPENIND enum DCOMMA enum DCOMMA expr COMMA expr COMMA . LexToken(NUM,5,1,40)
+   yacc.py: 445:Action : Shift and goto state 25
+   yacc.py: 410:
+   yacc.py: 411:State  : 25
+   yacc.py: 435:Stack  : 2DARRINT id ASGN OPENIND enum DCOMMA enum DCOMMA expr COMMA expr COMMA NUM . LexToken(COMMA,',',1,41)
+   yacc.py: 471:Action : Reduce rule [expr -> NUM] with [5] and goto state 138
+   yacc.py: 506:Result : <STNode @ 0x7faf9d28dda0> (number:5)
+   yacc.py: 410:
+   yacc.py: 411:State  : 138
+   yacc.py: 435:Stack  : 2DARRINT id ASGN OPENIND enum DCOMMA enum DCOMMA expr COMMA expr COMMA expr . LexToken(COMMA,',',1,41)
+   yacc.py: 445:Action : Shift and goto state 159
+   yacc.py: 410:
+   yacc.py: 411:State  : 159
+   yacc.py: 435:Stack  : 2DARRINT id ASGN OPENIND enum DCOMMA enum DCOMMA expr COMMA expr COMMA expr COMMA . LexToken(NUM,6,1,43)
+   yacc.py: 445:Action : Shift and goto state 25
+   yacc.py: 410:
+   yacc.py: 411:State  : 25
+   yacc.py: 435:Stack  : 2DARRINT id ASGN OPENIND enum DCOMMA enum DCOMMA expr COMMA expr COMMA expr COMMA NUM . LexToken(CLOSEIND,']',1,44)
+   yacc.py: 471:Action : Reduce rule [expr -> NUM] with [6] and goto state 138
+   yacc.py: 506:Result : <STNode @ 0x7faf9764c0b8> (number:6)
+   yacc.py: 410:
+   yacc.py: 411:State  : 138
+   yacc.py: 435:Stack  : 2DARRINT id ASGN OPENIND enum DCOMMA enum DCOMMA expr COMMA expr COMMA expr COMMA expr . LexToken(CLOSEIND,']',1,44)
+   yacc.py: 471:Action : Reduce rule [enum -> expr] with [number:6] and goto state 177
+   yacc.py: 506:Result : <list @ 0x7faf9d289f48> ([number:6])
+   yacc.py: 410:
+   yacc.py: 411:State  : 177
+   yacc.py: 435:Stack  : 2DARRINT id ASGN OPENIND enum DCOMMA enum DCOMMA expr COMMA expr COMMA expr COMMA enum . LexToken(CLOSEIND,']',1,44)
+   yacc.py: 471:Action : Reduce rule [enum -> expr COMMA enum] with [number:5,',',[number:6]] and goto state 177
+   yacc.py: 506:Result : <list @ 0x7faf9d289f48> ([number:6, number:5])
+   yacc.py: 410:
+   yacc.py: 411:State  : 177
+   yacc.py: 435:Stack  : 2DARRINT id ASGN OPENIND enum DCOMMA enum DCOMMA expr COMMA expr COMMA enum . LexToken(CLOSEIND,']',1,44)
+   yacc.py: 471:Action : Reduce rule [enum -> expr COMMA enum] with [number:4,',',<list @ 0x7faf9d289f48>] and goto state 177
+   yacc.py: 506:Result : <list @ 0x7faf9d289f48> ([number:6, number:5, number:4])
+   yacc.py: 410:
+   yacc.py: 411:State  : 177
+   yacc.py: 435:Stack  : 2DARRINT id ASGN OPENIND enum DCOMMA enum DCOMMA expr COMMA enum . LexToken(CLOSEIND,']',1,44)
+   yacc.py: 471:Action : Reduce rule [enum -> expr COMMA enum] with [number:3,',',<list @ 0x7faf9d289f48>] and goto state 150
+   yacc.py: 506:Result : <list @ 0x7faf9d289f48> ([number:6, number:5, number:4, number:3])
+   yacc.py: 410:
+   yacc.py: 411:State  : 150
+   yacc.py: 435:Stack  : 2DARRINT id ASGN OPENIND enum DCOMMA enum DCOMMA enum . LexToken(CLOSEIND,']',1,44)
+   yacc.py: 471:Action : Reduce rule [enum2 -> enum] with [<list @ 0x7faf9d289f48>] and goto state 186
+   yacc.py: 506:Result : <list @ 0x7faf9d2a0dc8> ([enum:[number:6, number:5, number:4, num ...)
+   yacc.py: 410:
+   yacc.py: 411:State  : 186
+   yacc.py: 430:Defaulted state 186: Reduce using 46
+   yacc.py: 435:Stack  : 2DARRINT id ASGN OPENIND enum DCOMMA enum DCOMMA enum2 . LexToken(CLOSEIND,']',1,44)
+   yacc.py: 471:Action : Reduce rule [enum2 -> enum DCOMMA enum2] with [<list @ 0x7faf9d28b408>,';',<list @ 0x7faf9d2a0dc8>] and goto state 186
+   yacc.py: 506:Result : <list @ 0x7faf9d2a0dc8> ([enum:[number:6, number:5, number:4, num ...)
+   yacc.py: 410:
+   yacc.py: 411:State  : 186
+   yacc.py: 430:Defaulted state 186: Reduce using 46
+   yacc.py: 435:Stack  : 2DARRINT id ASGN OPENIND enum DCOMMA enum2 . LexToken(CLOSEIND,']',1,44)
+   yacc.py: 471:Action : Reduce rule [enum2 -> enum DCOMMA enum2] with [<list @ 0x7faf9d289c88>,';',<list @ 0x7faf9d2a0dc8>] and goto state 151
+   yacc.py: 506:Result : <list @ 0x7faf9d2a0dc8> ([enum:[number:6, number:5, number:4, num ...)
+   yacc.py: 410:
+   yacc.py: 411:State  : 151
+   yacc.py: 435:Stack  : 2DARRINT id ASGN OPENIND enum2 . LexToken(CLOSEIND,']',1,44)
+   yacc.py: 445:Action : Shift and goto state 172
+   yacc.py: 410:
+   yacc.py: 411:State  : 172
+   yacc.py: 435:Stack  : 2DARRINT id ASGN OPENIND enum2 CLOSEIND . LexToken(UINT,'UINT',1,46)
+   yacc.py: 471:Action : Reduce rule [create_2darr -> 2DARRINT id ASGN OPENIND enum2 CLOSEIND] with ['2DARRINT',id:b,'=','[',<list @ 0x7faf9d2a0dc8>,']'] and goto state 10
+   yacc.py: 506:Result : <STNode @ 0x7faf9d28df28> (create_2darr:2DARRINT)
+   yacc.py: 410:
+   yacc.py: 411:State  : 10
+   yacc.py: 435:Stack  : create_2darr . LexToken(UINT,'UINT',1,46)
+   yacc.py: 471:Action : Reduce rule [statement -> create_2darr] with [<STNode @ 0x7faf9d28df28>] and goto state 3
+   yacc.py: 506:Result : <STNode @ 0x7faf9d28df28> (create_2darr:2DARRINT)
+   yacc.py: 410:
+   yacc.py: 411:State  : 3
+   yacc.py: 435:Stack  : statement . LexToken(UINT,'UINT',1,46)
+   yacc.py: 471:Action : Reduce rule [stmt_list -> statement] with [<STNode @ 0x7faf9d28df28>] and goto state 2
+   yacc.py: 506:Result : <STNode @ 0x7faf9d28df28> (create_2darr:2DARRINT)
+   yacc.py: 410:
+   yacc.py: 411:State  : 2
+   yacc.py: 435:Stack  : stmt_list . LexToken(UINT,'UINT',1,46)
+   yacc.py: 445:Action : Shift and goto state 26
+   yacc.py: 410:
+   yacc.py: 411:State  : 26
+   yacc.py: 435:Stack  : stmt_list UINT . LexToken(ID,'second',1,51)
+   yacc.py: 445:Action : Shift and goto state 37
+   yacc.py: 410:
+   yacc.py: 411:State  : 37
+   yacc.py: 435:Stack  : stmt_list UINT ID . LexToken(ASGN,'=',1,58)
+   yacc.py: 471:Action : Reduce rule [id -> ID] with ['second'] and goto state 60
+   yacc.py: 506:Result : <STNode @ 0x7faf9d28de80> (id:second)
+   yacc.py: 410:
+   yacc.py: 411:State  : 60
+   yacc.py: 435:Stack  : stmt_list UINT id . LexToken(ASGN,'=',1,58)
+   yacc.py: 445:Action : Shift and goto state 91
+   yacc.py: 410:
+   yacc.py: 411:State  : 91
+   yacc.py: 435:Stack  : stmt_list UINT id ASGN . LexToken(NUM,0,1,60)
+   yacc.py: 445:Action : Shift and goto state 25
+   yacc.py: 410:
+   yacc.py: 411:State  : 25
+   yacc.py: 435:Stack  : stmt_list UINT id ASGN NUM . $end
+   yacc.py: 471:Action : Reduce rule [expr -> NUM] with [0] and goto state 112
+   yacc.py: 506:Result : <STNode @ 0x7faf9de03b70> (number:0)
+   yacc.py: 410:
+   yacc.py: 411:State  : 112
+   yacc.py: 435:Stack  : stmt_list UINT id ASGN expr . $end
+   yacc.py: 471:Action : Reduce rule [create_id -> UINT id ASGN expr] with ['UINT',id:second,'=',number:0] and goto state 7
+   yacc.py: 506:Result : <STNode @ 0x7faf9764c048> (create_id:UINT)
+   yacc.py: 410:
+   yacc.py: 411:State  : 7
+   yacc.py: 435:Stack  : stmt_list create_id . $end
+   yacc.py: 471:Action : Reduce rule [statement -> create_id] with [create_id:UINT] and goto state 38
+   yacc.py: 506:Result : <STNode @ 0x7faf9764c048> (create_id:UINT)
+   yacc.py: 410:
+   yacc.py: 411:State  : 38
+   yacc.py: 435:Stack  : stmt_list statement . $end
+   yacc.py: 471:Action : Reduce rule [stmt_list -> stmt_list statement] with [<STNode @ 0x7faf9d28df28>,create_id:UINT] and goto state 2
+   yacc.py: 506:Result : <STNode @ 0x7faf9d28df60> (conjunction:None)
+   yacc.py: 410:
+   yacc.py: 411:State  : 2
+   yacc.py: 435:Stack  : stmt_list . $end
+   yacc.py: 471:Action : Reduce rule [program -> stmt_list] with [<STNode @ 0x7faf9d28df60>] and goto state 1
+   yacc.py: 506:Result : <STNode @ 0x7faf9de6c940> (program:None)
+   yacc.py: 410:
+   yacc.py: 411:State  : 1
+   yacc.py: 435:Stack  : program . $end
+   yacc.py: 571:Done   : Returning <STNode @ 0x7faf9de6c940> (program:None)
+   yacc.py: 572:PLY: PARSE DEBUG END
+   yacc.py: 362:PLY: PARSE DEBUG START
+   yacc.py: 410:
+   yacc.py: 411:State  : 0
+   yacc.py: 435:Stack  : . LexToken(OPENIND,'[',1,0)
+   yacc.py: 445:Action : Shift and goto state 31
+   yacc.py: 410:
+   yacc.py: 411:State  : 31
+   yacc.py: 435:Stack  : OPENIND . LexToken(ID,'b',1,1)
+   yacc.py: 445:Action : Shift and goto state 37
+   yacc.py: 410:
+   yacc.py: 411:State  : 37
+   yacc.py: 435:Stack  : OPENIND ID . LexToken(OPENBR,'(',1,2)
+   yacc.py: 471:Action : Reduce rule [id -> ID] with ['b'] and goto state 66
+   yacc.py: 506:Result : <STNode @ 0x7faf9d28d240> (id:b)
+   yacc.py: 410:
+   yacc.py: 411:State  : 66
+   yacc.py: 435:Stack  : OPENIND id . LexToken(OPENBR,'(',1,2)
+   yacc.py: 445:Action : Shift and goto state 98
+   yacc.py: 410:
+   yacc.py: 411:State  : 98
+   yacc.py: 435:Stack  : OPENIND id OPENBR . LexToken(NUM,0,1,3)
+   yacc.py: 445:Action : Shift and goto state 25
+   yacc.py: 410:
+   yacc.py: 411:State  : 25
+   yacc.py: 435:Stack  : OPENIND id OPENBR NUM . LexToken(CLOSEBR,')',1,4)
+   yacc.py: 471:Action : Reduce rule [expr -> NUM] with [0] and goto state 121
+   yacc.py: 506:Result : <STNode @ 0x7faf9d28df28> (number:0)
+   yacc.py: 410:
+   yacc.py: 411:State  : 121
+   yacc.py: 435:Stack  : OPENIND id OPENBR expr . LexToken(CLOSEBR,')',1,4)
+   yacc.py: 445:Action : Shift and goto state 143
+   yacc.py: 410:
+   yacc.py: 411:State  : 143
+   yacc.py: 435:Stack  : OPENIND id OPENBR expr CLOSEBR . LexToken(OPENBR,'(',1,5)
+   yacc.py: 445:Action : Shift and goto state 163
+   yacc.py: 410:
+   yacc.py: 411:State  : 163
+   yacc.py: 435:Stack  : OPENIND id OPENBR expr CLOSEBR OPENBR . LexToken(NUM,0,1,6)
+   yacc.py: 445:Action : Shift and goto state 25
+   yacc.py: 410:
+   yacc.py: 411:State  : 25
+   yacc.py: 435:Stack  : OPENIND id OPENBR expr CLOSEBR OPENBR NUM . LexToken(CLOSEBR,')',1,7)
+   yacc.py: 471:Action : Reduce rule [expr -> NUM] with [0] and goto state 181
+   yacc.py: 506:Result : <STNode @ 0x7faf9d28de48> (number:0)
+   yacc.py: 410:
+   yacc.py: 411:State  : 181
+   yacc.py: 435:Stack  : OPENIND id OPENBR expr CLOSEBR OPENBR expr . LexToken(CLOSEBR,')',1,7)
+   yacc.py: 445:Action : Shift and goto state 192
+   yacc.py: 410:
+   yacc.py: 411:State  : 192
+   yacc.py: 435:Stack  : OPENIND id OPENBR expr CLOSEBR OPENBR expr CLOSEBR . LexToken(COMMA,',',1,8)
+   yacc.py: 445:Action : Shift and goto state 200
+   yacc.py: 410:
+   yacc.py: 411:State  : 200
+   yacc.py: 435:Stack  : OPENIND id OPENBR expr CLOSEBR OPENBR expr CLOSEBR COMMA . LexToken(ID,'second',1,10)
+   yacc.py: 445:Action : Shift and goto state 37
+   yacc.py: 410:
+   yacc.py: 411:State  : 37
+   yacc.py: 435:Stack  : OPENIND id OPENBR expr CLOSEBR OPENBR expr CLOSEBR COMMA ID . LexToken(CLOSEIND,']',1,16)
+   yacc.py: 471:Action : Reduce rule [id -> ID] with ['second'] and goto state 118
+   yacc.py: 506:Result : <STNode @ 0x7faf9d28de10> (id:second)
+   yacc.py: 410:
+   yacc.py: 411:State  : 118
+   yacc.py: 435:Stack  : OPENIND id OPENBR expr CLOSEBR OPENBR expr CLOSEBR COMMA id . LexToken(CLOSEIND,']',1,16)
+   yacc.py: 471:Action : Reduce rule [enum_id_tail -> id] with [id:second] and goto state 204
+   yacc.py: 506:Result : <list @ 0x7faf9d28a188> ([id:second])
+   yacc.py: 410:
+   yacc.py: 411:State  : 204
+   yacc.py: 430:Defaulted state 204: Reduce using 65
+   yacc.py: 435:Stack  : OPENIND id OPENBR expr CLOSEBR OPENBR expr CLOSEBR COMMA enum_id_tail . LexToken(CLOSEIND,']',1,16)
+   yacc.py: 471:Action : Reduce rule [enum_id -> id OPENBR expr CLOSEBR OPENBR expr CLOSEBR COMMA enum_id_tail] with [id:b,'(',number:0,')','(',number:0,')',',',[id:second]] and goto state 67
+   yacc.py: 506:Result : <list @ 0x7faf9d28a188> ([id:second, index_2d:None])
+   yacc.py: 410:
+   yacc.py: 411:State  : 67
+   yacc.py: 435:Stack  : OPENIND enum_id . LexToken(CLOSEIND,']',1,16)
+   yacc.py: 445:Action : Shift and goto state 99
+   yacc.py: 410:
+   yacc.py: 411:State  : 99
+   yacc.py: 435:Stack  : OPENIND enum_id CLOSEIND . LexToken(ASGN,'=',1,18)
+   yacc.py: 445:Action : Shift and goto state 122
+   yacc.py: 410:
+   yacc.py: 411:State  : 122
+   yacc.py: 435:Stack  : OPENIND enum_id CLOSEIND ASGN . LexToken(ID,'LOL',1,20)
+   yacc.py: 445:Action : Shift and goto state 37
+   yacc.py: 410:
+   yacc.py: 411:State  : 37
+   yacc.py: 435:Stack  : OPENIND enum_id CLOSEIND ASGN ID . LexToken(OPENBR,'(',1,23)
+   yacc.py: 471:Action : Reduce rule [id -> ID] with ['LOL'] and goto state 144
+   yacc.py: 506:Result : <STNode @ 0x7faf9d28dcf8> (id:LOL)
+   yacc.py: 410:
+   yacc.py: 411:State  : 144
+   yacc.py: 435:Stack  : OPENIND enum_id CLOSEIND ASGN id . LexToken(OPENBR,'(',1,23)
+   yacc.py: 445:Action : Shift and goto state 165
+   yacc.py: 410:
+   yacc.py: 411:State  : 165
+   yacc.py: 435:Stack  : OPENIND enum_id CLOSEIND ASGN id OPENBR . LexToken(ID,'b',1,24)
+   yacc.py: 445:Action : Shift and goto state 37
+   yacc.py: 410:
+   yacc.py: 411:State  : 37
+   yacc.py: 435:Stack  : OPENIND enum_id CLOSEIND ASGN id OPENBR ID . LexToken(OPENBR,'(',1,25)
+   yacc.py: 471:Action : Reduce rule [id -> ID] with ['b'] and goto state 50
+   yacc.py: 506:Result : <STNode @ 0x7faf9d28df98> (id:b)
+   yacc.py: 410:
+   yacc.py: 411:State  : 50
+   yacc.py: 435:Stack  : OPENIND enum_id CLOSEIND ASGN id OPENBR id . LexToken(OPENBR,'(',1,25)
+   yacc.py: 445:Action : Shift and goto state 86
+   yacc.py: 410:
+   yacc.py: 411:State  : 86
+   yacc.py: 435:Stack  : OPENIND enum_id CLOSEIND ASGN id OPENBR id OPENBR . LexToken(NUM,2,1,26)
+   yacc.py: 445:Action : Shift and goto state 25
+   yacc.py: 410:
+   yacc.py: 411:State  : 25
+   yacc.py: 435:Stack  : OPENIND enum_id CLOSEIND ASGN id OPENBR id OPENBR NUM . LexToken(CLOSEBR,')',1,27)
+   yacc.py: 471:Action : Reduce rule [expr -> NUM] with [2] and goto state 108
+   yacc.py: 506:Result : <STNode @ 0x7faf9d28deb8> (number:2)
+   yacc.py: 410:
+   yacc.py: 411:State  : 108
+   yacc.py: 435:Stack  : OPENIND enum_id CLOSEIND ASGN id OPENBR id OPENBR expr . LexToken(CLOSEBR,')',1,27)
+   yacc.py: 445:Action : Shift and goto state 132
+   yacc.py: 410:
+   yacc.py: 411:State  : 132
+   yacc.py: 435:Stack  : OPENIND enum_id CLOSEIND ASGN id OPENBR id OPENBR expr CLOSEBR . LexToken(OPENBR,'(',1,28)
+   yacc.py: 445:Action : Shift and goto state 134
+   yacc.py: 410:
+   yacc.py: 411:State  : 134
+   yacc.py: 435:Stack  : OPENIND enum_id CLOSEIND ASGN id OPENBR id OPENBR expr CLOSEBR OPENBR . LexToken(NUM,3,1,29)
+   yacc.py: 445:Action : Shift and goto state 25
+   yacc.py: 410:
+   yacc.py: 411:State  : 25
+   yacc.py: 435:Stack  : OPENIND enum_id CLOSEIND ASGN id OPENBR id OPENBR expr CLOSEBR OPENBR NUM . LexToken(CLOSEBR,')',1,30)
+   yacc.py: 471:Action : Reduce rule [expr -> NUM] with [3] and goto state 155
+   yacc.py: 506:Result : <STNode @ 0x7faf9d28ddd8> (number:3)
+   yacc.py: 410:
+   yacc.py: 411:State  : 155
+   yacc.py: 435:Stack  : OPENIND enum_id CLOSEIND ASGN id OPENBR id OPENBR expr CLOSEBR OPENBR expr . LexToken(CLOSEBR,')',1,30)
+   yacc.py: 445:Action : Shift and goto state 175
+   yacc.py: 410:
+   yacc.py: 411:State  : 175
+   yacc.py: 435:Stack  : OPENIND enum_id CLOSEIND ASGN id OPENBR id OPENBR expr CLOSEBR OPENBR expr CLOSEBR . LexToken(COMMA,',',1,31)
+   yacc.py: 471:Action : Reduce rule [expr -> id OPENBR expr CLOSEBR OPENBR expr CLOSEBR] with [id:b,'(',number:2,')','(',number:3,')'] and goto state 184
+   yacc.py: 506:Result : <STNode @ 0x7faf9764c208> (index_2d:None)
+   yacc.py: 410:
+   yacc.py: 411:State  : 184
+   yacc.py: 435:Stack  : OPENIND enum_id CLOSEIND ASGN id OPENBR expr . LexToken(COMMA,',',1,31)
+   yacc.py: 445:Action : Shift and goto state 194
+   yacc.py: 410:
+   yacc.py: 411:State  : 194
+   yacc.py: 435:Stack  : OPENIND enum_id CLOSEIND ASGN id OPENBR expr COMMA . LexToken(COMMA,',',1,32)
+   yacc.py: 445:Action : Shift and goto state 185
+   yacc.py: 410:
+   yacc.py: 411:State  : 185
+   yacc.py: 435:Stack  : OPENIND enum_id CLOSEIND ASGN id OPENBR expr COMMA COMMA . LexToken(ID,'b',1,33)
+   yacc.py: 445:Action : Shift and goto state 37
+   yacc.py: 410:
+   yacc.py: 411:State  : 37
+   yacc.py: 435:Stack  : OPENIND enum_id CLOSEIND ASGN id OPENBR expr COMMA COMMA ID . LexToken(CLOSEBR,')',1,34)
+   yacc.py: 471:Action : Reduce rule [id -> ID] with ['b'] and goto state 50
+   yacc.py: 506:Result : <STNode @ 0x7faf9de6c940> (id:b)
+   yacc.py: 410:
+   yacc.py: 411:State  : 50
+   yacc.py: 435:Stack  : OPENIND enum_id CLOSEIND ASGN id OPENBR expr COMMA COMMA id . LexToken(CLOSEBR,')',1,34)
+   yacc.py: 471:Action : Reduce rule [expr -> id] with [id:b] and goto state 184
+   yacc.py: 506:Result : <STNode @ 0x7faf9de6c940> (id:b)
+   yacc.py: 410:
+   yacc.py: 411:State  : 184
+   yacc.py: 435:Stack  : OPENIND enum_id CLOSEIND ASGN id OPENBR expr COMMA COMMA expr . LexToken(CLOSEBR,')',1,34)
+   yacc.py: 471:Action : Reduce rule [enum_par -> expr] with [id:b] and goto state 195
+   yacc.py: 506:Result : <list @ 0x7faf9d28b188> ([id:b])
+   yacc.py: 410:
+   yacc.py: 411:State  : 195
+   yacc.py: 430:Defaulted state 195: Reduce using 76
+   yacc.py: 435:Stack  : OPENIND enum_id CLOSEIND ASGN id OPENBR expr COMMA COMMA enum_par . LexToken(CLOSEBR,')',1,34)
+   yacc.py: 471:Action : Reduce rule [enum_par -> COMMA enum_par] with [',',[id:b]] and goto state 201
+   yacc.py: 506:Result : <list @ 0x7faf9d28b188> ([id:b, empty_slot:None])
+   yacc.py: 410:
+   yacc.py: 411:State  : 201
+   yacc.py: 430:Defaulted state 201: Reduce using 77
+   yacc.py: 435:Stack  : OPENIND enum_id CLOSEIND ASGN id OPENBR expr COMMA enum_par . LexToken(CLOSEBR,')',1,34)
+   yacc.py: 471:Action : Reduce rule [enum_par -> expr COMMA enum_par] with [index_2d:None,',',<list @ 0x7faf9d28b188>] and goto state 183
+   yacc.py: 506:Result : <list @ 0x7faf9d28b188> ([id:b, empty_slot:None, index_2d:None])
+   yacc.py: 410:
+   yacc.py: 411:State  : 183
+   yacc.py: 435:Stack  : OPENIND enum_id CLOSEIND ASGN id OPENBR enum_par . LexToken(CLOSEBR,')',1,34)
+   yacc.py: 445:Action : Shift and goto state 193
+   yacc.py: 410:
+   yacc.py: 411:State  : 193
+   yacc.py: 435:Stack  : OPENIND enum_id CLOSEIND ASGN id OPENBR enum_par CLOSEBR . $end
+   yacc.py: 471:Action : Reduce rule [call -> OPENIND enum_id CLOSEIND ASGN id OPENBR enum_par CLOSEBR] with ['[',<list @ 0x7faf9d28a188>,']','=',id:LOL,'(',<list @ 0x7faf9d28b188>,')'] and goto state 14
+   yacc.py: 506:Result : <STNode @ 0x7faf9d28dbe0> (call:id:LOL)
+   yacc.py: 410:
+   yacc.py: 411:State  : 14
+   yacc.py: 435:Stack  : call . $end
+   yacc.py: 471:Action : Reduce rule [statement -> call] with [call:id:LOL] and goto state 3
+   yacc.py: 506:Result : <STNode @ 0x7faf9d28dbe0> (call:id:LOL)
+   yacc.py: 410:
+   yacc.py: 411:State  : 3
+   yacc.py: 435:Stack  : statement . $end
+   yacc.py: 471:Action : Reduce rule [stmt_list -> statement] with [call:id:LOL] and goto state 2
+   yacc.py: 506:Result : <STNode @ 0x7faf9d28dbe0> (call:id:LOL)
+   yacc.py: 410:
+   yacc.py: 411:State  : 2
+   yacc.py: 435:Stack  : stmt_list . $end
+   yacc.py: 471:Action : Reduce rule [program -> stmt_list] with [call:id:LOL] and goto state 1
+   yacc.py: 506:Result : <STNode @ 0x7faf9d28df60> (program:None)
+   yacc.py: 410:
+   yacc.py: 411:State  : 1
+   yacc.py: 435:Stack  : program . $end
+   yacc.py: 571:Done   : Returning <STNode @ 0x7faf9d28df60> (program:None)
    yacc.py: 572:PLY: PARSE DEBUG END

@@ -93,7 +93,9 @@ class Parser:
                      | create_1darr
                      | create_2darr
                      | extend1
-                     | extend2"""
+                     | extend2
+                     | declaration
+                     | call"""
         if len(p) == 2:
             p[0] = p[1]
         else:
@@ -133,9 +135,13 @@ class Parser:
         """expr : OPENBR expr CLOSEBR"""
         p[0] = p[2]
 
-    def p_expr_ind(self, p):
+    def p_expr_ind1(self, p):
         """expr : id OPENBR expr CLOSEBR"""
         p[0] = STNode('index_1d', None, p[1], p[3])
+
+    def p_expr_ind2(self, p):
+        """expr : id OPENBR expr CLOSEBR OPENBR expr CLOSEBR"""
+        p[0] = STNode('index_2d', None, p[1], p[3], p[6])
 
     def p_expr_sz(self, p):
         """expr : SZ1 id %prec UOPER"""
@@ -147,12 +153,10 @@ class Parser:
 
     def p_expr_const(self, p):
         """expr : NUM"""
-        # print("p_factor_const rule")
         p[0] = STNode('number', p[1])
 
     def p_expr_id(self, p):
         """expr : id"""
-        # print("p_factor_id rule")
         p[0] = p[1]
 
     def p_create_1darr(self, p):
@@ -164,7 +168,7 @@ class Parser:
     def p_extend1(self, p):
         """extend1 : EXTEND1 id expr %prec EXTEND"""
         p[0] = STNode('extend1', None, p[2], p[3])
-
+ 
     def p_extend2(self, p):
         """extend2 : EXTEND2 id OPENBR expr CLOSEBR OPENBR expr CLOSEBR %prec EXTEND"""
         p[0] = STNode('extend2', None, p[2], p[4], p[7])
@@ -192,6 +196,131 @@ class Parser:
         else:
             p[3].append(STNode('enum', p[1]))
             p[0] = p[3]
+
+    def p_declaration(self, p):
+        """declaration : OPENIND enum_rets CLOSEIND FUNC id OPENBR opt_enum_ids CLOSEBR OPENST stmt_list CLOSEST"""
+        p[0] = STNode('declare', 'function', p[5], p[10])
+        retp = STNode('retp', p[2])
+        pars = STNode('pars', p[7])
+        p[0].add_part(retp)
+        p[0].add_part(pars)
+
+    def p_enum_args(self, p):
+        """enum_ids : create_id
+                    | create_1darr
+                    | create_2darr
+                    | create_id COMMA enum_ids
+                    | create_1darr COMMA enum_ids
+                    | create_2darr COMMA enum_ids"""
+        if len(p) == 2:
+            p[0] = [p[1]]
+        else:
+            p[3].append(p[1])
+            p[0] = p[3]
+
+    def p_opt_enum_par(self, p):
+        """opt_enum_ids :
+                         | enum_ids"""
+        if len(p) == 1:
+            p[0] = []
+        else:
+            p[0] = p[1]
+
+    def p_enum_rets(self, p):
+        """enum_rets : create_id
+                     | create_id COMMA enum_ids"""
+        if len(p) == 2:
+            p[0] = [p[1]]
+        else:
+            p[3].append(p[1])
+            p[0] = p[3]
+
+    def p_call(self, p):
+        """call : OPENIND enum_id CLOSEIND ASGN id OPENBR enum_par CLOSEBR"""
+        p[0] = STNode('call', p[5])
+        sets = STNode('set', p[2])
+        pars = STNode('pars', p[7])
+        p[0].add_part(sets)
+        p[0].add_part(pars)
+
+    def p_enum_id(self, p):  # this will only match lists with at least 1 id inside!
+        """enum_id : id
+                   | COMMA enum_id
+                   | id COMMA enum_id_tail
+                   | id OPENBR expr CLOSEBR
+                   | id OPENBR expr CLOSEBR COMMA enum_id_tail"""
+        if len(p) == 2:
+            p[0] = [p[1]]
+        elif len(p) == 4:
+            p[3].append(p[1])
+            p[0] = p[3]
+        elif len(p) == 5:
+            p[0] = [STNode('index_1d', None, p[1], p[3])]
+        elif len(p) == 7:
+            p[6].append(STNode('index_1d', None, p[1], p[3]))
+            p[0] = p[6]
+        else:
+            p[2].append(STNode('empty_slot', None))
+            p[0] = p[2]
+
+    def p_enum_id_2darr(self, p):
+        """enum_id : id OPENBR expr CLOSEBR OPENBR expr CLOSEBR
+                   | id OPENBR expr CLOSEBR OPENBR expr CLOSEBR COMMA enum_id_tail"""
+        if len(p) == 8:
+            p[0] = [STNode('index_2d', None, p[1], p[3], p[6])]
+        else:
+            p[9].append(STNode('index_2d', None, p[1], p[3], p[6]))
+            p[0] = p[9]
+
+    def p_enum_id_tail(self, p):
+        """enum_id_tail :
+                        | id
+                        | COMMA enum_id_tail
+                        | id COMMA enum_id_tail"""
+        if len(p) == 1:
+            p[0] = []
+        elif len(p) == 2:
+            p[0] = [p[1]]
+        elif len(p) == 4:
+            p[3].append(p[1])
+            p[0] = p[3]
+        else:
+            p[2].append(STNode('empty_slot', None))
+            p[0] = p[2]
+
+    def p_enum_id_tail_1darr(self, p):
+        """enum_id_tail : id OPENBR expr CLOSEBR
+                        | id OPENBR expr CLOSEBR COMMA enum_id_tail"""
+        if len(p) == 5:
+            p[0] = [STNode('index_1d', None, p[1], p[3])]
+        else:
+            p[6].append(STNode('index_1d', None, p[1], p[3]))
+            p[0] = p[6]
+
+    def p_enum_id_tail_2darr(self, p):
+        """enum_id_tail : id OPENBR expr CLOSEBR OPENBR expr CLOSEBR
+                        | id OPENBR expr CLOSEBR OPENBR expr CLOSEBR COMMA enum_id_tail"""
+        if len(p) == 8:
+            p[0] = [STNode('index_2d', None, p[1], p[3], p[6])]
+        else:
+            p[9].append(STNode('index_2d', None, p[1], p[3], p[6]))
+            p[0]= p[9]
+
+    def p_enum_par(self, p):
+        """enum_par :
+                    | expr
+                    | COMMA enum_par
+                    | expr COMMA enum_par"""
+        if len(p) == 1:
+            p[0] = [STNode('empty_slot', None)]
+        elif len(p) == 2:
+            p[0] = [p[1]]
+        elif len(p) == 4:
+            p[3].append(p[1])
+            p[0] = p[3]
+        else:
+            p[2].append(STNode('empty_slot', None))
+            p[0] = p[2]
 
     def p_create_id(self, p):
         """create_id : UINT id ASGN expr

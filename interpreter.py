@@ -74,6 +74,7 @@ class Interpreter:
         self.nmsp_stack = []
         self.LDT = {}
         self._errors = []
+        self._functions = {}
 
     def interpret(self, code: str):
         t = self.parser.parse(code)
@@ -177,7 +178,7 @@ class Interpreter:
                            // self._int_nd(node.parts[1])
                 elif node.value == 'OR':
                     return self._int_nd(node.parts[0]) \
-                           and self._int_nd(node.parts[1])
+                           or self._int_nd(node.parts[1])
                 elif node.value == 'GT':
                     return self._int_nd(node.parts[0]) \
                            > self._int_nd(node.parts[1])
@@ -502,6 +503,7 @@ class Interpreter:
             self.LDT[node.parts[0].value] = Descriptor(node.value,
                                                        None,
                                                        node)
+            self._functions[node.parts[0].value] = self.LDT[node.parts[0].value] = self.LDT[node.parts[0].value]
 
         elif node.type == 'call':
             if node.value.value not in self.LDT.keys():
@@ -511,12 +513,13 @@ class Interpreter:
                 self._errors.append(RecursionStackOverflow)
                 return None
             fptr = self.LDT[node.value.value].link  # link to the function declaration
-            current_descriptor = self.LDT[fptr.parts[0].value]
             node.parts[0].value.reverse()  # reverse the args' lists
             node.parts[1].value.reverse()
             args = self.parse_args(node.parts[1].value)
             self.nmsp_stack.append(self.LDT)
-            self.LDT = {fptr.parts[0].value: current_descriptor}
+            self.LDT = {}
+            for f in self._functions.keys():
+                self.LDT[f] = self._functions[f]
             self.create_vars(fptr.parts[-1].value)  # create parameters and return values inside the function
             self.create_vars(fptr.parts[-2].value)
             self.asgn_args(fptr.parts[-1].value, args)

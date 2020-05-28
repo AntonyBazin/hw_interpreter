@@ -83,7 +83,7 @@ class Interpreter:
     def interpret(self, code: str):
         t = self.parser.parse(code)
         if t is None:
-            print('Global syntax failure!')
+            print('GGlobal syntax failure!')
             return
         STNode.paste(t, 0)
         print(self._int_nd(t))

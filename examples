@@ -25,3 +25,6 @@ UINT k = 7 UINT l = 1
 [b(0)(0), second] = LOL(b(2)(3),,b)
 
 [BOOLEAN a = 0, UINT b = 0] FUNCTION LOL(UINT c = 5, UINT d = 0){[a,b] = LOL(a,b)} UINT k = 5 [k,] = LOL(,k)
+
+
+2DARRAYOFBOOL b = [1, 2, 3; 2, 3; 3, 4, 5, 6]

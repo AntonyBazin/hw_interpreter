@@ -64,7 +64,7 @@ class Parser:
         try:
             log = logging.getLogger()
             res = self.parser.parse(s, debug=log)
-            return res
+            return res if self.accept else None
         except LexError:
             print('Illegal token {}\n'.format(s))
 
@@ -171,7 +171,7 @@ class Parser:
     def p_extend1(self, p):
         """extend1 : EXTEND1 id expr %prec EXTEND"""
         p[0] = STNode('extend1', None, p[2], p[3])
- 
+
     def p_extend2(self, p):
         """extend2 : EXTEND2 id OPENBR expr CLOSEBR OPENBR expr CLOSEBR %prec EXTEND"""
         p[0] = STNode('extend2', None, p[2], p[4], p[7])
@@ -307,7 +307,7 @@ class Parser:
             p[0] = [STNode('index_2d', None, p[1], p[3], p[6])]
         else:
             p[9].append(STNode('index_2d', None, p[1], p[3], p[6]))
-            p[0]= p[9]
+            p[0] = p[9]
 
     def p_enum_par(self, p):
         """enum_par :

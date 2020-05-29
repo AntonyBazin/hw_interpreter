@@ -1,4 +1,5 @@
 from parser import Parser, STNode
+import maze
 
 
 class InterpreterError(Exception):
@@ -43,7 +44,7 @@ class BadBoolAssignment(InterpreterError):
     """Inappropriate value on bool assignment"""
 
 
-class BadExtension(InterpreterError):  # TODO show the result
+class BadExtension(InterpreterError):
     """Negative or NoneType value in expression for extending an array"""
 
 
@@ -94,7 +95,6 @@ class Interpreter:
             return
         STNode.paste(t, 0)
         print(self._int_nd(t))
-        print(self.nmsp_stack)
         print(self.LDT)
         for e in self._errors:
             print(e)
@@ -213,7 +213,7 @@ class Interpreter:
         elif node.type == 'id':
             if node.value not in self.LDT.keys():
                 self._errors.append(NotFoundError(node.lineno))
-                return None  # TODO check1 NB!
+                return None
             return self.LDT[node.value].value
 
         elif node.type == 'unary':
@@ -291,7 +291,7 @@ class Interpreter:
                                                                node.parts[0])
             # return self.LDT[node.parts[0].value].value
 
-        elif node.type == 'assign':  # TODO
+        elif node.type == 'assign':
             if node.parts[0].value not in self.LDT.keys():
                 self._errors.append(NotFoundError(node.lineno))
                 return None
@@ -526,7 +526,7 @@ class Interpreter:
             if node.value.value not in self.LDT.keys():
                 self._errors.append(NotFoundError(node.lineno))
                 return None
-            if len(self.nmsp_stack) > 200:
+            if len(self.nmsp_stack) > 10:
                 self._errors.append(RecursionStackOverflow(node.lineno))
                 return None
             fptr = self.LDT[node.value.value].link  # link to the function declaration
@@ -541,7 +541,7 @@ class Interpreter:
             self.create_vars(fptr.parts[-2].value)
             self.asgn_args(fptr.parts[-1].value, args)
             self._int_nd(fptr.parts[1])  # execute body
-            ret_values = self.collect_rets(fptr.parts[-2].value)  # TODO
+            ret_values = self.collect_rets(fptr.parts[-2].value)
             self.LDT = self.nmsp_stack.pop()
             self.asgn_rets(node.parts[0].value, ret_values)  # assign ret-values
             return None
@@ -552,7 +552,6 @@ if __name__ == '__main__':
     # while True:
     #     interpreter.interpret(input())
 
-    with open('testdata/calc', 'r') as f:
+    with open('testdata/fib', 'r') as f:
         data = f.read()
     interpreter.interpret(data)
-    print('lol')

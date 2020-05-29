@@ -1,0 +1,13 @@
+[UINT res = 0] FUNCTION FIBONACCI(UINT n = 0){
+    IF(n GT 2){
+        UINT buffer = 0
+        [buffer] = FIBONACCI(n - 1)
+        [res] = FIBONACCI(n - 2)
+        res = res + buffer
+    } ELSE{
+        res = 1
+    }
+}
+
+UINT number = 12
+[number] = FIBONACCI(number)

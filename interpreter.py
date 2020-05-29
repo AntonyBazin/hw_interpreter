@@ -4,8 +4,11 @@ from parser import Parser, STNode
 class InterpreterError(Exception):
     """Base Error Class"""
 
+    def __init__(self, line):
+        self.lineno = line
+
     def __str__(self):
-        return self.__doc__
+        return self.__doc__ + ':' + str(self.lineno)
 
 
 class RedeclarationError(InterpreterError):
@@ -60,6 +63,10 @@ class NoneTypeError(InterpreterError):
     """Nonetype object at an important place"""
 
 
+class ZeroDivError(InterpreterError):
+    """Division by zero"""
+
+
 class Descriptor:
     """Used for describing a variable in a dictionary"""
 
@@ -102,17 +109,17 @@ class Interpreter:
         for i in range(len(dst)):
             if src[i]:
                 if dst[i].type == 'create_id':
-                    self._int_nd(STNode('assign', None, dst[i].parts[0], STNode('number', src[i])))
+                    self._int_nd(STNode('assign', None, -1, dst[i].parts[0], STNode('number', src[i], -1)))
                 elif dst[i].type == 'create_1darr':
                     dst[i].parts = [dst[i].parts[0]]
-                    dst[i].parts.extend([STNode('number', j) for j in src[i]])
+                    dst[i].parts.extend([STNode('number', j, -1) for j in src[i]])
                     del self.LDT[dst[i].parts[0].value]
                     self._int_nd(dst[i])
                     self.LDT[dst[i].parts[0].value].value.reverse()
                 elif dst[i].type == 'create_2darr':
                     dst[i].parts = [dst[i].parts[0]]
                     for j in src[i][::-1]:  # j -- inner lists
-                        dst[i].parts.extend([STNode('enum', [STNode('number', k) for k in j[::-1]])])
+                        dst[i].parts.extend([STNode('enum', [STNode('number', k, -1) for k in j[::-1]], -1)])
                     del self.LDT[dst[i].parts[0].value]
                     self._int_nd(dst[i])
                     # self.LDT[dst[i].parts[0].value].value.reverse()
@@ -142,17 +149,17 @@ class Interpreter:
         for i in range(len(dst)):
             if dst[i].type != 'empty_slot':
                 if dst[i].type == 'id':
-                    self._int_nd(STNode('assign', None, dst[i], STNode('number', src[i])))
+                    self._int_nd(STNode('assign', None, -1, dst[i], STNode('number', src[i], -1)))
                     # self.LDT[dst[i].value].value = src[i]
                 elif dst[i].type == 'index_1d':
-                    self._int_nd(STNode('assign', None, dst[i].parts[0], dst[i].parts[1], STNode('number', src[i])))
+                    self._int_nd(
+                        STNode('assign', None, -1, dst[i].parts[0], dst[i].parts[1], STNode('number', src[i], -1)))
                 elif dst[i].type == 'index_2d':
-                    self._int_nd(STNode('assign', None,
+                    self._int_nd(STNode('assign', None, -1,
                                         dst[i].parts[0],
                                         dst[i].parts[1],
                                         dst[i].parts[2],
-                                        STNode('number',
-                                               src[i])))
+                                        STNode('number', src[i], -1)))
 
     def _int_nd(self, node: STNode):
         if node is None:
@@ -181,8 +188,12 @@ class Interpreter:
                     return self._int_nd(node.parts[0]) \
                            * self._int_nd(node.parts[1])
                 elif node.value == '/':
-                    return self._int_nd(node.parts[0]) \
-                           // self._int_nd(node.parts[1])
+                    try:
+                        return self._int_nd(node.parts[0]) \
+                               // self._int_nd(node.parts[1])
+                    except ZeroDivisionError:
+                        self._errors.append(ZeroDivError(node.lineno))
+                        return self._int_nd(node.parts[0])
                 elif node.value == 'OR':
                     return self._int_nd(node.parts[0]) \
                            or self._int_nd(node.parts[1])
@@ -201,7 +212,7 @@ class Interpreter:
 
         elif node.type == 'id':
             if node.value not in self.LDT.keys():
-                self._errors.append(NotFoundError())
+                self._errors.append(NotFoundError(node.lineno))
                 return None  # TODO check1 NB!
             return self.LDT[node.value].value
 
@@ -218,14 +229,14 @@ class Interpreter:
 
             elif node.value == 'INC':
                 if node.parts[0].value not in self.LDT.keys():
-                    self._errors.append(NotFoundError())
+                    self._errors.append(NotFoundError(node.lineno))
                     return None
                 try:
                     if self.LDT[node.parts[0].value].type in ('CUINT', 'CBOOL'):
-                        self._errors.append(ConstIncrement())
+                        self._errors.append(ConstIncrement(node.lineno))
                         return self._int_nd(node.parts[0])
                     if self.LDT[node.parts[0].value].type == 'BOOL':
-                        self._errors.append(BoolIncrement())
+                        self._errors.append(BoolIncrement(node.lineno))
                         return self._int_nd(node.parts[0])
                     self.LDT[node.parts[0].value].value += 1
                     return self._int_nd(node.parts[0])
@@ -235,14 +246,14 @@ class Interpreter:
 
             elif node.value == 'DEC':
                 if node.parts[0].value not in self.LDT.keys():
-                    self._errors.append(NotFoundError())
+                    self._errors.append(NotFoundError(node.lineno))
                     return None
                 try:
                     if self.LDT[node.parts[0].value].type in ('CUINT', 'CBOOL'):
-                        self._errors.append(ConstDecrement())
+                        self._errors.append(ConstDecrement(node.lineno))
                         return self._int_nd(node.parts[0])
                     if self.LDT[node.parts[0].value].type == 'BOOL':
-                        self._errors.append(BoolDecrement())
+                        self._errors.append(BoolDecrement(node.lineno))
                         return self._int_nd(node.parts[0])
                     self.LDT[node.parts[0].value].value -= 1
                     return self._int_nd(node.parts[0])
@@ -256,7 +267,7 @@ class Interpreter:
 
         elif node.type == 'create_id':
             if node.parts[0].value in self.LDT.keys():
-                self._errors.append(RedeclarationError())
+                self._errors.append(RedeclarationError(node.lineno))
                 return None
             if node.value in ('UINT', 'CUINT'):
                 val = self._int_nd(node.parts[1])
@@ -265,7 +276,7 @@ class Interpreter:
                                                                val,
                                                                node.parts[0])
                 else:
-                    self._errors.append(NoneTypeError())
+                    self._errors.append(NoneTypeError(node.lineno))
                     return None
             elif node.value in ('BOOL', 'CBOOL'):
                 res = self._int_nd(node.parts[1])
@@ -274,7 +285,7 @@ class Interpreter:
                                                                res,
                                                                node.parts[0])
                 else:
-                    self._errors.append(BadBoolAssignment())
+                    self._errors.append(BadBoolAssignment(node.lineno))
                     self.LDT[node.parts[0].value] = Descriptor(node.value,
                                                                1,
                                                                node.parts[0])
@@ -282,17 +293,17 @@ class Interpreter:
 
         elif node.type == 'assign':  # TODO
             if node.parts[0].value not in self.LDT.keys():
-                self._errors.append(NotFoundError())
+                self._errors.append(NotFoundError(node.lineno))
                 return None
             if self.LDT[node.parts[0].value].type in ('CUINT', 'CBOOL'):
-                self._errors.append(ConstAssignment())
+                self._errors.append(ConstAssignment(node.lineno))
                 return None
             elif self.LDT[node.parts[0].value].type == 'BOOL':
                 res = self._int_nd(node.parts[1])
                 if res in (0, 1):
                     self.LDT[node.parts[0].value].value = res
                 else:
-                    self._errors.append(BadBoolAssignment())
+                    self._errors.append(BadBoolAssignment(node.lineno))
                     self.LDT[node.parts[0].value].value = 1
                     return None
                 return self.LDT[node.parts[0].value].value
@@ -301,7 +312,7 @@ class Interpreter:
                 if res is not None:
                     self.LDT[node.parts[0].value].value = res
                 else:
-                    self._errors.append(NoneTypeError())
+                    self._errors.append(NoneTypeError(node.lineno))
                     return None
                 return self.LDT[node.parts[0].value].value
             elif self.LDT[node.parts[0].value].type == '1DARRINT':
@@ -321,7 +332,7 @@ class Interpreter:
                     if (res in (0, 1)) and index is not None:
                         self.LDT[node.parts[0].value].value[index] = res
                     else:
-                        self._errors.append(BadBoolAssignment())
+                        self._errors.append(BadBoolAssignment(node.lineno))
                         self.LDT[node.parts[0].value].value[index] = 1
                         return None
                     return self.LDT[node.parts[0].value].value[index]
@@ -336,7 +347,7 @@ class Interpreter:
                     if val is not None:
                         self.LDT[node.parts[0].value].value[index1][index2] = val
                     else:
-                        self._errors.append(NoneTypeError())
+                        self._errors.append(NoneTypeError(node.lineno))
                         return None
                 except IndexError as ie:
                     self._errors.append(ie)
@@ -348,7 +359,7 @@ class Interpreter:
                 if val in (0, 1) and index1 is not None and index2 is not None:
                     self.LDT[node.parts[0].value].value[index1][index2] = val
                 else:
-                    self._errors.append(BadBoolAssignment())
+                    self._errors.append(BadBoolAssignment(node.lineno))
                     try:
                         self.LDT[node.parts[0].value].value[index1][index2] = 1
                     except (IndexError, TypeError) as e:  # TypeError or IndexError
@@ -372,7 +383,7 @@ class Interpreter:
 
         elif node.type == 'create_1darr':
             if node.parts[0].value in self.LDT.keys():
-                self._errors.append(RedeclarationError())
+                self._errors.append(RedeclarationError(node.lineno))
                 return None
             self.LDT[node.parts[0].value] = Descriptor(node.value, [], None)
             if node.value == '1DARRBOOL':
@@ -381,30 +392,28 @@ class Interpreter:
                     if res in (0, 1):
                         self.LDT[node.parts[0].value].value.append(res)
                     else:
-                        del self.LDT[node.parts[0].value]
-                        self._errors.append(BadBoolAssignment())
+                        self._errors.append(BadBoolAssignment(node.lineno))
                         self.LDT[node.parts[0].value].value.append(1)
-                        return None
             else:
                 self.LDT[node.parts[0].value].value = [self._int_nd(i) for i in node.parts[1:] if self._int_nd(i)]
             self.LDT[node.parts[0].value].value.reverse()
 
         elif node.type == 'index_1d':
             if node.parts[0].value not in self.LDT.keys():
-                self._errors.append(NotFoundError())
+                self._errors.append(NotFoundError(node.lineno))
                 return None
             if self.LDT[node.parts[0].value].type not in ('1DARRINT', '1DARRBOOL'):
-                self._errors.append(InvalidIndexingObject())
+                self._errors.append(InvalidIndexingObject(node.lineno))
             index = self._int_nd(node.parts[1])
             if index is not None:
                 return self.LDT[node.parts[0].value].value[index]
             else:
-                self._errors.append(NoneTypeError())
+                self._errors.append(NoneTypeError(node.lineno))
                 return None
 
         elif node.type == 'index_2d':
             if node.parts[0].value not in self.LDT.keys():
-                self._errors.append(NotFoundError())
+                self._errors.append(NotFoundError(node.lineno))
                 return None
             index1 = self._int_nd(node.parts[1])
             index2 = self._int_nd(node.parts[2])
@@ -416,18 +425,18 @@ class Interpreter:
                     self._errors.append(ie)
                     return None
             else:
-                self._errors.append(NoneTypeError())
+                self._errors.append(NoneTypeError(node.lineno))
                 return None
 
         elif node.type == 'size_1d':
             if node.parts[0].value not in self.LDT.keys():
-                self._errors.append(NotFoundError())
+                self._errors.append(NotFoundError(node.lineno))
                 return None
             return len(self.LDT[node.parts[0].value].value)
 
         elif node.type == 'size_2d':
             if node.parts[0].value not in self.LDT.keys():
-                self._errors.append(NotFoundError())
+                self._errors.append(NotFoundError(node.lineno))
                 return None
             index = self._int_nd(node.parts[1])
             if index is not None:
@@ -437,16 +446,16 @@ class Interpreter:
                     self._errors.append(ie)
                     return None
             else:
-                self._errors.append(NoneTypeError())
+                self._errors.append(NoneTypeError(node.lineno))
                 return None
 
         elif node.type == 'extend1':
             if node.parts[0].value not in self.LDT.keys():
-                self._errors.append(NotFoundError())
+                self._errors.append(NotFoundError(node.lineno))
                 return None
             if self.LDT[node.parts[0].value].type in ('1DARRINT', '1DARRBOOL'):
                 if self._int_nd(node.parts[1]) < 0 or self._int_nd(node.parts[1]) is None:
-                    self._errors.append(BadExtension())
+                    self._errors.append(BadExtension(node.lineno))
                     return None
                 extension = [0 for _ in range(self._int_nd(node.parts[1]))]
                 self.LDT[node.parts[0].value].value.extend(extension)
@@ -454,27 +463,28 @@ class Interpreter:
                 ext_ln = self._int_nd(node.parts[1])
                 int_ln = len(self.LDT[node.parts[0].value].value[-1])
                 if ext_ln < 0 or ext_ln is None:
-                    self._errors.append(BadExtension())
+                    self._errors.append(BadExtension(node.lineno))
                     return None
                 extension = [[0 for _ in range(int_ln)] for _ in range(ext_ln)]
                 self.LDT[node.parts[0].value].value.extend(extension)
             else:
-                self._errors.append(InvalidArrayOperator())
+                self._errors.append(InvalidArrayOperator(node.lineno))
                 return None
 
         elif node.type == 'create_2darr':
             if node.parts[0].value in self.LDT.keys():
-                self._errors.append(RedeclarationError())
+                self._errors.append(RedeclarationError(node.lineno))
                 return None
             self.LDT[node.parts[0].value] = Descriptor(node.value, [[]], None)
             if node.value == '2DARRBOOL':
                 for i in range(1, len(node.parts)):
                     for j in range(len(node.parts[i].value)):
                         if self._int_nd(node.parts[i].value[j]) not in (0, 1):
-                            self._errors.append(BadBoolAssignment())
-                            node.parts[i].value[j] = STNode('number', 1)
+                            self._errors.append(BadBoolAssignment(node.lineno))
+                            node.parts[i].value[j] = STNode('number', 1, -1)
             try:
-                self.LDT[node.parts[0].value].value = list(map(lambda x: list(map(self._int_nd, x.value)), node.parts[1:]))
+                self.LDT[node.parts[0].value].value = list(
+                    map(lambda x: list(map(self._int_nd, x.value)), node.parts[1:]))
             except TypeError as te:
                 self._errors.append(te)
                 return None
@@ -487,23 +497,23 @@ class Interpreter:
 
         elif node.type == 'extend2':
             if node.parts[0].value not in self.LDT.keys():
-                self._errors.append(NotFoundError())
+                self._errors.append(NotFoundError(node.lineno))
                 return None
             if self.LDT[node.parts[0].value].type in ('2DARRBOOL', '2DARRINT'):
                 index = self._int_nd(node.parts[1])
                 ext_ln = self._int_nd(node.parts[2])
                 if ext_ln < 0 or ext_ln is None:
-                    self._errors.append(BadExtension())
+                    self._errors.append(BadExtension(node.lineno))
                     return None
                 extension = [0 for _ in range(ext_ln)]
                 self.LDT[node.parts[0].value].value[index].extend(extension)
             else:
-                self._errors.append(InvalidArrayOperator())
+                self._errors.append(InvalidArrayOperator(node.lineno))
                 return None
 
         elif node.type == 'declare':
             if node.parts[0].value in self.LDT.keys():
-                self._errors.append(RedeclarationError())
+                self._errors.append(RedeclarationError(node.lineno))
                 return None
             node.parts[-1].value.reverse()
             node.parts[-2].value.reverse()
@@ -514,10 +524,10 @@ class Interpreter:
 
         elif node.type == 'call':
             if node.value.value not in self.LDT.keys():
-                self._errors.append(NotFoundError())
+                self._errors.append(NotFoundError(node.lineno))
                 return None
             if len(self.nmsp_stack) > 200:
-                self._errors.append(RecursionStackOverflow())
+                self._errors.append(RecursionStackOverflow(node.lineno))
                 return None
             fptr = self.LDT[node.value.value].link  # link to the function declaration
             node.parts[0].value.reverse()  # reverse the args' lists

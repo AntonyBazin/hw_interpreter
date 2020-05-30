@@ -70,8 +70,12 @@ class Parser:
             print('Illegal token {}\n'.format(s))
 
     def p_program(self, p):
-        """program : stmt_list"""
-        p[0] = STNode('program', None, p.lexer.lineno, p[1])
+        """program :
+                   | stmt_list"""
+        if len(p) == 2:
+            p[0] = STNode('program', None, p.lexer.lineno, p[1])
+        else:
+            p[0] = STNode('pass', None, p.lexer.lineno)
 
     def p_stmt_list(self, p):
         """stmt_list : statement
@@ -87,8 +91,7 @@ class Parser:
         print("Syntax error : {}\n".format(str(p[1])))
 
     def p_statement(self, p):
-        """statement :
-                     | expr
+        """statement : expr
                      | OPENST stmt_list CLOSEST
                      | create_id
                      | assign
@@ -162,6 +165,22 @@ class Parser:
     def p_expr_id(self, p):
         """expr : id"""
         p[0] = p[1]
+
+    # def p_expr_robot_oper(self, p):
+    #     """expr : FORW
+    #             | BACK
+    #             | LEFT
+    #             | RIGHT
+    #             | GETF
+    #             | GETR
+    #             | GETL
+    #             | GETB
+    #             | PUSHF
+    #             | PUSHB
+    #             | PUSHR
+    #             | PUSHL
+    #             | UNDO"""
+    #     p[0] = STNode('command', str(p[1]).lower, p.lexer.lineno)
 
     def p_create_1darr(self, p):
         """create_1darr : 1DARRBOOL id ASGN OPENIND enum CLOSEIND

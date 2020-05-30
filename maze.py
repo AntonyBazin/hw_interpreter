@@ -20,12 +20,26 @@ class Cell:
         return self.type
 
 
+class Robot:
+    """The robot"""
+
+    def __init__(self, x, y):
+        self.x = x
+        self.y = y
+
+    def __str__(self):
+        return 'robot at ({0}, {1})'.format(self.x, self.y)
+
+
 def read_map(name):
     if os.path.isfile(name):
         field = []
         path = []
         with open(name) as file:
-            for line in file:
+            lines = file.readlines()
+            x, y = (int(val) for val in lines[0].split())
+            robot = Robot(x, y)
+            for line in lines[1:]:
                 for symbol in line:
                     if symbol == 'O':
                         path.append(Cell('plain'))
@@ -35,14 +49,15 @@ def read_map(name):
                         path.append(Cell('wall'))
                 field.append(path)
                 path = []
-            return field
+            return field, robot
     else:
         raise FileNotFoundError
 
 
 if __name__ == '__main__':
-    f = read_map('testdata/map')
+    f, r = read_map('testdata/map')
     for i in f:
         for j in i:
             print(j)
         print()
+    print(r)

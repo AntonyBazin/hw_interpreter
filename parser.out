@@ -10,12 +10,10 @@ Unused terminals:
     GETL
     GETR
     LEFT
-    NL
     PUSHB
     PUSHF
     PUSHL
     PUSHR
-    RET
     RIGHT
     TRUE
     UNDO
@@ -23,11 +21,11 @@ Unused terminals:
 Grammar
 
 Rule 0     S' -> program
-Rule 1     program -> stmt_list
-Rule 2     stmt_list -> statement
-Rule 3     stmt_list -> stmt_list statement
-Rule 4     statement -> error
-Rule 5     statement -> <empty>
+Rule 1     program -> <empty>
+Rule 2     program -> stmt_list
+Rule 3     stmt_list -> statement
+Rule 4     stmt_list -> stmt_list statement
+Rule 5     statement -> error
 Rule 6     statement -> expr
 Rule 7     statement -> OPENST stmt_list CLOSEST
 Rule 8     statement -> create_id
@@ -148,7 +146,6 @@ LEFT                 :
 LT                   : 29
 MINUS                : 19 24
 MUL                  : 25
-NL                   : 
 NOT                  : 20
 NUM                  : 36
 OPENBR               : 16 17 18 31 32 33 33 41 41 48 59 63 64 65 65 66 66 71 72 73 73 74 74 84 85
@@ -160,7 +157,6 @@ PUSHB                :
 PUSHF                : 
 PUSHL                : 
 PUSHR                : 
-RET                  : 
 RIGHT                : 
 SZ1                  : 34
 SZ2                  : 35
@@ -168,7 +164,7 @@ TRUE                 :
 UINT                 : 79
 UNDO                 : 
 WHILE                : 16
-error                : 4
+error                : 5
 
 Nonterminals, with rules where they appear
 
@@ -191,19 +187,19 @@ extend2              : 13
 id                   : 21 22 32 33 34 35 37 38 39 40 41 42 43 48 59 60 62 63 64 65 66 68 70 71 72 73 74 79 80 81 82 83 84 85
 opt_enum_ids         : 48
 program              : 0
-statement            : 2 3 16 17 18 18
-stmt_list            : 1 3 7 48
+statement            : 3 4 16 17 18 18
+stmt_list            : 2 4 7 48
 
 Parsing method: LALR
 
 state 0
 
     (0) S' -> . program
-    (1) program -> . stmt_list
-    (2) stmt_list -> . statement
-    (3) stmt_list -> . stmt_list statement
-    (4) statement -> . error
-    (5) statement -> .
+    (1) program -> .
+    (2) program -> . stmt_list
+    (3) stmt_list -> . statement
+    (4) stmt_list -> . stmt_list statement
+    (5) statement -> . error
     (6) statement -> . expr
     (7) statement -> . OPENST stmt_list CLOSEST
     (8) statement -> . create_id
@@ -253,32 +249,8 @@ state 0
     (59) call -> . OPENIND enum_id CLOSEIND ASGN id OPENBR enum_par CLOSEBR
     (86) id -> . ID
 
-  ! shift/reduce conflict for error resolved as shift
-  ! shift/reduce conflict for OPENST resolved as shift
-  ! shift/reduce conflict for WHILE resolved as shift
-  ! shift/reduce conflict for IF resolved as shift
-  ! shift/reduce conflict for MINUS resolved as shift
-  ! shift/reduce conflict for NOT resolved as shift
-  ! shift/reduce conflict for INC resolved as shift
-  ! shift/reduce conflict for DEC resolved as shift
-  ! shift/reduce conflict for OPENBR resolved as shift
-  ! shift/reduce conflict for SZ1 resolved as shift
-  ! shift/reduce conflict for SZ2 resolved as shift
-  ! shift/reduce conflict for NUM resolved as shift
-  ! shift/reduce conflict for UINT resolved as shift
-  ! shift/reduce conflict for CUINT resolved as shift
-  ! shift/reduce conflict for BOOL resolved as shift
-  ! shift/reduce conflict for CBOOL resolved as shift
-  ! shift/reduce conflict for 1DARRBOOL resolved as shift
-  ! shift/reduce conflict for 1DARRINT resolved as shift
-  ! shift/reduce conflict for 2DARRBOOL resolved as shift
-  ! shift/reduce conflict for 2DARRINT resolved as shift
-  ! shift/reduce conflict for EXTEND1 resolved as shift
-  ! shift/reduce conflict for EXTEND2 resolved as shift
-  ! shift/reduce conflict for OPENIND resolved as shift
-  ! shift/reduce conflict for ID resolved as shift
+    $end            reduce using rule 1 (program -> .)
     error           shift and go to state 4
-    $end            reduce using rule 5 (statement -> .)
     OPENST          shift and go to state 6
     WHILE           shift and go to state 15
     IF              shift and go to state 17
@@ -302,31 +274,6 @@ state 0
     EXTEND2         shift and go to state 36
     OPENIND         shift and go to state 31
     ID              shift and go to state 37
-
-  ! error           [ reduce using rule 5 (statement -> .) ]
-  ! OPENST          [ reduce using rule 5 (statement -> .) ]
-  ! WHILE           [ reduce using rule 5 (statement -> .) ]
-  ! IF              [ reduce using rule 5 (statement -> .) ]
-  ! MINUS           [ reduce using rule 5 (statement -> .) ]
-  ! NOT             [ reduce using rule 5 (statement -> .) ]
-  ! INC             [ reduce using rule 5 (statement -> .) ]
-  ! DEC             [ reduce using rule 5 (statement -> .) ]
-  ! OPENBR          [ reduce using rule 5 (statement -> .) ]
-  ! SZ1             [ reduce using rule 5 (statement -> .) ]
-  ! SZ2             [ reduce using rule 5 (statement -> .) ]
-  ! NUM             [ reduce using rule 5 (statement -> .) ]
-  ! UINT            [ reduce using rule 5 (statement -> .) ]
-  ! CUINT           [ reduce using rule 5 (statement -> .) ]
-  ! BOOL            [ reduce using rule 5 (statement -> .) ]
-  ! CBOOL           [ reduce using rule 5 (statement -> .) ]
-  ! 1DARRBOOL       [ reduce using rule 5 (statement -> .) ]
-  ! 1DARRINT        [ reduce using rule 5 (statement -> .) ]
-  ! 2DARRBOOL       [ reduce using rule 5 (statement -> .) ]
-  ! 2DARRINT        [ reduce using rule 5 (statement -> .) ]
-  ! EXTEND1         [ reduce using rule 5 (statement -> .) ]
-  ! EXTEND2         [ reduce using rule 5 (statement -> .) ]
-  ! OPENIND         [ reduce using rule 5 (statement -> .) ]
-  ! ID              [ reduce using rule 5 (statement -> .) ]
 
     program                        shift and go to state 1
     stmt_list                      shift and go to state 2
@@ -350,10 +297,9 @@ state 1
 
 state 2
 
-    (1) program -> stmt_list .
-    (3) stmt_list -> stmt_list . statement
-    (4) statement -> . error
-    (5) statement -> .
+    (2) program -> stmt_list .
+    (4) stmt_list -> stmt_list . statement
+    (5) statement -> . error
     (6) statement -> . expr
     (7) statement -> . OPENST stmt_list CLOSEST
     (8) statement -> . create_id
@@ -403,32 +349,7 @@ state 2
     (59) call -> . OPENIND enum_id CLOSEIND ASGN id OPENBR enum_par CLOSEBR
     (86) id -> . ID
 
-  ! shift/reduce conflict for error resolved as shift
-  ! reduce/reduce conflict for $end resolved using rule 1 (program -> stmt_list .)
-  ! shift/reduce conflict for OPENST resolved as shift
-  ! shift/reduce conflict for WHILE resolved as shift
-  ! shift/reduce conflict for IF resolved as shift
-  ! shift/reduce conflict for MINUS resolved as shift
-  ! shift/reduce conflict for NOT resolved as shift
-  ! shift/reduce conflict for INC resolved as shift
-  ! shift/reduce conflict for DEC resolved as shift
-  ! shift/reduce conflict for OPENBR resolved as shift
-  ! shift/reduce conflict for SZ1 resolved as shift
-  ! shift/reduce conflict for SZ2 resolved as shift
-  ! shift/reduce conflict for NUM resolved as shift
-  ! shift/reduce conflict for UINT resolved as shift
-  ! shift/reduce conflict for CUINT resolved as shift
-  ! shift/reduce conflict for BOOL resolved as shift
-  ! shift/reduce conflict for CBOOL resolved as shift
-  ! shift/reduce conflict for 1DARRBOOL resolved as shift
-  ! shift/reduce conflict for 1DARRINT resolved as shift
-  ! shift/reduce conflict for 2DARRBOOL resolved as shift
-  ! shift/reduce conflict for 2DARRINT resolved as shift
-  ! shift/reduce conflict for EXTEND1 resolved as shift
-  ! shift/reduce conflict for EXTEND2 resolved as shift
-  ! shift/reduce conflict for OPENIND resolved as shift
-  ! shift/reduce conflict for ID resolved as shift
-    $end            reduce using rule 1 (program -> stmt_list .)
+    $end            reduce using rule 2 (program -> stmt_list .)
     error           shift and go to state 4
     OPENST          shift and go to state 6
     WHILE           shift and go to state 15
@@ -454,32 +375,6 @@ state 2
     OPENIND         shift and go to state 31
     ID              shift and go to state 37
 
-  ! error           [ reduce using rule 5 (statement -> .) ]
-  ! OPENST          [ reduce using rule 5 (statement -> .) ]
-  ! WHILE           [ reduce using rule 5 (statement -> .) ]
-  ! IF              [ reduce using rule 5 (statement -> .) ]
-  ! MINUS           [ reduce using rule 5 (statement -> .) ]
-  ! NOT             [ reduce using rule 5 (statement -> .) ]
-  ! INC             [ reduce using rule 5 (statement -> .) ]
-  ! DEC             [ reduce using rule 5 (statement -> .) ]
-  ! OPENBR          [ reduce using rule 5 (statement -> .) ]
-  ! SZ1             [ reduce using rule 5 (statement -> .) ]
-  ! SZ2             [ reduce using rule 5 (statement -> .) ]
-  ! NUM             [ reduce using rule 5 (statement -> .) ]
-  ! UINT            [ reduce using rule 5 (statement -> .) ]
-  ! CUINT           [ reduce using rule 5 (statement -> .) ]
-  ! BOOL            [ reduce using rule 5 (statement -> .) ]
-  ! CBOOL           [ reduce using rule 5 (statement -> .) ]
-  ! 1DARRBOOL       [ reduce using rule 5 (statement -> .) ]
-  ! 1DARRINT        [ reduce using rule 5 (statement -> .) ]
-  ! 2DARRBOOL       [ reduce using rule 5 (statement -> .) ]
-  ! 2DARRINT        [ reduce using rule 5 (statement -> .) ]
-  ! EXTEND1         [ reduce using rule 5 (statement -> .) ]
-  ! EXTEND2         [ reduce using rule 5 (statement -> .) ]
-  ! OPENIND         [ reduce using rule 5 (statement -> .) ]
-  ! ID              [ reduce using rule 5 (statement -> .) ]
-  ! $end            [ reduce using rule 5 (statement -> .) ]
-
     statement                      shift and go to state 38
     expr                           shift and go to state 5
     create_id                      shift and go to state 7
@@ -494,67 +389,67 @@ state 2
 
 state 3
 
-    (2) stmt_list -> statement .
+    (3) stmt_list -> statement .
 
-    error           reduce using rule 2 (stmt_list -> statement .)
-    OPENST          reduce using rule 2 (stmt_list -> statement .)
-    WHILE           reduce using rule 2 (stmt_list -> statement .)
-    IF              reduce using rule 2 (stmt_list -> statement .)
-    MINUS           reduce using rule 2 (stmt_list -> statement .)
-    NOT             reduce using rule 2 (stmt_list -> statement .)
-    INC             reduce using rule 2 (stmt_list -> statement .)
-    DEC             reduce using rule 2 (stmt_list -> statement .)
-    OPENBR          reduce using rule 2 (stmt_list -> statement .)
-    SZ1             reduce using rule 2 (stmt_list -> statement .)
-    SZ2             reduce using rule 2 (stmt_list -> statement .)
-    NUM             reduce using rule 2 (stmt_list -> statement .)
-    UINT            reduce using rule 2 (stmt_list -> statement .)
-    CUINT           reduce using rule 2 (stmt_list -> statement .)
-    BOOL            reduce using rule 2 (stmt_list -> statement .)
-    CBOOL           reduce using rule 2 (stmt_list -> statement .)
-    1DARRBOOL       reduce using rule 2 (stmt_list -> statement .)
-    1DARRINT        reduce using rule 2 (stmt_list -> statement .)
-    2DARRBOOL       reduce using rule 2 (stmt_list -> statement .)
-    2DARRINT        reduce using rule 2 (stmt_list -> statement .)
-    EXTEND1         reduce using rule 2 (stmt_list -> statement .)
-    EXTEND2         reduce using rule 2 (stmt_list -> statement .)
-    OPENIND         reduce using rule 2 (stmt_list -> statement .)
-    ID              reduce using rule 2 (stmt_list -> statement .)
-    $end            reduce using rule 2 (stmt_list -> statement .)
-    CLOSEST         reduce using rule 2 (stmt_list -> statement .)
+    error           reduce using rule 3 (stmt_list -> statement .)
+    OPENST          reduce using rule 3 (stmt_list -> statement .)
+    WHILE           reduce using rule 3 (stmt_list -> statement .)
+    IF              reduce using rule 3 (stmt_list -> statement .)
+    MINUS           reduce using rule 3 (stmt_list -> statement .)
+    NOT             reduce using rule 3 (stmt_list -> statement .)
+    INC             reduce using rule 3 (stmt_list -> statement .)
+    DEC             reduce using rule 3 (stmt_list -> statement .)
+    OPENBR          reduce using rule 3 (stmt_list -> statement .)
+    SZ1             reduce using rule 3 (stmt_list -> statement .)
+    SZ2             reduce using rule 3 (stmt_list -> statement .)
+    NUM             reduce using rule 3 (stmt_list -> statement .)
+    UINT            reduce using rule 3 (stmt_list -> statement .)
+    CUINT           reduce using rule 3 (stmt_list -> statement .)
+    BOOL            reduce using rule 3 (stmt_list -> statement .)
+    CBOOL           reduce using rule 3 (stmt_list -> statement .)
+    1DARRBOOL       reduce using rule 3 (stmt_list -> statement .)
+    1DARRINT        reduce using rule 3 (stmt_list -> statement .)
+    2DARRBOOL       reduce using rule 3 (stmt_list -> statement .)
+    2DARRINT        reduce using rule 3 (stmt_list -> statement .)
+    EXTEND1         reduce using rule 3 (stmt_list -> statement .)
+    EXTEND2         reduce using rule 3 (stmt_list -> statement .)
+    OPENIND         reduce using rule 3 (stmt_list -> statement .)
+    ID              reduce using rule 3 (stmt_list -> statement .)
+    $end            reduce using rule 3 (stmt_list -> statement .)
+    CLOSEST         reduce using rule 3 (stmt_list -> statement .)
 
 
 state 4
 
-    (4) statement -> error .
+    (5) statement -> error .
 
-    error           reduce using rule 4 (statement -> error .)
-    OPENST          reduce using rule 4 (statement -> error .)
-    WHILE           reduce using rule 4 (statement -> error .)
-    IF              reduce using rule 4 (statement -> error .)
-    MINUS           reduce using rule 4 (statement -> error .)
-    NOT             reduce using rule 4 (statement -> error .)
-    INC             reduce using rule 4 (statement -> error .)
-    DEC             reduce using rule 4 (statement -> error .)
-    OPENBR          reduce using rule 4 (statement -> error .)
-    SZ1             reduce using rule 4 (statement -> error .)
-    SZ2             reduce using rule 4 (statement -> error .)
-    NUM             reduce using rule 4 (statement -> error .)
-    UINT            reduce using rule 4 (statement -> error .)
-    CUINT           reduce using rule 4 (statement -> error .)
-    BOOL            reduce using rule 4 (statement -> error .)
-    CBOOL           reduce using rule 4 (statement -> error .)
-    1DARRBOOL       reduce using rule 4 (statement -> error .)
-    1DARRINT        reduce using rule 4 (statement -> error .)
-    2DARRBOOL       reduce using rule 4 (statement -> error .)
-    2DARRINT        reduce using rule 4 (statement -> error .)
-    EXTEND1         reduce using rule 4 (statement -> error .)
-    EXTEND2         reduce using rule 4 (statement -> error .)
-    OPENIND         reduce using rule 4 (statement -> error .)
-    ID              reduce using rule 4 (statement -> error .)
-    $end            reduce using rule 4 (statement -> error .)
-    CLOSEST         reduce using rule 4 (statement -> error .)
-    ELSE            reduce using rule 4 (statement -> error .)
+    error           reduce using rule 5 (statement -> error .)
+    OPENST          reduce using rule 5 (statement -> error .)
+    WHILE           reduce using rule 5 (statement -> error .)
+    IF              reduce using rule 5 (statement -> error .)
+    MINUS           reduce using rule 5 (statement -> error .)
+    NOT             reduce using rule 5 (statement -> error .)
+    INC             reduce using rule 5 (statement -> error .)
+    DEC             reduce using rule 5 (statement -> error .)
+    OPENBR          reduce using rule 5 (statement -> error .)
+    SZ1             reduce using rule 5 (statement -> error .)
+    SZ2             reduce using rule 5 (statement -> error .)
+    NUM             reduce using rule 5 (statement -> error .)
+    UINT            reduce using rule 5 (statement -> error .)
+    CUINT           reduce using rule 5 (statement -> error .)
+    BOOL            reduce using rule 5 (statement -> error .)
+    CBOOL           reduce using rule 5 (statement -> error .)
+    1DARRBOOL       reduce using rule 5 (statement -> error .)
+    1DARRINT        reduce using rule 5 (statement -> error .)
+    2DARRBOOL       reduce using rule 5 (statement -> error .)
+    2DARRINT        reduce using rule 5 (statement -> error .)
+    EXTEND1         reduce using rule 5 (statement -> error .)
+    EXTEND2         reduce using rule 5 (statement -> error .)
+    OPENIND         reduce using rule 5 (statement -> error .)
+    ID              reduce using rule 5 (statement -> error .)
+    $end            reduce using rule 5 (statement -> error .)
+    CLOSEST         reduce using rule 5 (statement -> error .)
+    ELSE            reduce using rule 5 (statement -> error .)
 
 
 state 5
@@ -611,10 +506,9 @@ state 5
 state 6
 
     (7) statement -> OPENST . stmt_list CLOSEST
-    (2) stmt_list -> . statement
-    (3) stmt_list -> . stmt_list statement
-    (4) statement -> . error
-    (5) statement -> .
+    (3) stmt_list -> . statement
+    (4) stmt_list -> . stmt_list statement
+    (5) statement -> . error
     (6) statement -> . expr
     (7) statement -> . OPENST stmt_list CLOSEST
     (8) statement -> . create_id
@@ -664,32 +558,7 @@ state 6
     (59) call -> . OPENIND enum_id CLOSEIND ASGN id OPENBR enum_par CLOSEBR
     (86) id -> . ID
 
-  ! shift/reduce conflict for error resolved as shift
-  ! shift/reduce conflict for OPENST resolved as shift
-  ! shift/reduce conflict for WHILE resolved as shift
-  ! shift/reduce conflict for IF resolved as shift
-  ! shift/reduce conflict for MINUS resolved as shift
-  ! shift/reduce conflict for NOT resolved as shift
-  ! shift/reduce conflict for INC resolved as shift
-  ! shift/reduce conflict for DEC resolved as shift
-  ! shift/reduce conflict for OPENBR resolved as shift
-  ! shift/reduce conflict for SZ1 resolved as shift
-  ! shift/reduce conflict for SZ2 resolved as shift
-  ! shift/reduce conflict for NUM resolved as shift
-  ! shift/reduce conflict for UINT resolved as shift
-  ! shift/reduce conflict for CUINT resolved as shift
-  ! shift/reduce conflict for BOOL resolved as shift
-  ! shift/reduce conflict for CBOOL resolved as shift
-  ! shift/reduce conflict for 1DARRBOOL resolved as shift
-  ! shift/reduce conflict for 1DARRINT resolved as shift
-  ! shift/reduce conflict for 2DARRBOOL resolved as shift
-  ! shift/reduce conflict for 2DARRINT resolved as shift
-  ! shift/reduce conflict for EXTEND1 resolved as shift
-  ! shift/reduce conflict for EXTEND2 resolved as shift
-  ! shift/reduce conflict for OPENIND resolved as shift
-  ! shift/reduce conflict for ID resolved as shift
     error           shift and go to state 4
-    CLOSEST         reduce using rule 5 (statement -> .)
     OPENST          shift and go to state 6
     WHILE           shift and go to state 15
     IF              shift and go to state 17
@@ -713,31 +582,6 @@ state 6
     EXTEND2         shift and go to state 36
     OPENIND         shift and go to state 31
     ID              shift and go to state 37
-
-  ! error           [ reduce using rule 5 (statement -> .) ]
-  ! OPENST          [ reduce using rule 5 (statement -> .) ]
-  ! WHILE           [ reduce using rule 5 (statement -> .) ]
-  ! IF              [ reduce using rule 5 (statement -> .) ]
-  ! MINUS           [ reduce using rule 5 (statement -> .) ]
-  ! NOT             [ reduce using rule 5 (statement -> .) ]
-  ! INC             [ reduce using rule 5 (statement -> .) ]
-  ! DEC             [ reduce using rule 5 (statement -> .) ]
-  ! OPENBR          [ reduce using rule 5 (statement -> .) ]
-  ! SZ1             [ reduce using rule 5 (statement -> .) ]
-  ! SZ2             [ reduce using rule 5 (statement -> .) ]
-  ! NUM             [ reduce using rule 5 (statement -> .) ]
-  ! UINT            [ reduce using rule 5 (statement -> .) ]
-  ! CUINT           [ reduce using rule 5 (statement -> .) ]
-  ! BOOL            [ reduce using rule 5 (statement -> .) ]
-  ! CBOOL           [ reduce using rule 5 (statement -> .) ]
-  ! 1DARRBOOL       [ reduce using rule 5 (statement -> .) ]
-  ! 1DARRINT        [ reduce using rule 5 (statement -> .) ]
-  ! 2DARRBOOL       [ reduce using rule 5 (statement -> .) ]
-  ! 2DARRINT        [ reduce using rule 5 (statement -> .) ]
-  ! EXTEND1         [ reduce using rule 5 (statement -> .) ]
-  ! EXTEND2         [ reduce using rule 5 (statement -> .) ]
-  ! OPENIND         [ reduce using rule 5 (statement -> .) ]
-  ! ID              [ reduce using rule 5 (statement -> .) ]
 
     stmt_list                      shift and go to state 47
     statement                      shift and go to state 3
@@ -1439,34 +1283,34 @@ state 37
 
 state 38
 
-    (3) stmt_list -> stmt_list statement .
+    (4) stmt_list -> stmt_list statement .
 
-    error           reduce using rule 3 (stmt_list -> stmt_list statement .)
-    OPENST          reduce using rule 3 (stmt_list -> stmt_list statement .)
-    WHILE           reduce using rule 3 (stmt_list -> stmt_list statement .)
-    IF              reduce using rule 3 (stmt_list -> stmt_list statement .)
-    MINUS           reduce using rule 3 (stmt_list -> stmt_list statement .)
-    NOT             reduce using rule 3 (stmt_list -> stmt_list statement .)
-    INC             reduce using rule 3 (stmt_list -> stmt_list statement .)
-    DEC             reduce using rule 3 (stmt_list -> stmt_list statement .)
-    OPENBR          reduce using rule 3 (stmt_list -> stmt_list statement .)
-    SZ1             reduce using rule 3 (stmt_list -> stmt_list statement .)
-    SZ2             reduce using rule 3 (stmt_list -> stmt_list statement .)
-    NUM             reduce using rule 3 (stmt_list -> stmt_list statement .)
-    UINT            reduce using rule 3 (stmt_list -> stmt_list statement .)
-    CUINT           reduce using rule 3 (stmt_list -> stmt_list statement .)
-    BOOL            reduce using rule 3 (stmt_list -> stmt_list statement .)
-    CBOOL           reduce using rule 3 (stmt_list -> stmt_list statement .)
-    1DARRBOOL       reduce using rule 3 (stmt_list -> stmt_list statement .)
-    1DARRINT        reduce using rule 3 (stmt_list -> stmt_list statement .)
-    2DARRBOOL       reduce using rule 3 (stmt_list -> stmt_list statement .)
-    2DARRINT        reduce using rule 3 (stmt_list -> stmt_list statement .)
-    EXTEND1         reduce using rule 3 (stmt_list -> stmt_list statement .)
-    EXTEND2         reduce using rule 3 (stmt_list -> stmt_list statement .)
-    OPENIND         reduce using rule 3 (stmt_list -> stmt_list statement .)
-    ID              reduce using rule 3 (stmt_list -> stmt_list statement .)
-    $end            reduce using rule 3 (stmt_list -> stmt_list statement .)
-    CLOSEST         reduce using rule 3 (stmt_list -> stmt_list statement .)
+    error           reduce using rule 4 (stmt_list -> stmt_list statement .)
+    OPENST          reduce using rule 4 (stmt_list -> stmt_list statement .)
+    WHILE           reduce using rule 4 (stmt_list -> stmt_list statement .)
+    IF              reduce using rule 4 (stmt_list -> stmt_list statement .)
+    MINUS           reduce using rule 4 (stmt_list -> stmt_list statement .)
+    NOT             reduce using rule 4 (stmt_list -> stmt_list statement .)
+    INC             reduce using rule 4 (stmt_list -> stmt_list statement .)
+    DEC             reduce using rule 4 (stmt_list -> stmt_list statement .)
+    OPENBR          reduce using rule 4 (stmt_list -> stmt_list statement .)
+    SZ1             reduce using rule 4 (stmt_list -> stmt_list statement .)
+    SZ2             reduce using rule 4 (stmt_list -> stmt_list statement .)
+    NUM             reduce using rule 4 (stmt_list -> stmt_list statement .)
+    UINT            reduce using rule 4 (stmt_list -> stmt_list statement .)
+    CUINT           reduce using rule 4 (stmt_list -> stmt_list statement .)
+    BOOL            reduce using rule 4 (stmt_list -> stmt_list statement .)
+    CBOOL           reduce using rule 4 (stmt_list -> stmt_list statement .)
+    1DARRBOOL       reduce using rule 4 (stmt_list -> stmt_list statement .)
+    1DARRINT        reduce using rule 4 (stmt_list -> stmt_list statement .)
+    2DARRBOOL       reduce using rule 4 (stmt_list -> stmt_list statement .)
+    2DARRINT        reduce using rule 4 (stmt_list -> stmt_list statement .)
+    EXTEND1         reduce using rule 4 (stmt_list -> stmt_list statement .)
+    EXTEND2         reduce using rule 4 (stmt_list -> stmt_list statement .)
+    OPENIND         reduce using rule 4 (stmt_list -> stmt_list statement .)
+    ID              reduce using rule 4 (stmt_list -> stmt_list statement .)
+    $end            reduce using rule 4 (stmt_list -> stmt_list statement .)
+    CLOSEST         reduce using rule 4 (stmt_list -> stmt_list statement .)
 
 
 state 39
@@ -1768,9 +1612,8 @@ state 46
 state 47
 
     (7) statement -> OPENST stmt_list . CLOSEST
-    (3) stmt_list -> stmt_list . statement
-    (4) statement -> . error
-    (5) statement -> .
+    (4) stmt_list -> stmt_list . statement
+    (5) statement -> . error
     (6) statement -> . expr
     (7) statement -> . OPENST stmt_list CLOSEST
     (8) statement -> . create_id
@@ -1820,31 +1663,6 @@ state 47
     (59) call -> . OPENIND enum_id CLOSEIND ASGN id OPENBR enum_par CLOSEBR
     (86) id -> . ID
 
-  ! shift/reduce conflict for CLOSEST resolved as shift
-  ! shift/reduce conflict for error resolved as shift
-  ! shift/reduce conflict for OPENST resolved as shift
-  ! shift/reduce conflict for WHILE resolved as shift
-  ! shift/reduce conflict for IF resolved as shift
-  ! shift/reduce conflict for MINUS resolved as shift
-  ! shift/reduce conflict for NOT resolved as shift
-  ! shift/reduce conflict for INC resolved as shift
-  ! shift/reduce conflict for DEC resolved as shift
-  ! shift/reduce conflict for OPENBR resolved as shift
-  ! shift/reduce conflict for SZ1 resolved as shift
-  ! shift/reduce conflict for SZ2 resolved as shift
-  ! shift/reduce conflict for NUM resolved as shift
-  ! shift/reduce conflict for UINT resolved as shift
-  ! shift/reduce conflict for CUINT resolved as shift
-  ! shift/reduce conflict for BOOL resolved as shift
-  ! shift/reduce conflict for CBOOL resolved as shift
-  ! shift/reduce conflict for 1DARRBOOL resolved as shift
-  ! shift/reduce conflict for 1DARRINT resolved as shift
-  ! shift/reduce conflict for 2DARRBOOL resolved as shift
-  ! shift/reduce conflict for 2DARRINT resolved as shift
-  ! shift/reduce conflict for EXTEND1 resolved as shift
-  ! shift/reduce conflict for EXTEND2 resolved as shift
-  ! shift/reduce conflict for OPENIND resolved as shift
-  ! shift/reduce conflict for ID resolved as shift
     CLOSEST         shift and go to state 83
     error           shift and go to state 4
     OPENST          shift and go to state 6
@@ -1870,32 +1688,6 @@ state 47
     EXTEND2         shift and go to state 36
     OPENIND         shift and go to state 31
     ID              shift and go to state 37
-
-  ! CLOSEST         [ reduce using rule 5 (statement -> .) ]
-  ! error           [ reduce using rule 5 (statement -> .) ]
-  ! OPENST          [ reduce using rule 5 (statement -> .) ]
-  ! WHILE           [ reduce using rule 5 (statement -> .) ]
-  ! IF              [ reduce using rule 5 (statement -> .) ]
-  ! MINUS           [ reduce using rule 5 (statement -> .) ]
-  ! NOT             [ reduce using rule 5 (statement -> .) ]
-  ! INC             [ reduce using rule 5 (statement -> .) ]
-  ! DEC             [ reduce using rule 5 (statement -> .) ]
-  ! OPENBR          [ reduce using rule 5 (statement -> .) ]
-  ! SZ1             [ reduce using rule 5 (statement -> .) ]
-  ! SZ2             [ reduce using rule 5 (statement -> .) ]
-  ! NUM             [ reduce using rule 5 (statement -> .) ]
-  ! UINT            [ reduce using rule 5 (statement -> .) ]
-  ! CUINT           [ reduce using rule 5 (statement -> .) ]
-  ! BOOL            [ reduce using rule 5 (statement -> .) ]
-  ! CBOOL           [ reduce using rule 5 (statement -> .) ]
-  ! 1DARRBOOL       [ reduce using rule 5 (statement -> .) ]
-  ! 1DARRINT        [ reduce using rule 5 (statement -> .) ]
-  ! 2DARRBOOL       [ reduce using rule 5 (statement -> .) ]
-  ! 2DARRINT        [ reduce using rule 5 (statement -> .) ]
-  ! EXTEND1         [ reduce using rule 5 (statement -> .) ]
-  ! EXTEND2         [ reduce using rule 5 (statement -> .) ]
-  ! OPENIND         [ reduce using rule 5 (statement -> .) ]
-  ! ID              [ reduce using rule 5 (statement -> .) ]
 
     statement                      shift and go to state 38
     expr                           shift and go to state 5
@@ -3786,8 +3578,7 @@ state 109
 
     (17) statement -> IF OPENBR expr CLOSEBR . statement
     (18) statement -> IF OPENBR expr CLOSEBR . statement ELSE statement
-    (4) statement -> . error
-    (5) statement -> .
+    (5) statement -> . error
     (6) statement -> . expr
     (7) statement -> . OPENST stmt_list CLOSEST
     (8) statement -> . create_id
@@ -3837,34 +3628,7 @@ state 109
     (59) call -> . OPENIND enum_id CLOSEIND ASGN id OPENBR enum_par CLOSEBR
     (86) id -> . ID
 
-  ! shift/reduce conflict for error resolved as shift
-  ! shift/reduce conflict for OPENST resolved as shift
-  ! shift/reduce conflict for WHILE resolved as shift
-  ! shift/reduce conflict for IF resolved as shift
-  ! shift/reduce conflict for MINUS resolved as shift
-  ! shift/reduce conflict for NOT resolved as shift
-  ! shift/reduce conflict for INC resolved as shift
-  ! shift/reduce conflict for DEC resolved as shift
-  ! shift/reduce conflict for OPENBR resolved as shift
-  ! shift/reduce conflict for SZ1 resolved as shift
-  ! shift/reduce conflict for SZ2 resolved as shift
-  ! shift/reduce conflict for NUM resolved as shift
-  ! shift/reduce conflict for UINT resolved as shift
-  ! shift/reduce conflict for CUINT resolved as shift
-  ! shift/reduce conflict for BOOL resolved as shift
-  ! shift/reduce conflict for CBOOL resolved as shift
-  ! shift/reduce conflict for 1DARRBOOL resolved as shift
-  ! shift/reduce conflict for 1DARRINT resolved as shift
-  ! shift/reduce conflict for 2DARRBOOL resolved as shift
-  ! shift/reduce conflict for 2DARRINT resolved as shift
-  ! shift/reduce conflict for EXTEND1 resolved as shift
-  ! shift/reduce conflict for EXTEND2 resolved as shift
-  ! shift/reduce conflict for OPENIND resolved as shift
-  ! shift/reduce conflict for ID resolved as shift
     error           shift and go to state 4
-    ELSE            reduce using rule 5 (statement -> .)
-    $end            reduce using rule 5 (statement -> .)
-    CLOSEST         reduce using rule 5 (statement -> .)
     OPENST          shift and go to state 6
     WHILE           shift and go to state 15
     IF              shift and go to state 17
@@ -3888,31 +3652,6 @@ state 109
     EXTEND2         shift and go to state 36
     OPENIND         shift and go to state 31
     ID              shift and go to state 37
-
-  ! error           [ reduce using rule 5 (statement -> .) ]
-  ! OPENST          [ reduce using rule 5 (statement -> .) ]
-  ! WHILE           [ reduce using rule 5 (statement -> .) ]
-  ! IF              [ reduce using rule 5 (statement -> .) ]
-  ! MINUS           [ reduce using rule 5 (statement -> .) ]
-  ! NOT             [ reduce using rule 5 (statement -> .) ]
-  ! INC             [ reduce using rule 5 (statement -> .) ]
-  ! DEC             [ reduce using rule 5 (statement -> .) ]
-  ! OPENBR          [ reduce using rule 5 (statement -> .) ]
-  ! SZ1             [ reduce using rule 5 (statement -> .) ]
-  ! SZ2             [ reduce using rule 5 (statement -> .) ]
-  ! NUM             [ reduce using rule 5 (statement -> .) ]
-  ! UINT            [ reduce using rule 5 (statement -> .) ]
-  ! CUINT           [ reduce using rule 5 (statement -> .) ]
-  ! BOOL            [ reduce using rule 5 (statement -> .) ]
-  ! CBOOL           [ reduce using rule 5 (statement -> .) ]
-  ! 1DARRBOOL       [ reduce using rule 5 (statement -> .) ]
-  ! 1DARRINT        [ reduce using rule 5 (statement -> .) ]
-  ! 2DARRBOOL       [ reduce using rule 5 (statement -> .) ]
-  ! 2DARRINT        [ reduce using rule 5 (statement -> .) ]
-  ! EXTEND1         [ reduce using rule 5 (statement -> .) ]
-  ! EXTEND2         [ reduce using rule 5 (statement -> .) ]
-  ! OPENIND         [ reduce using rule 5 (statement -> .) ]
-  ! ID              [ reduce using rule 5 (statement -> .) ]
 
     expr                           shift and go to state 5
     statement                      shift and go to state 133
@@ -4535,8 +4274,7 @@ state 130
 state 131
 
     (16) statement -> WHILE OPENBR expr CLOSEBR DO . statement
-    (4) statement -> . error
-    (5) statement -> .
+    (5) statement -> . error
     (6) statement -> . expr
     (7) statement -> . OPENST stmt_list CLOSEST
     (8) statement -> . create_id
@@ -4586,34 +4324,7 @@ state 131
     (59) call -> . OPENIND enum_id CLOSEIND ASGN id OPENBR enum_par CLOSEBR
     (86) id -> . ID
 
-  ! shift/reduce conflict for error resolved as shift
-  ! shift/reduce conflict for OPENST resolved as shift
-  ! shift/reduce conflict for WHILE resolved as shift
-  ! shift/reduce conflict for IF resolved as shift
-  ! shift/reduce conflict for MINUS resolved as shift
-  ! shift/reduce conflict for NOT resolved as shift
-  ! shift/reduce conflict for INC resolved as shift
-  ! shift/reduce conflict for DEC resolved as shift
-  ! shift/reduce conflict for OPENBR resolved as shift
-  ! shift/reduce conflict for SZ1 resolved as shift
-  ! shift/reduce conflict for SZ2 resolved as shift
-  ! shift/reduce conflict for NUM resolved as shift
-  ! shift/reduce conflict for UINT resolved as shift
-  ! shift/reduce conflict for CUINT resolved as shift
-  ! shift/reduce conflict for BOOL resolved as shift
-  ! shift/reduce conflict for CBOOL resolved as shift
-  ! shift/reduce conflict for 1DARRBOOL resolved as shift
-  ! shift/reduce conflict for 1DARRINT resolved as shift
-  ! shift/reduce conflict for 2DARRBOOL resolved as shift
-  ! shift/reduce conflict for 2DARRINT resolved as shift
-  ! shift/reduce conflict for EXTEND1 resolved as shift
-  ! shift/reduce conflict for EXTEND2 resolved as shift
-  ! shift/reduce conflict for OPENIND resolved as shift
-  ! shift/reduce conflict for ID resolved as shift
     error           shift and go to state 4
-    ELSE            reduce using rule 5 (statement -> .)
-    $end            reduce using rule 5 (statement -> .)
-    CLOSEST         reduce using rule 5 (statement -> .)
     OPENST          shift and go to state 6
     WHILE           shift and go to state 15
     IF              shift and go to state 17
@@ -4637,31 +4348,6 @@ state 131
     EXTEND2         shift and go to state 36
     OPENIND         shift and go to state 31
     ID              shift and go to state 37
-
-  ! error           [ reduce using rule 5 (statement -> .) ]
-  ! OPENST          [ reduce using rule 5 (statement -> .) ]
-  ! WHILE           [ reduce using rule 5 (statement -> .) ]
-  ! IF              [ reduce using rule 5 (statement -> .) ]
-  ! MINUS           [ reduce using rule 5 (statement -> .) ]
-  ! NOT             [ reduce using rule 5 (statement -> .) ]
-  ! INC             [ reduce using rule 5 (statement -> .) ]
-  ! DEC             [ reduce using rule 5 (statement -> .) ]
-  ! OPENBR          [ reduce using rule 5 (statement -> .) ]
-  ! SZ1             [ reduce using rule 5 (statement -> .) ]
-  ! SZ2             [ reduce using rule 5 (statement -> .) ]
-  ! NUM             [ reduce using rule 5 (statement -> .) ]
-  ! UINT            [ reduce using rule 5 (statement -> .) ]
-  ! CUINT           [ reduce using rule 5 (statement -> .) ]
-  ! BOOL            [ reduce using rule 5 (statement -> .) ]
-  ! CBOOL           [ reduce using rule 5 (statement -> .) ]
-  ! 1DARRBOOL       [ reduce using rule 5 (statement -> .) ]
-  ! 1DARRINT        [ reduce using rule 5 (statement -> .) ]
-  ! 2DARRBOOL       [ reduce using rule 5 (statement -> .) ]
-  ! 2DARRINT        [ reduce using rule 5 (statement -> .) ]
-  ! EXTEND1         [ reduce using rule 5 (statement -> .) ]
-  ! EXTEND2         [ reduce using rule 5 (statement -> .) ]
-  ! OPENIND         [ reduce using rule 5 (statement -> .) ]
-  ! ID              [ reduce using rule 5 (statement -> .) ]
 
     expr                           shift and go to state 5
     statement                      shift and go to state 153
@@ -5151,8 +4837,7 @@ state 153
 state 154
 
     (18) statement -> IF OPENBR expr CLOSEBR statement ELSE . statement
-    (4) statement -> . error
-    (5) statement -> .
+    (5) statement -> . error
     (6) statement -> . expr
     (7) statement -> . OPENST stmt_list CLOSEST
     (8) statement -> . create_id
@@ -5202,34 +4887,7 @@ state 154
     (59) call -> . OPENIND enum_id CLOSEIND ASGN id OPENBR enum_par CLOSEBR
     (86) id -> . ID
 
-  ! shift/reduce conflict for error resolved as shift
-  ! shift/reduce conflict for OPENST resolved as shift
-  ! shift/reduce conflict for WHILE resolved as shift
-  ! shift/reduce conflict for IF resolved as shift
-  ! shift/reduce conflict for MINUS resolved as shift
-  ! shift/reduce conflict for NOT resolved as shift
-  ! shift/reduce conflict for INC resolved as shift
-  ! shift/reduce conflict for DEC resolved as shift
-  ! shift/reduce conflict for OPENBR resolved as shift
-  ! shift/reduce conflict for SZ1 resolved as shift
-  ! shift/reduce conflict for SZ2 resolved as shift
-  ! shift/reduce conflict for NUM resolved as shift
-  ! shift/reduce conflict for UINT resolved as shift
-  ! shift/reduce conflict for CUINT resolved as shift
-  ! shift/reduce conflict for BOOL resolved as shift
-  ! shift/reduce conflict for CBOOL resolved as shift
-  ! shift/reduce conflict for 1DARRBOOL resolved as shift
-  ! shift/reduce conflict for 1DARRINT resolved as shift
-  ! shift/reduce conflict for 2DARRBOOL resolved as shift
-  ! shift/reduce conflict for 2DARRINT resolved as shift
-  ! shift/reduce conflict for EXTEND1 resolved as shift
-  ! shift/reduce conflict for EXTEND2 resolved as shift
-  ! shift/reduce conflict for OPENIND resolved as shift
-  ! shift/reduce conflict for ID resolved as shift
     error           shift and go to state 4
-    ELSE            reduce using rule 5 (statement -> .)
-    $end            reduce using rule 5 (statement -> .)
-    CLOSEST         reduce using rule 5 (statement -> .)
     OPENST          shift and go to state 6
     WHILE           shift and go to state 15
     IF              shift and go to state 17
@@ -5253,31 +4911,6 @@ state 154
     EXTEND2         shift and go to state 36
     OPENIND         shift and go to state 31
     ID              shift and go to state 37
-
-  ! error           [ reduce using rule 5 (statement -> .) ]
-  ! OPENST          [ reduce using rule 5 (statement -> .) ]
-  ! WHILE           [ reduce using rule 5 (statement -> .) ]
-  ! IF              [ reduce using rule 5 (statement -> .) ]
-  ! MINUS           [ reduce using rule 5 (statement -> .) ]
-  ! NOT             [ reduce using rule 5 (statement -> .) ]
-  ! INC             [ reduce using rule 5 (statement -> .) ]
-  ! DEC             [ reduce using rule 5 (statement -> .) ]
-  ! OPENBR          [ reduce using rule 5 (statement -> .) ]
-  ! SZ1             [ reduce using rule 5 (statement -> .) ]
-  ! SZ2             [ reduce using rule 5 (statement -> .) ]
-  ! NUM             [ reduce using rule 5 (statement -> .) ]
-  ! UINT            [ reduce using rule 5 (statement -> .) ]
-  ! CUINT           [ reduce using rule 5 (statement -> .) ]
-  ! BOOL            [ reduce using rule 5 (statement -> .) ]
-  ! CBOOL           [ reduce using rule 5 (statement -> .) ]
-  ! 1DARRBOOL       [ reduce using rule 5 (statement -> .) ]
-  ! 1DARRINT        [ reduce using rule 5 (statement -> .) ]
-  ! 2DARRBOOL       [ reduce using rule 5 (statement -> .) ]
-  ! 2DARRINT        [ reduce using rule 5 (statement -> .) ]
-  ! EXTEND1         [ reduce using rule 5 (statement -> .) ]
-  ! EXTEND2         [ reduce using rule 5 (statement -> .) ]
-  ! OPENIND         [ reduce using rule 5 (statement -> .) ]
-  ! ID              [ reduce using rule 5 (statement -> .) ]
 
     expr                           shift and go to state 5
     statement                      shift and go to state 174
@@ -6359,10 +5992,9 @@ state 196
 state 197
 
     (48) declaration -> OPENIND enum_rets CLOSEIND FUNC id OPENBR opt_enum_ids CLOSEBR OPENST . stmt_list CLOSEST
-    (2) stmt_list -> . statement
-    (3) stmt_list -> . stmt_list statement
-    (4) statement -> . error
-    (5) statement -> .
+    (3) stmt_list -> . statement
+    (4) stmt_list -> . stmt_list statement
+    (5) statement -> . error
     (6) statement -> . expr
     (7) statement -> . OPENST stmt_list CLOSEST
     (8) statement -> . create_id
@@ -6412,32 +6044,7 @@ state 197
     (59) call -> . OPENIND enum_id CLOSEIND ASGN id OPENBR enum_par CLOSEBR
     (86) id -> . ID
 
-  ! shift/reduce conflict for error resolved as shift
-  ! shift/reduce conflict for OPENST resolved as shift
-  ! shift/reduce conflict for WHILE resolved as shift
-  ! shift/reduce conflict for IF resolved as shift
-  ! shift/reduce conflict for MINUS resolved as shift
-  ! shift/reduce conflict for NOT resolved as shift
-  ! shift/reduce conflict for INC resolved as shift
-  ! shift/reduce conflict for DEC resolved as shift
-  ! shift/reduce conflict for OPENBR resolved as shift
-  ! shift/reduce conflict for SZ1 resolved as shift
-  ! shift/reduce conflict for SZ2 resolved as shift
-  ! shift/reduce conflict for NUM resolved as shift
-  ! shift/reduce conflict for UINT resolved as shift
-  ! shift/reduce conflict for CUINT resolved as shift
-  ! shift/reduce conflict for BOOL resolved as shift
-  ! shift/reduce conflict for CBOOL resolved as shift
-  ! shift/reduce conflict for 1DARRBOOL resolved as shift
-  ! shift/reduce conflict for 1DARRINT resolved as shift
-  ! shift/reduce conflict for 2DARRBOOL resolved as shift
-  ! shift/reduce conflict for 2DARRINT resolved as shift
-  ! shift/reduce conflict for EXTEND1 resolved as shift
-  ! shift/reduce conflict for EXTEND2 resolved as shift
-  ! shift/reduce conflict for OPENIND resolved as shift
-  ! shift/reduce conflict for ID resolved as shift
     error           shift and go to state 4
-    CLOSEST         reduce using rule 5 (statement -> .)
     OPENST          shift and go to state 6
     WHILE           shift and go to state 15
     IF              shift and go to state 17
@@ -6461,31 +6068,6 @@ state 197
     EXTEND2         shift and go to state 36
     OPENIND         shift and go to state 31
     ID              shift and go to state 37
-
-  ! error           [ reduce using rule 5 (statement -> .) ]
-  ! OPENST          [ reduce using rule 5 (statement -> .) ]
-  ! WHILE           [ reduce using rule 5 (statement -> .) ]
-  ! IF              [ reduce using rule 5 (statement -> .) ]
-  ! MINUS           [ reduce using rule 5 (statement -> .) ]
-  ! NOT             [ reduce using rule 5 (statement -> .) ]
-  ! INC             [ reduce using rule 5 (statement -> .) ]
-  ! DEC             [ reduce using rule 5 (statement -> .) ]
-  ! OPENBR          [ reduce using rule 5 (statement -> .) ]
-  ! SZ1             [ reduce using rule 5 (statement -> .) ]
-  ! SZ2             [ reduce using rule 5 (statement -> .) ]
-  ! NUM             [ reduce using rule 5 (statement -> .) ]
-  ! UINT            [ reduce using rule 5 (statement -> .) ]
-  ! CUINT           [ reduce using rule 5 (statement -> .) ]
-  ! BOOL            [ reduce using rule 5 (statement -> .) ]
-  ! CBOOL           [ reduce using rule 5 (statement -> .) ]
-  ! 1DARRBOOL       [ reduce using rule 5 (statement -> .) ]
-  ! 1DARRINT        [ reduce using rule 5 (statement -> .) ]
-  ! 2DARRBOOL       [ reduce using rule 5 (statement -> .) ]
-  ! 2DARRINT        [ reduce using rule 5 (statement -> .) ]
-  ! EXTEND1         [ reduce using rule 5 (statement -> .) ]
-  ! EXTEND2         [ reduce using rule 5 (statement -> .) ]
-  ! OPENIND         [ reduce using rule 5 (statement -> .) ]
-  ! ID              [ reduce using rule 5 (statement -> .) ]
 
     id                             shift and go to state 21
     stmt_list                      shift and go to state 202
@@ -6561,9 +6143,8 @@ state 201
 state 202
 
     (48) declaration -> OPENIND enum_rets CLOSEIND FUNC id OPENBR opt_enum_ids CLOSEBR OPENST stmt_list . CLOSEST
-    (3) stmt_list -> stmt_list . statement
-    (4) statement -> . error
-    (5) statement -> .
+    (4) stmt_list -> stmt_list . statement
+    (5) statement -> . error
     (6) statement -> . expr
     (7) statement -> . OPENST stmt_list CLOSEST
     (8) statement -> . create_id
@@ -6613,31 +6194,6 @@ state 202
     (59) call -> . OPENIND enum_id CLOSEIND ASGN id OPENBR enum_par CLOSEBR
     (86) id -> . ID
 
-  ! shift/reduce conflict for CLOSEST resolved as shift
-  ! shift/reduce conflict for error resolved as shift
-  ! shift/reduce conflict for OPENST resolved as shift
-  ! shift/reduce conflict for WHILE resolved as shift
-  ! shift/reduce conflict for IF resolved as shift
-  ! shift/reduce conflict for MINUS resolved as shift
-  ! shift/reduce conflict for NOT resolved as shift
-  ! shift/reduce conflict for INC resolved as shift
-  ! shift/reduce conflict for DEC resolved as shift
-  ! shift/reduce conflict for OPENBR resolved as shift
-  ! shift/reduce conflict for SZ1 resolved as shift
-  ! shift/reduce conflict for SZ2 resolved as shift
-  ! shift/reduce conflict for NUM resolved as shift
-  ! shift/reduce conflict for UINT resolved as shift
-  ! shift/reduce conflict for CUINT resolved as shift
-  ! shift/reduce conflict for BOOL resolved as shift
-  ! shift/reduce conflict for CBOOL resolved as shift
-  ! shift/reduce conflict for 1DARRBOOL resolved as shift
-  ! shift/reduce conflict for 1DARRINT resolved as shift
-  ! shift/reduce conflict for 2DARRBOOL resolved as shift
-  ! shift/reduce conflict for 2DARRINT resolved as shift
-  ! shift/reduce conflict for EXTEND1 resolved as shift
-  ! shift/reduce conflict for EXTEND2 resolved as shift
-  ! shift/reduce conflict for OPENIND resolved as shift
-  ! shift/reduce conflict for ID resolved as shift
     CLOSEST         shift and go to state 205
     error           shift and go to state 4
     OPENST          shift and go to state 6
@@ -6663,32 +6219,6 @@ state 202
     EXTEND2         shift and go to state 36
     OPENIND         shift and go to state 31
     ID              shift and go to state 37
-
-  ! CLOSEST         [ reduce using rule 5 (statement -> .) ]
-  ! error           [ reduce using rule 5 (statement -> .) ]
-  ! OPENST          [ reduce using rule 5 (statement -> .) ]
-  ! WHILE           [ reduce using rule 5 (statement -> .) ]
-  ! IF              [ reduce using rule 5 (statement -> .) ]
-  ! MINUS           [ reduce using rule 5 (statement -> .) ]
-  ! NOT             [ reduce using rule 5 (statement -> .) ]
-  ! INC             [ reduce using rule 5 (statement -> .) ]
-  ! DEC             [ reduce using rule 5 (statement -> .) ]
-  ! OPENBR          [ reduce using rule 5 (statement -> .) ]
-  ! SZ1             [ reduce using rule 5 (statement -> .) ]
-  ! SZ2             [ reduce using rule 5 (statement -> .) ]
-  ! NUM             [ reduce using rule 5 (statement -> .) ]
-  ! UINT            [ reduce using rule 5 (statement -> .) ]
-  ! CUINT           [ reduce using rule 5 (statement -> .) ]
-  ! BOOL            [ reduce using rule 5 (statement -> .) ]
-  ! CBOOL           [ reduce using rule 5 (statement -> .) ]
-  ! 1DARRBOOL       [ reduce using rule 5 (statement -> .) ]
-  ! 1DARRINT        [ reduce using rule 5 (statement -> .) ]
-  ! 2DARRBOOL       [ reduce using rule 5 (statement -> .) ]
-  ! 2DARRINT        [ reduce using rule 5 (statement -> .) ]
-  ! EXTEND1         [ reduce using rule 5 (statement -> .) ]
-  ! EXTEND2         [ reduce using rule 5 (statement -> .) ]
-  ! OPENIND         [ reduce using rule 5 (statement -> .) ]
-  ! ID              [ reduce using rule 5 (statement -> .) ]
 
     id                             shift and go to state 21
     statement                      shift and go to state 38
@@ -6780,105 +6310,8 @@ state 207
 WARNING: 
 WARNING: Conflicts:
 WARNING: 
-WARNING: shift/reduce conflict for error in state 0 resolved as shift
-WARNING: shift/reduce conflict for OPENST in state 0 resolved as shift
-WARNING: shift/reduce conflict for WHILE in state 0 resolved as shift
-WARNING: shift/reduce conflict for IF in state 0 resolved as shift
-WARNING: shift/reduce conflict for MINUS in state 0 resolved as shift
-WARNING: shift/reduce conflict for NOT in state 0 resolved as shift
-WARNING: shift/reduce conflict for INC in state 0 resolved as shift
-WARNING: shift/reduce conflict for DEC in state 0 resolved as shift
-WARNING: shift/reduce conflict for OPENBR in state 0 resolved as shift
-WARNING: shift/reduce conflict for SZ1 in state 0 resolved as shift
-WARNING: shift/reduce conflict for SZ2 in state 0 resolved as shift
-WARNING: shift/reduce conflict for NUM in state 0 resolved as shift
-WARNING: shift/reduce conflict for UINT in state 0 resolved as shift
-WARNING: shift/reduce conflict for CUINT in state 0 resolved as shift
-WARNING: shift/reduce conflict for BOOL in state 0 resolved as shift
-WARNING: shift/reduce conflict for CBOOL in state 0 resolved as shift
-WARNING: shift/reduce conflict for 1DARRBOOL in state 0 resolved as shift
-WARNING: shift/reduce conflict for 1DARRINT in state 0 resolved as shift
-WARNING: shift/reduce conflict for 2DARRBOOL in state 0 resolved as shift
-WARNING: shift/reduce conflict for 2DARRINT in state 0 resolved as shift
-WARNING: shift/reduce conflict for EXTEND1 in state 0 resolved as shift
-WARNING: shift/reduce conflict for EXTEND2 in state 0 resolved as shift
-WARNING: shift/reduce conflict for OPENIND in state 0 resolved as shift
-WARNING: shift/reduce conflict for ID in state 0 resolved as shift
-WARNING: shift/reduce conflict for error in state 2 resolved as shift
-WARNING: shift/reduce conflict for OPENST in state 2 resolved as shift
-WARNING: shift/reduce conflict for WHILE in state 2 resolved as shift
-WARNING: shift/reduce conflict for IF in state 2 resolved as shift
-WARNING: shift/reduce conflict for MINUS in state 2 resolved as shift
-WARNING: shift/reduce conflict for NOT in state 2 resolved as shift
-WARNING: shift/reduce conflict for INC in state 2 resolved as shift
-WARNING: shift/reduce conflict for DEC in state 2 resolved as shift
-WARNING: shift/reduce conflict for OPENBR in state 2 resolved as shift
-WARNING: shift/reduce conflict for SZ1 in state 2 resolved as shift
-WARNING: shift/reduce conflict for SZ2 in state 2 resolved as shift
-WARNING: shift/reduce conflict for NUM in state 2 resolved as shift
-WARNING: shift/reduce conflict for UINT in state 2 resolved as shift
-WARNING: shift/reduce conflict for CUINT in state 2 resolved as shift
-WARNING: shift/reduce conflict for BOOL in state 2 resolved as shift
-WARNING: shift/reduce conflict for CBOOL in state 2 resolved as shift
-WARNING: shift/reduce conflict for 1DARRBOOL in state 2 resolved as shift
-WARNING: shift/reduce conflict for 1DARRINT in state 2 resolved as shift
-WARNING: shift/reduce conflict for 2DARRBOOL in state 2 resolved as shift
-WARNING: shift/reduce conflict for 2DARRINT in state 2 resolved as shift
-WARNING: shift/reduce conflict for EXTEND1 in state 2 resolved as shift
-WARNING: shift/reduce conflict for EXTEND2 in state 2 resolved as shift
-WARNING: shift/reduce conflict for OPENIND in state 2 resolved as shift
-WARNING: shift/reduce conflict for ID in state 2 resolved as shift
 WARNING: shift/reduce conflict for MINUS in state 5 resolved as shift
-WARNING: shift/reduce conflict for error in state 6 resolved as shift
-WARNING: shift/reduce conflict for OPENST in state 6 resolved as shift
-WARNING: shift/reduce conflict for WHILE in state 6 resolved as shift
-WARNING: shift/reduce conflict for IF in state 6 resolved as shift
-WARNING: shift/reduce conflict for MINUS in state 6 resolved as shift
-WARNING: shift/reduce conflict for NOT in state 6 resolved as shift
-WARNING: shift/reduce conflict for INC in state 6 resolved as shift
-WARNING: shift/reduce conflict for DEC in state 6 resolved as shift
-WARNING: shift/reduce conflict for OPENBR in state 6 resolved as shift
-WARNING: shift/reduce conflict for SZ1 in state 6 resolved as shift
-WARNING: shift/reduce conflict for SZ2 in state 6 resolved as shift
-WARNING: shift/reduce conflict for NUM in state 6 resolved as shift
-WARNING: shift/reduce conflict for UINT in state 6 resolved as shift
-WARNING: shift/reduce conflict for CUINT in state 6 resolved as shift
-WARNING: shift/reduce conflict for BOOL in state 6 resolved as shift
-WARNING: shift/reduce conflict for CBOOL in state 6 resolved as shift
-WARNING: shift/reduce conflict for 1DARRBOOL in state 6 resolved as shift
-WARNING: shift/reduce conflict for 1DARRINT in state 6 resolved as shift
-WARNING: shift/reduce conflict for 2DARRBOOL in state 6 resolved as shift
-WARNING: shift/reduce conflict for 2DARRINT in state 6 resolved as shift
-WARNING: shift/reduce conflict for EXTEND1 in state 6 resolved as shift
-WARNING: shift/reduce conflict for EXTEND2 in state 6 resolved as shift
-WARNING: shift/reduce conflict for OPENIND in state 6 resolved as shift
-WARNING: shift/reduce conflict for ID in state 6 resolved as shift
 WARNING: shift/reduce conflict for OPENBR in state 21 resolved as shift
-WARNING: shift/reduce conflict for CLOSEST in state 47 resolved as shift
-WARNING: shift/reduce conflict for error in state 47 resolved as shift
-WARNING: shift/reduce conflict for OPENST in state 47 resolved as shift
-WARNING: shift/reduce conflict for WHILE in state 47 resolved as shift
-WARNING: shift/reduce conflict for IF in state 47 resolved as shift
-WARNING: shift/reduce conflict for MINUS in state 47 resolved as shift
-WARNING: shift/reduce conflict for NOT in state 47 resolved as shift
-WARNING: shift/reduce conflict for INC in state 47 resolved as shift
-WARNING: shift/reduce conflict for DEC in state 47 resolved as shift
-WARNING: shift/reduce conflict for OPENBR in state 47 resolved as shift
-WARNING: shift/reduce conflict for SZ1 in state 47 resolved as shift
-WARNING: shift/reduce conflict for SZ2 in state 47 resolved as shift
-WARNING: shift/reduce conflict for NUM in state 47 resolved as shift
-WARNING: shift/reduce conflict for UINT in state 47 resolved as shift
-WARNING: shift/reduce conflict for CUINT in state 47 resolved as shift
-WARNING: shift/reduce conflict for BOOL in state 47 resolved as shift
-WARNING: shift/reduce conflict for CBOOL in state 47 resolved as shift
-WARNING: shift/reduce conflict for 1DARRBOOL in state 47 resolved as shift
-WARNING: shift/reduce conflict for 1DARRINT in state 47 resolved as shift
-WARNING: shift/reduce conflict for 2DARRBOOL in state 47 resolved as shift
-WARNING: shift/reduce conflict for 2DARRINT in state 47 resolved as shift
-WARNING: shift/reduce conflict for EXTEND1 in state 47 resolved as shift
-WARNING: shift/reduce conflict for EXTEND2 in state 47 resolved as shift
-WARNING: shift/reduce conflict for OPENIND in state 47 resolved as shift
-WARNING: shift/reduce conflict for ID in state 47 resolved as shift
 WARNING: shift/reduce conflict for OPENBR in state 50 resolved as shift
 WARNING: shift/reduce conflict for PLUS in state 79 resolved as shift
 WARNING: shift/reduce conflict for MINUS in state 79 resolved as shift
@@ -6888,128 +6321,5 @@ WARNING: shift/reduce conflict for OR in state 79 resolved as shift
 WARNING: shift/reduce conflict for GT in state 79 resolved as shift
 WARNING: shift/reduce conflict for LT in state 79 resolved as shift
 WARNING: shift/reduce conflict for EQ in state 79 resolved as shift
-WARNING: shift/reduce conflict for error in state 109 resolved as shift
-WARNING: shift/reduce conflict for OPENST in state 109 resolved as shift
-WARNING: shift/reduce conflict for WHILE in state 109 resolved as shift
-WARNING: shift/reduce conflict for IF in state 109 resolved as shift
-WARNING: shift/reduce conflict for MINUS in state 109 resolved as shift
-WARNING: shift/reduce conflict for NOT in state 109 resolved as shift
-WARNING: shift/reduce conflict for INC in state 109 resolved as shift
-WARNING: shift/reduce conflict for DEC in state 109 resolved as shift
-WARNING: shift/reduce conflict for OPENBR in state 109 resolved as shift
-WARNING: shift/reduce conflict for SZ1 in state 109 resolved as shift
-WARNING: shift/reduce conflict for SZ2 in state 109 resolved as shift
-WARNING: shift/reduce conflict for NUM in state 109 resolved as shift
-WARNING: shift/reduce conflict for UINT in state 109 resolved as shift
-WARNING: shift/reduce conflict for CUINT in state 109 resolved as shift
-WARNING: shift/reduce conflict for BOOL in state 109 resolved as shift
-WARNING: shift/reduce conflict for CBOOL in state 109 resolved as shift
-WARNING: shift/reduce conflict for 1DARRBOOL in state 109 resolved as shift
-WARNING: shift/reduce conflict for 1DARRINT in state 109 resolved as shift
-WARNING: shift/reduce conflict for 2DARRBOOL in state 109 resolved as shift
-WARNING: shift/reduce conflict for 2DARRINT in state 109 resolved as shift
-WARNING: shift/reduce conflict for EXTEND1 in state 109 resolved as shift
-WARNING: shift/reduce conflict for EXTEND2 in state 109 resolved as shift
-WARNING: shift/reduce conflict for OPENIND in state 109 resolved as shift
-WARNING: shift/reduce conflict for ID in state 109 resolved as shift
 WARNING: shift/reduce conflict for OPENBR in state 110 resolved as shift
-WARNING: shift/reduce conflict for error in state 131 resolved as shift
-WARNING: shift/reduce conflict for OPENST in state 131 resolved as shift
-WARNING: shift/reduce conflict for WHILE in state 131 resolved as shift
-WARNING: shift/reduce conflict for IF in state 131 resolved as shift
-WARNING: shift/reduce conflict for MINUS in state 131 resolved as shift
-WARNING: shift/reduce conflict for NOT in state 131 resolved as shift
-WARNING: shift/reduce conflict for INC in state 131 resolved as shift
-WARNING: shift/reduce conflict for DEC in state 131 resolved as shift
-WARNING: shift/reduce conflict for OPENBR in state 131 resolved as shift
-WARNING: shift/reduce conflict for SZ1 in state 131 resolved as shift
-WARNING: shift/reduce conflict for SZ2 in state 131 resolved as shift
-WARNING: shift/reduce conflict for NUM in state 131 resolved as shift
-WARNING: shift/reduce conflict for UINT in state 131 resolved as shift
-WARNING: shift/reduce conflict for CUINT in state 131 resolved as shift
-WARNING: shift/reduce conflict for BOOL in state 131 resolved as shift
-WARNING: shift/reduce conflict for CBOOL in state 131 resolved as shift
-WARNING: shift/reduce conflict for 1DARRBOOL in state 131 resolved as shift
-WARNING: shift/reduce conflict for 1DARRINT in state 131 resolved as shift
-WARNING: shift/reduce conflict for 2DARRBOOL in state 131 resolved as shift
-WARNING: shift/reduce conflict for 2DARRINT in state 131 resolved as shift
-WARNING: shift/reduce conflict for EXTEND1 in state 131 resolved as shift
-WARNING: shift/reduce conflict for EXTEND2 in state 131 resolved as shift
-WARNING: shift/reduce conflict for OPENIND in state 131 resolved as shift
-WARNING: shift/reduce conflict for ID in state 131 resolved as shift
 WARNING: shift/reduce conflict for OPENBR in state 132 resolved as shift
-WARNING: shift/reduce conflict for error in state 154 resolved as shift
-WARNING: shift/reduce conflict for OPENST in state 154 resolved as shift
-WARNING: shift/reduce conflict for WHILE in state 154 resolved as shift
-WARNING: shift/reduce conflict for IF in state 154 resolved as shift
-WARNING: shift/reduce conflict for MINUS in state 154 resolved as shift
-WARNING: shift/reduce conflict for NOT in state 154 resolved as shift
-WARNING: shift/reduce conflict for INC in state 154 resolved as shift
-WARNING: shift/reduce conflict for DEC in state 154 resolved as shift
-WARNING: shift/reduce conflict for OPENBR in state 154 resolved as shift
-WARNING: shift/reduce conflict for SZ1 in state 154 resolved as shift
-WARNING: shift/reduce conflict for SZ2 in state 154 resolved as shift
-WARNING: shift/reduce conflict for NUM in state 154 resolved as shift
-WARNING: shift/reduce conflict for UINT in state 154 resolved as shift
-WARNING: shift/reduce conflict for CUINT in state 154 resolved as shift
-WARNING: shift/reduce conflict for BOOL in state 154 resolved as shift
-WARNING: shift/reduce conflict for CBOOL in state 154 resolved as shift
-WARNING: shift/reduce conflict for 1DARRBOOL in state 154 resolved as shift
-WARNING: shift/reduce conflict for 1DARRINT in state 154 resolved as shift
-WARNING: shift/reduce conflict for 2DARRBOOL in state 154 resolved as shift
-WARNING: shift/reduce conflict for 2DARRINT in state 154 resolved as shift
-WARNING: shift/reduce conflict for EXTEND1 in state 154 resolved as shift
-WARNING: shift/reduce conflict for EXTEND2 in state 154 resolved as shift
-WARNING: shift/reduce conflict for OPENIND in state 154 resolved as shift
-WARNING: shift/reduce conflict for ID in state 154 resolved as shift
-WARNING: shift/reduce conflict for error in state 197 resolved as shift
-WARNING: shift/reduce conflict for OPENST in state 197 resolved as shift
-WARNING: shift/reduce conflict for WHILE in state 197 resolved as shift
-WARNING: shift/reduce conflict for IF in state 197 resolved as shift
-WARNING: shift/reduce conflict for MINUS in state 197 resolved as shift
-WARNING: shift/reduce conflict for NOT in state 197 resolved as shift
-WARNING: shift/reduce conflict for INC in state 197 resolved as shift
-WARNING: shift/reduce conflict for DEC in state 197 resolved as shift
-WARNING: shift/reduce conflict for OPENBR in state 197 resolved as shift
-WARNING: shift/reduce conflict for SZ1 in state 197 resolved as shift
-WARNING: shift/reduce conflict for SZ2 in state 197 resolved as shift
-WARNING: shift/reduce conflict for NUM in state 197 resolved as shift
-WARNING: shift/reduce conflict for UINT in state 197 resolved as shift
-WARNING: shift/reduce conflict for CUINT in state 197 resolved as shift
-WARNING: shift/reduce conflict for BOOL in state 197 resolved as shift
-WARNING: shift/reduce conflict for CBOOL in state 197 resolved as shift
-WARNING: shift/reduce conflict for 1DARRBOOL in state 197 resolved as shift
-WARNING: shift/reduce conflict for 1DARRINT in state 197 resolved as shift
-WARNING: shift/reduce conflict for 2DARRBOOL in state 197 resolved as shift
-WARNING: shift/reduce conflict for 2DARRINT in state 197 resolved as shift
-WARNING: shift/reduce conflict for EXTEND1 in state 197 resolved as shift
-WARNING: shift/reduce conflict for EXTEND2 in state 197 resolved as shift
-WARNING: shift/reduce conflict for OPENIND in state 197 resolved as shift
-WARNING: shift/reduce conflict for ID in state 197 resolved as shift
-WARNING: shift/reduce conflict for CLOSEST in state 202 resolved as shift
-WARNING: shift/reduce conflict for error in state 202 resolved as shift
-WARNING: shift/reduce conflict for OPENST in state 202 resolved as shift
-WARNING: shift/reduce conflict for WHILE in state 202 resolved as shift
-WARNING: shift/reduce conflict for IF in state 202 resolved as shift
-WARNING: shift/reduce conflict for MINUS in state 202 resolved as shift
-WARNING: shift/reduce conflict for NOT in state 202 resolved as shift
-WARNING: shift/reduce conflict for INC in state 202 resolved as shift
-WARNING: shift/reduce conflict for DEC in state 202 resolved as shift
-WARNING: shift/reduce conflict for OPENBR in state 202 resolved as shift
-WARNING: shift/reduce conflict for SZ1 in state 202 resolved as shift
-WARNING: shift/reduce conflict for SZ2 in state 202 resolved as shift
-WARNING: shift/reduce conflict for NUM in state 202 resolved as shift
-WARNING: shift/reduce conflict for UINT in state 202 resolved as shift
-WARNING: shift/reduce conflict for CUINT in state 202 resolved as shift
-WARNING: shift/reduce conflict for BOOL in state 202 resolved as shift
-WARNING: shift/reduce conflict for CBOOL in state 202 resolved as shift
-WARNING: shift/reduce conflict for 1DARRBOOL in state 202 resolved as shift
-WARNING: shift/reduce conflict for 1DARRINT in state 202 resolved as shift
-WARNING: shift/reduce conflict for 2DARRBOOL in state 202 resolved as shift
-WARNING: shift/reduce conflict for 2DARRINT in state 202 resolved as shift
-WARNING: shift/reduce conflict for EXTEND1 in state 202 resolved as shift
-WARNING: shift/reduce conflict for EXTEND2 in state 202 resolved as shift
-WARNING: shift/reduce conflict for OPENIND in state 202 resolved as shift
-WARNING: shift/reduce conflict for ID in state 202 resolved as shift
-WARNING: reduce/reduce conflict in state 2 resolved using rule (program -> stmt_list)
-WARNING: rejected rule (statement -> <empty>) in state 2

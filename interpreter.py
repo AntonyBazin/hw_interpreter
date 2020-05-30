@@ -68,6 +68,10 @@ class ZeroDivError(InterpreterError):
     """Division by zero"""
 
 
+class NoFieldError(InterpreterError):
+    """Robot command used without a valid field loaded"""
+
+
 class Descriptor:
     """Used for describing a variable in a dictionary"""
 
@@ -81,18 +85,22 @@ class Descriptor:
 
 
 class Interpreter:
-    def __init__(self):
+    def __init__(self, field=None, robot=None):
         self.parser = Parser()
         self.nmsp_stack = []
         self.LDT = {}
         self._errors = []
         self._functions = {}
+        self.field = field
+        self.robot = robot
 
     def interpret(self, code: str):
         t = self.parser.parse(code)
         if t is None:
             print('GGlobal syntax failure!')
             return
+        if self.field is None:
+            print('Field not acquired!')
         STNode.paste(t, 0)
         print(self._int_nd(t))
         print(self.LDT)
@@ -544,7 +552,14 @@ class Interpreter:
             ret_values = self.collect_rets(fptr.parts[-2].value)
             self.LDT = self.nmsp_stack.pop()
             self.asgn_rets(node.parts[0].value, ret_values)  # assign ret-values
-            return None
+
+        elif node.type == 'command':
+            if self.field is None:
+                self._errors.append(NoFieldError(node.lineno))
+                return
+            if node.value == 'forw':
+                pass
+
 
 
 if __name__ == '__main__':

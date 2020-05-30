@@ -11,10 +11,10 @@ class Lexer:  # added RETURN and EQ statements to task
         'ASGN', 'INC', 'DEC', 'NOT', 'OR', 'GT', 'LT', 'EQ',
         'WHILE', 'DO', 'IF', 'ELSE',
         'OPENBR', 'CLOSEBR', 'OPENST', 'CLOSEST', 'OPENIND', 'CLOSEIND',
-        'FUNC', 'RET',
+        'FUNC',
         'FORW', 'BACK', 'RIGHT', 'LEFT',
         'GETF', 'GETB', 'GETR', 'GETL', 'PUSHF', 'PUSHB', 'PUSHR', 'PUSHL',
-        'UNDO', 'NL', 'ID', 'NUM'
+        'UNDO', 'ID', 'NUM'
     )
 
     t_ignore = ' \t'
@@ -189,10 +189,6 @@ class Lexer:  # added RETURN and EQ statements to task
     def t_FUNC(self, t):
         r"""FUNCTION"""
         t.value = "FUNC"
-        return t
-
-    def t_RET(self, t):
-        r"""RETURN"""
         return t
 
     def t_FORW(self, t):

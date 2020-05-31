@@ -1,5 +1,5 @@
 from parser import Parser, STNode
-import maze
+import sys
 
 
 class InterpreterError(Exception):
@@ -72,6 +72,17 @@ class NoFieldError(InterpreterError):
     """Robot command used without a valid field loaded"""
 
 
+class ExitFound(Exception):
+    """Robot has found the exit at"""
+
+    def __init__(self, x, y):
+        self.x = x
+        self.y = y
+
+    def __str__(self):
+        return self.__doc__ + '({0}, {1})!'.format(self.x, self.y)
+
+
 class Descriptor:
     """Used for describing a variable in a dictionary"""
 
@@ -104,6 +115,7 @@ class Interpreter:
         STNode.paste(t, 0)
         print(self._int_nd(t))
         print(self.LDT)
+        print(self.robot)
         for e in self._errors:
             print(e)
         # self.nmsp_stack = []  # for debug with many iterations
@@ -403,7 +415,7 @@ class Interpreter:
                         self._errors.append(BadBoolAssignment(node.lineno))
                         self.LDT[node.parts[0].value].value.append(1)
             else:
-                self.LDT[node.parts[0].value].value = [self._int_nd(i) for i in node.parts[1:] if self._int_nd(i)]
+                self.LDT[node.parts[0].value].value = [self._int_nd(i) for i in node.parts[1:] if self._int_nd(i) is not None]
             self.LDT[node.parts[0].value].value.reverse()
 
         elif node.type == 'index_1d':
@@ -524,7 +536,6 @@ class Interpreter:
                 self._errors.append(RedeclarationError(node.lineno))
                 return None
             node.parts[-1].value.reverse()
-            node.parts[-2].value.reverse()
             self.LDT[node.parts[0].value] = Descriptor(node.value,
                                                        None,
                                                        node)
@@ -534,13 +545,15 @@ class Interpreter:
             if node.value.value not in self.LDT.keys():
                 self._errors.append(NotFoundError(node.lineno))
                 return None
-            if len(self.nmsp_stack) > 10:
+            if len(self.nmsp_stack) > 100:
                 self._errors.append(RecursionStackOverflow(node.lineno))
                 return None
             fptr = self.LDT[node.value.value].link  # link to the function declaration
-            node.parts[0].value.reverse()  # reverse the args' lists
-            node.parts[1].value.reverse()
-            args = self.parse_args(node.parts[1].value)
+            sets = node.parts[0].value[:]
+            pars = node.parts[1].value[:]
+            sets.reverse()  # reverse the args' lists
+            pars.reverse()
+            args = self.parse_args(pars)
             self.nmsp_stack.append(self.LDT)
             self.LDT = {}
             for f in self._functions.keys():
@@ -554,12 +567,157 @@ class Interpreter:
             self.asgn_rets(node.parts[0].value, ret_values)  # assign ret-values
 
         elif node.type == 'command':
-            if self.field is None:
+            if self.field is None or self.robot is None:
                 self._errors.append(NoFieldError(node.lineno))
                 return
             if node.value == 'forw':
-                pass
+                self.robot.cmd = None
+                if self.field[self.robot.x - 1][self.robot.y].type == 'wall':
+                    return 0
+                self.robot.x -= 1
+                if self.field[self.robot.x][self.robot.y].type == 'exit':
+                    raise ExitFound(self.robot.x - 1, self.robot.y - 1)
+                return 1
 
+            elif node.value == 'back':
+                self.robot.cmd = None
+                if self.field[self.robot.x + 1][self.robot.y].type == 'wall':
+                    return 0
+                self.robot.x += 1
+                if self.field[self.robot.x][self.robot.y].type == 'exit':
+                    raise ExitFound(self.robot.x - 1, self.robot.y - 1)
+                return 1
+
+            elif node.value == 'right':
+                self.robot.cmd = None
+                if self.field[self.robot.x][self.robot.y + 1].type == 'wall':
+                    return 0
+                self.robot.y += 1
+                if self.field[self.robot.x][self.robot.y].type == 'exit':
+                    raise ExitFound(self.robot.x - 1, self.robot.y - 1)
+                return 1
+
+            elif node.value == 'left':
+                self.robot.cmd = None
+                if self.field[self.robot.x][self.robot.y - 1].type == 'wall':
+                    return 0
+                self.robot.y -= 1
+                if self.field[self.robot.x][self.robot.y].type == 'exit':
+                    raise ExitFound(self.robot.x - 1, self.robot.y - 1)
+                return 1
+
+            elif node.value == 'pushf':
+                if self.field[self.robot.x - 1][self.robot.y].type != 'wall':
+                    self.robot.cmd = None
+                    return -1
+                if self.robot.x - 2 < 0:
+                    self.robot.cmd = None
+                    return 0
+                if self.field[self.robot.x - 2][self.robot.y].type in ('wall', 'exit'):
+                    self.robot.cmd = None
+                    return 0
+                self.field[self.robot.x - 2][self.robot.y].type = 'wall'
+                self.field[self.robot.x - 1][self.robot.y].type = 'plain'
+                self.robot.cmd = 'pushf'
+                return 1
+
+            elif node.value == 'pushb':
+                if self.field[self.robot.x + 1][self.robot.y].type != 'wall':
+                    self.robot.cmd = None
+                    return -1
+                if self.robot.x + 2 > len(self.field):
+                    self.robot.cmd = None
+                    return 0
+                if self.field[self.robot.x + 2][self.robot.y].type in ('wall', 'exit'):
+                    self.robot.cmd = None
+                    return 0
+                self.field[self.robot.x + 2][self.robot.y].type = 'wall'
+                self.field[self.robot.x + 1][self.robot.y].type = 'plain'
+                self.robot.cmd = 'pushb'
+                return 1
+
+            elif node.value == 'pushl':
+                if self.field[self.robot.x][self.robot.y - 1].type != 'wall':
+                    self.robot.cmd = None
+                    return -1
+                if self.robot.y - 2 < 0:
+                    self.robot.cmd = None
+                    return 0
+                if self.field[self.robot.x][self.robot.y - 2].type in ('wall', 'exit'):
+                    self.robot.cmd = None
+                    return 0
+                self.field[self.robot.x][self.robot.y - 2].type = 'wall'
+                self.field[self.robot.x][self.robot.y - 1].type = 'plain'
+                self.robot.cmd = 'pushl'
+                return 1
+
+            elif node.value == 'pushr':
+                if self.field[self.robot.x][self.robot.y + 1].type != 'wall':
+                    self.robot.cmd = None
+                    return -1
+                if self.robot.y + 2 > len(self.field):
+                    self.robot.cmd = None
+                    return 0
+                elif self.field[self.robot.x][self.robot.y + 2].type in ('wall', 'exit'):
+                    self.robot.cmd = None
+                    return 0
+                self.field[self.robot.x][self.robot.y + 2].type = 'wall'
+                self.field[self.robot.x][self.robot.y + 1].type = 'plain'
+                self.robot.cmd = 'pushr'
+                return 1
+
+            elif node.value == 'undo':
+                if self.robot.cmd == 'pushf':
+                    self.field[self.robot.x - 2][self.robot.y].type = 'plain'
+                    self.field[self.robot.x - 1][self.robot.y].type = 'wall'
+                elif self.robot.cmd == 'pushb':
+                    self.field[self.robot.x - 2][self.robot.y].type = 'plain'
+                    self.field[self.robot.x - 1][self.robot.y].type = 'wall'
+                elif self.robot.cmd == 'pushr':
+                    self.field[self.robot.x][self.robot.y + 2].type = 'plain'
+                    self.field[self.robot.x][self.robot.y + 1].type = 'wall'
+                elif self.robot.cmd == 'pushl':
+                    self.field[self.robot.x][self.robot.y - 2].type = 'plain'
+                    self.field[self.robot.x][self.robot.y - 1].type = 'wall'
+                else:
+                    return 0
+                return 1
+
+            elif node.value == 'getf':
+                self.robot.cmd = None
+                dist = sys.maxsize * 2
+                for i in range(0, self.robot.x + 1):
+                    for j in range(0, len(self.field[i])):
+                        if self.field[i][j].type == 'exit':
+                            dist = min(dist, (abs(i - self.robot.x) + abs(j - self.robot.y)))
+                return dist
+
+            elif node.value == 'getb':
+                self.robot.cmd = None
+                dist = sys.maxsize * 2
+                for i in range(self.robot.x, len(self.field)):
+                    for j in range(0, len(self.field[i])):
+                        if self.field[i][j].type == 'exit':
+                            dist = min(dist, (abs(i - self.robot.x) + abs(j - self.robot.y)))
+                return dist
+
+            elif node.value == 'getl':
+                self.robot.cmd = None
+                dist = sys.maxsize * 2
+                for i in range(0, len(self.field)):
+                    for j in range(0, self.robot.y + 1):
+                        if self.field[i][j].type == 'exit':
+                            dist = min(dist, (abs(i - self.robot.x) + abs(j - self.robot.y)))
+                return dist
+
+            elif node.value == 'getr':
+                self.robot.cmd = None
+                dist = sys.maxsize * 2
+                for i in range(0, len(self.field)):
+                    for j in range(self.robot.y, len(self.field[i])):
+                        if self.field[i][j].type == 'exit':
+                            dist = min(dist, (abs(i - self.robot.x) + abs(j - self.robot.y)))
+                return dist
 
 
 if __name__ == '__main__':

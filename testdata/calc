@@ -3,7 +3,7 @@ c = b
 d = a
 }
 
-[UINT a1 = -1, UINT a2 = -1, UINT a3 = -1] FUNCTION gnome_sort(a = [0, 0, 0], UINT dir = 0) {
+[UINT a1 = -1, UINT a2 = -1, UINT a3 = -1, UINT a4 = -1, UINT a5 = -1] FUNCTION gnome_sort(1DARRAYOFUINT a = [0, 0, 0], UINT dir = 0) {
     UINT pos = 0
     WHILE(pos LT (SIZE1 a)) DO {
         IF((pos EQ 0) OR (a(pos) GT a(pos-1)) OR (a(pos) EQ a(pos-1))){
@@ -17,10 +17,14 @@ d = a
     a1 = a(0)
     a2 = a(1)
     a3 = a(2)
+    a4 = a(3)
+    a5 = a(4)
 }
 
-1DARRAYOFUINT a = [1, 7, 2, 4, 0]
+1DARRAYOFUINT a = [2, 4, 1, 3, 0]
 UINT a1 = -2
 UINT a2 = -2
 UINT a3 = -2
-[a1, a2, a3] = gnome_sort(a,)
+UINT a4 = -2
+UINT a5 = -2
+[a1, a2, a3, a4, a5] = gnome_sort(a,)

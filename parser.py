@@ -162,25 +162,33 @@ class Parser:
         """expr : NUM"""
         p[0] = STNode('number', p[1], p.lexer.lineno)
 
+    def p_expr_logic(self, p):
+        """expr : TRUE
+                | FALSE"""
+        if str(p[1]) == 'TRUE':
+            p[0] = STNode('number', 1, p.lexer.lineno)
+        else:
+            p[0] = STNode('number', 0, p.lexer.lineno)
+
     def p_expr_id(self, p):
         """expr : id"""
         p[0] = p[1]
 
-    # def p_expr_robot_oper(self, p):
-    #     """expr : FORW
-    #             | BACK
-    #             | LEFT
-    #             | RIGHT
-    #             | GETF
-    #             | GETR
-    #             | GETL
-    #             | GETB
-    #             | PUSHF
-    #             | PUSHB
-    #             | PUSHR
-    #             | PUSHL
-    #             | UNDO"""
-    #     p[0] = STNode('command', str(p[1]).lower, p.lexer.lineno)
+    def p_expr_robot_oper(self, p):
+        """expr : FORW
+                | BACK
+                | LEFT
+                | RIGHT
+                | GETF
+                | GETR
+                | GETL
+                | GETB
+                | PUSHF
+                | PUSHB
+                | PUSHR
+                | PUSHL
+                | UNDO"""
+        p[0] = STNode('command', str(p[1]).lower(), p.lexer.lineno)
 
     def p_create_1darr(self, p):
         """create_1darr : 1DARRBOOL id ASGN OPENIND enum CLOSEIND

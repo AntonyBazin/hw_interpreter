@@ -1,0 +1,81 @@
+[UINT ret = 0] FUNCTION Move(UINT ldir = 0){
+    IF(ldir EQ 0){
+        ret = FORW
+    }
+    IF(ldir EQ 1){
+        ret = RIGHT
+    }
+    IF(ldir EQ 2){
+        ret = BACK
+    }
+    IF(ldir EQ 3){
+        ret = LEFT
+    }
+}
+
+
+[UINT ret = 0, UINT resdir = 0] FUNCTION TryR(UINT ldir = 0){
+    UINT b = 0
+    INC ldir
+    IF(ldir EQ 4){
+        ldir = 0
+    }
+    [b] = Move(ldir)
+    IF(b EQ 0){
+        DEC ldir
+        IF(ldir LT 0){
+            ldir = 3
+        }
+    }
+    resdir = ldir
+    ret = b
+}
+
+[UINT ret = 0, UINT resdir = 0] FUNCTION TryL(UINT ldir = 0){
+    UINT b = 0
+    DEC ldir
+    IF(ldir LT 0){
+        ldir = 3
+    }
+    [b] = Move(ldir)
+    IF(b EQ 0){
+        INC ldir
+        IF(ldir EQ 4){
+            ldir = 0
+        }
+    }
+    resdir = ldir
+    ret = b
+}
+
+UINT dir = 0
+UINT cnt = 0
+UINT res = 0
+BOOLEAN continue = 0
+
+WHILE(TRUE) DO {
+    continue = 0
+    IF(cnt GT 0){
+        [res, dir] = TryR(dir)
+        IF(res){
+            DEC cnt
+            continue = 1
+        }
+    }
+    IF(continue EQ 0){
+        [res] = Move(dir)
+        IF(res){
+            continue = 1
+        }
+    }
+    IF(continue EQ 0){
+        [res, dir] = TryL(dir)
+        IF(res EQ 0){
+            DEC dir
+            IF(dir LT 0){
+                dir = 3
+            }
+        }
+        INC cnt
+    }
+}

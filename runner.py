@@ -1,9 +1,8 @@
 import interpreter
 import maze
 
-if __name__ == '__main__':
-    # print('Input map file name:')
-    # name = input()
+
+def control():
     try:
         fld, robot = maze.read_map('testdata/map')
     except FileNotFoundError as fn:
@@ -16,3 +15,9 @@ if __name__ == '__main__':
         controller.interpret(data)
     except interpreter.ExitFound as ex:
         print(ex)
+        return
+    print('Robot could not find the exit!')
+
+
+if __name__ == '__main__':
+    control()

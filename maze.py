@@ -41,7 +41,7 @@ def read_map(name):
             lines = file.readlines()
             x, y = (int(val) for val in lines[0].split())
             robot = Robot(x + 1, y + 1)
-            for c in range(len(lines[1])):
+            for c in range(len(lines[1]) + 1):
                 path.append(Cell('wall'))
             field.append(path)
             path = []
@@ -57,7 +57,7 @@ def read_map(name):
                 path.append(Cell('wall'))
                 field.append(path)
                 path = []
-            for c in range(len(lines[-1])):
+            for c in range(len(lines[-1]) + 1):
                 path.append(Cell('wall'))
             field.append(path)
             return field, robot

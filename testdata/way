@@ -52,8 +52,15 @@ UINT dir = 0
 UINT cnt = 0
 UINT res = 0
 BOOLEAN continue = 0
+UINT clock = 0
 
-WHILE(TRUE) DO {
+UINT getF = GETF
+UINT getB = GETB
+UINT getL = GETL
+UINT getR = GETR
+
+WHILE(clock LT 10000) DO {
+    INC clock
     continue = 0
     IF(cnt GT 0){
         [res, dir] = TryR(dir)

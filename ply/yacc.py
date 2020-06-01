@@ -1667,7 +1667,7 @@ class Grammar(object):
     # infinite_cycles()
     #
     # This function looks at the various parsing rules and tries to detect
-    # infinite recursion cycles (grammar rules where there is no possible way
+    # infinite recursion cycles (grammar rules where there is no possible way.txt
     # to derive a string of only terminals).
     # -----------------------------------------------------------------------------
 
@@ -2157,7 +2157,7 @@ class LRGeneratedTable(LRTable):
 
     # Compute the LR(0) goto function goto(I,X) where I is a set
     # of LR(0) items and X is a grammar symbol.   This function is written
-    # in a way that guarantees uniqueness of the generated goto sets
+    # in a way.txt that guarantees uniqueness of the generated goto sets
     # (i.e. the same goto set will never be returned as two different Python
     # objects).  With uniqueness, we can later do fast set comparisons using
     # id(obj) instead of element-wise comparison.
@@ -2168,7 +2168,7 @@ class LRGeneratedTable(LRTable):
         if g:
             return g
 
-        # Now we generate the goto set in a way that guarantees uniqueness
+        # Now we generate the goto set in a way.txt that guarantees uniqueness
         # of the result
 
         s = self.lr_goto_cache.get(x)
@@ -2386,7 +2386,7 @@ class LRGeneratedTable(LRTable):
                 if p.name != N:
                     continue
 
-                # Okay, we have a name match.  We now follow the production all the way
+                # Okay, we have a name match.  We now follow the production all the way.txt
                 # through the state machine until we get the . on the right hand side
 
                 lr_index = p.lr_index
@@ -2398,7 +2398,7 @@ class LRGeneratedTable(LRTable):
                     # Check to see if this symbol and state are a non-terminal transition
                     if (j, t) in dtrans:
                         # Yes.  Okay, there is some chance that this is an includes relation
-                        # the only way to know for certain is whether the rest of the
+                        # the only way.txt to know for certain is whether the rest of the
                         # production derives empty
 
                         li = lr_index + 1
@@ -3056,7 +3056,7 @@ class ParserReflect(object):
                 self.log.error('%s:%d: p_error() requires 1 argument', efile, eline)
                 self.error = True
 
-    # Get the tokens map
+    # Get the tokens map.txt
     def get_tokens(self):
         tokens = self.pdict.get('tokens')
         if not tokens:
@@ -3090,11 +3090,11 @@ class ParserReflect(object):
                 self.log.warning('Token %r multiply defined', n)
             terminals.add(n)
 
-    # Get the precedence map (if any)
+    # Get the precedence map.txt (if any)
     def get_precedence(self):
         self.prec = self.pdict.get('precedence')
 
-    # Validate and parse the precedence map
+    # Validate and parse the precedence map.txt
     def validate_precedence(self):
         preclist = []
         if self.prec:

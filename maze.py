@@ -2,7 +2,7 @@ import os.path
 
 
 class Map:
-    """The entire map"""
+    """The entire map.txt"""
 
     def __init__(self, sizex, sizey, cells):
         self.sizex = sizex
@@ -62,13 +62,18 @@ def read_map(name):
             field.append(path)
             return field, robot
     else:
-        raise FileNotFoundError
+        raise FileNotFoundError()
 
 
 if __name__ == '__main__':
-    f, r = read_map('testdata/map')
-    for i in f:
-        for j in i:
-            print(j)
-        print()
-    print(r)
+    print('Input the filename of the map file:')
+    filename = input()
+    try:
+        f, r = read_map(filename)
+        for i in f:
+            for j in i:
+                print(j)
+            print()
+        print(r)
+    except FileNotFoundError:
+        print('No such file!')

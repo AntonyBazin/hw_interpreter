@@ -108,20 +108,17 @@ class Interpreter:
     def interpret(self, code: str):
         t = self.parser.parse(code)
         if t is None:
-            print('GGlobal syntax failure!')
+            print('Global syntax failure!')
             return
         if self.field is None:
             print('Field not acquired!')
-        STNode.paste(t, 0)
+        # STNode.paste(t, 0)
         print(self._int_nd(t))
-        print(self.LDT)
-        print(self.robot)
+        print(self.nmsp_stack)
         for e in self._errors:
             print(e)
-        # self.nmsp_stack = []  # for debug with many iterations
-        # self.LDT = {}
 
-    def create_vars(self, nodes):  # used in functions
+    def create_vars(self, nodes):
         for i in range(len(nodes)):
             self._int_nd(nodes[i])
 
@@ -722,7 +719,11 @@ class Interpreter:
 
 if __name__ == '__main__':
     interpreter = Interpreter()
-
-    with open('testdata/fib', 'r') as f:
-        data = f.read()
-    interpreter.interpret(data)
+    print('Input the filename for reading the language-only instructions:')
+    filename = input()
+    try:
+        with open(filename, 'r') as f:
+            data = f.read()
+        interpreter.interpret(data)
+    except FileNotFoundError as fn:
+        print(fn)

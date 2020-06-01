@@ -384,7 +384,7 @@ if __name__ == '__main__':
     # while True:
     #     t = parser.parse(input())
     #     STNode.paste(t, 0)
-    with open('testdata/calc', 'r') as f:
+    with open('gnome.txt', 'r') as f:
         data = f.read()
     t = parser.parse(data)
     STNode.paste(t, 0)

@@ -355,7 +355,7 @@ class Lexer:
                     lexignore = self.lexignore      # This is here in case there was a state change
                     break
 
-                # Verify type of the token.  If not in the token map, raise an error
+                # Verify type of the token.  If not in the token map.txt, raise an error
                 if not self.lexoptimize:
                     if newtok.type not in self.lextokens_all:
                         raise LexError("%s:%d: Rule '%s' returned an unknown token type '%s'" % (
@@ -497,7 +497,7 @@ def _form_master_re(relist, reflags, ldict, toknames):
     try:
         lexre = re.compile(regex, reflags)
 
-        # Build the index to function map for the matching engine
+        # Build the index to function map.txt for the matching engine
         lexindexfunc = [None] * (max(lexre.groupindex.values()) + 1)
         lexindexnames = lexindexfunc[:]
 
@@ -579,7 +579,7 @@ class LexerReflect(object):
         self.validate_rules()
         return self.error
 
-    # Get the tokens map
+    # Get the tokens map.txt
     def get_tokens(self):
         tokens = self.ldict.get('tokens', None)
         if not tokens:
@@ -1082,7 +1082,7 @@ def runmain(lexer=None, data=None):
 # @TOKEN(regex)
 #
 # This decorator function can be used to set the regex expression on a function
-# when its docstring might need to be set in an alternative way
+# when its docstring might need to be set in an alternative way.txt
 # -----------------------------------------------------------------------------
 
 def TOKEN(r):

@@ -8,7 +8,7 @@ def control():
     except FileNotFoundError as fn:
         print(fn)
         fld, robot = None, None
-    with open('testdata/way') as w:
+    with open('testdata/way2') as w:
         data = w.read()
     controller = interpreter.Interpreter(fld, robot)
     try:

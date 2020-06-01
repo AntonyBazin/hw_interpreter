@@ -655,7 +655,7 @@ class Interpreter:
                 if self.field[self.robot.x][self.robot.y + 1].type != 'wall':
                     self.robot.cmd = None
                     return -1
-                if self.robot.y + 2 > len(self.field):
+                if self.robot.y + 2 > len(self.field[self.robot.x]):
                     self.robot.cmd = None
                     return 0
                 elif self.field[self.robot.x][self.robot.y + 2].type in ('wall', 'exit'):

@@ -1,0 +1,11 @@
+UINT getF = GETF
+UINT getB = GETB
+UINT getL = GETL
+UINT getR = GETR
+
+UINT pushL = PUSHL
+UINT undo1 = UNDO
+PUSHL
+UINT pushr = PUSHR
+UINT undo2 = UNDO
+UINT pushb = PUSHB

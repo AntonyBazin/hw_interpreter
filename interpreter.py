@@ -722,8 +722,6 @@ class Interpreter:
 
 if __name__ == '__main__':
     interpreter = Interpreter()
-    # while True:
-    #     interpreter.interpret(input())
 
     with open('testdata/fib', 'r') as f:
         data = f.read()

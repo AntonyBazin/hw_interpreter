@@ -1,6 +1,6 @@
 # Interpreter
 
-A simple non-optimizing interpreter.
+A simple non-optimizing interpreter written in Python 3.
 
 ## Installation
 

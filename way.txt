@@ -59,7 +59,7 @@ UINT getB = GETB
 UINT getL = GETL
 UINT getR = GETR
 
-WHILE(clock LT 10000) DO {
+WHILE(clock LT 5000) DO {
     INC clock
     continue = 0
     IF(cnt GT 0){

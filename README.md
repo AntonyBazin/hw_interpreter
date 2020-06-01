@@ -29,7 +29,7 @@ To run the standard robot pathfinding algorithm, type:
 python3 runner.py
 ```
 The script will first ask you for the name of the file containing the map, then the name of the file with instructions. If the script won't be able to read the map, it will notify you.
-There is a pre-written ```map.txt``` file containing the map, ```way.txt``` containing the pathfinding algorithm, and ```way2.txt``` which can be used to demonstrate the robot's abilities.
+There is a pre-written ```map.txt``` file containing the map, ```way.txt``` containing the pathfinding algorithm, and ```way2.txt``` which can be used to demonstrate the robot's abilities. ```way2.txt``` will not lead the robot to the exit.
 
 
 ## License
